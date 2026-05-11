@@ -2,7 +2,7 @@ import { getDashboardStats, getInvestments } from "@/actions/investment.actions"
 import { StatCard } from "@/components/dashboard/StatCard";
 import { OverallChart } from "@/components/dashboard/OverallChart";
 import { RecentInvestments } from "@/components/dashboard/RecentInvestments";
-import { Users, TrendingUp, DollarSign, Wallet } from "lucide-react";
+import { Users, TrendingUp, IndianRupee, Wallet } from "lucide-react";
 
 export default async function DashboardPage() {
   const [statsRes, investmentsRes] = await Promise.all([
@@ -20,7 +20,7 @@ export default async function DashboardPage() {
   return (
     <div className="container p-4 space-y-6">
       <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
-      
+
       <div className="grid gap-6 grid-cols-1 md:grid-cols-3">
         <StatCard
           title="Total Investors"
@@ -35,7 +35,7 @@ export default async function DashboardPage() {
         <StatCard
           title="Total Profit Expected"
           value={`₹${stats.totalProfitExpected.toLocaleString('en-IN')}`}
-          icon={<DollarSign className="h-4 w-4 text-success" />}
+          icon={<IndianRupee className="h-4 w-4 text-success" />}
           description={<span className="text-success flex items-center gap-1.5"><TrendingUp className="h-3.5 w-3.5" /> +50% ROI</span>}
         />
       </div>
