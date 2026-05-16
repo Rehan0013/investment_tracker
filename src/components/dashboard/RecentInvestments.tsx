@@ -31,29 +31,44 @@ export function RecentInvestments({ investments }: { investments: any[] }) {
       <CardContent>
         <div className="overflow-x-auto">
           <Table>
-            <TableHeader className="bg-transparent border-b border-border">
+            <TableHeader className="bg-transparent border-b border-border/60">
               <TableRow className="border-none hover:bg-transparent">
-                <TableHead className="text-muted-foreground font-medium text-xs tracking-wider uppercase">User Name</TableHead>
-                <TableHead className="text-muted-foreground font-medium text-xs tracking-wider uppercase text-right">Invested</TableHead>
-                <TableHead className="text-muted-foreground font-medium text-xs tracking-wider uppercase text-right">Expected</TableHead>
-                <TableHead className="text-muted-foreground font-medium text-xs tracking-wider uppercase text-right">Status</TableHead>
+                <TableHead className="text-muted-foreground font-semibold text-xs tracking-wider uppercase">Investor Name</TableHead>
+                <TableHead className="text-muted-foreground font-semibold text-xs tracking-wider uppercase">Contact / ID</TableHead>
+                <TableHead className="text-muted-foreground font-semibold text-xs tracking-wider uppercase text-right">Invested</TableHead>
+                <TableHead className="text-muted-foreground font-semibold text-xs tracking-wider uppercase text-right">Expected</TableHead>
+                <TableHead className="text-muted-foreground font-semibold text-xs tracking-wider uppercase text-right">Net Profit</TableHead>
+                <TableHead className="text-muted-foreground font-semibold text-xs tracking-wider uppercase text-right">ROI</TableHead>
+                <TableHead className="text-muted-foreground font-semibold text-xs tracking-wider uppercase text-right">Status</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {investments.map((inv) => (
-                <TableRow key={inv._id} className="border-b border-border hover:bg-muted/30 transition-colors group cursor-pointer" onClick={() => router.push(`/investments/${inv._id}`)}>
-                  <TableCell className="font-medium py-3">
-                    <span className="text-foreground">{inv.investorName}</span>
-                  </TableCell>
-                  <TableCell className="text-right text-muted-foreground font-mono text-xs">₹{inv.amount.toLocaleString('en-IN')}</TableCell>
-                  <TableCell className="text-right text-foreground font-mono text-xs">₹{inv.returnAmount.toLocaleString('en-IN')}</TableCell>
-                  <TableCell className="text-right">
-                    <Badge className={inv.isPaid ? "bg-success/10 text-success hover:bg-success/20 border border-success/20 rounded px-1.5 py-0 font-mono text-[10px]" : "bg-warning/10 text-warning hover:bg-warning/20 border border-warning/20 rounded px-1.5 py-0 font-mono text-[10px]"}>
-                      {inv.isPaid ? "PAID" : "ACTIVE"}
-                    </Badge>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {investments.map((inv) => {
+                const netProfit = inv.returnAmount - inv.amount;
+                const roi = ((netProfit / inv.amount) * 100).toFixed(1);
+                return (
+                  <TableRow key={inv._id} className="border-b border-border/40 hover:bg-muted/30 transition-colors group cursor-pointer" onClick={() => router.push(`/investments/${inv._id}`)}>
+                    <TableCell className="font-medium py-3.5">
+                      <span className="text-foreground font-semibold tracking-tight">{inv.investorName}</span>
+                    </TableCell>
+                    <TableCell className="text-muted-foreground font-mono text-xs">
+                      <div>{inv.mobileNo}</div>
+                      <div className="text-[10px] text-muted-foreground/70">{inv.aadharNo ? inv.aadharNo.replace(/(\d{4})\d{4}(\d{4})/, '$1 ●●●● $2') : 'N/A'}</div>
+                    </TableCell>
+                    <TableCell className="text-right text-muted-foreground font-mono text-xs">₹{inv.amount.toLocaleString('en-IN')}</TableCell>
+                    <TableCell className="text-right text-foreground font-mono text-xs font-semibold">₹{inv.returnAmount.toLocaleString('en-IN')}</TableCell>
+                    <TableCell className="text-right text-success font-mono text-xs font-semibold">+₹{netProfit.toLocaleString('en-IN')}</TableCell>
+                    <TableCell className="text-right font-mono text-xs">
+                      <span className="text-success bg-success/10 px-1.5 py-0.5 rounded font-bold">+{roi}%</span>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Badge className={inv.isPaid ? "bg-success/10 text-success hover:bg-success/20 border border-success/20 rounded px-2 py-0.5 font-mono text-[10px] font-bold" : "bg-warning/10 text-warning hover:bg-warning/20 border border-warning/20 rounded px-2 py-0.5 font-mono text-[10px] font-bold"}>
+                        {inv.isPaid ? "PAID" : "ACTIVE"}
+                      </Badge>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </div>

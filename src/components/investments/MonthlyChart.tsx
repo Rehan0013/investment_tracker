@@ -21,7 +21,7 @@ export function MonthlyChart({ data }: { data: MonthlySnapshot[] }) {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       return (
-        <div className="bg-card border border-border p-3 rounded-xl shadow-xl backdrop-blur-md">
+        <div className="bg-card/80 border border-border/80 p-4 rounded-xl shadow-2xl backdrop-blur-2xl">
           <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-2">{label}</p>
           <div className="space-y-2">
             <div className="flex justify-between items-center gap-10">
@@ -32,7 +32,7 @@ export function MonthlyChart({ data }: { data: MonthlySnapshot[] }) {
               <span className="text-[10px] text-success uppercase font-semibold">Monthly Profit</span>
               <span className="text-sm font-mono font-bold text-success">+₹{data.profit.toLocaleString("en-IN")}</span>
             </div>
-            <div className="pt-2 mt-1 border-t border-border space-y-1">
+            <div className="pt-2 mt-1 border-t border-border/40 space-y-1">
               <div className="flex justify-between items-center gap-10">
                 <span className="text-[10px] text-foreground uppercase font-bold">Closing</span>
                 <span className="text-sm font-mono font-black text-foreground">₹{data.closing.toLocaleString("en-IN")}</span>
@@ -50,12 +50,12 @@ export function MonthlyChart({ data }: { data: MonthlySnapshot[] }) {
   };
 
   return (
-    <Card className="border-border bg-card shadow-sm">
+    <Card className="border-border/60 bg-card/60 dark:bg-card/40 backdrop-blur-2xl shadow-2xl">
       <CardHeader className="pb-2">
-        <CardTitle className="text-sm font-semibold tracking-wide text-muted-foreground uppercase">Monthly Returns Breakdown</CardTitle>
+        <CardTitle className="text-sm font-bold tracking-wide text-muted-foreground uppercase font-mono">Monthly Returns Breakdown</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="h-[280px] w-full">
+        <div className="h-[280px] w-full pt-2">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart 
               data={chartData} 

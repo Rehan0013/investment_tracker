@@ -24,26 +24,26 @@ export default function InvestmentsPage() {
   }, []);
 
   const filtered = investments.filter(inv => {
-    const matchesSearch = inv.investorName.toLowerCase().includes(search.toLowerCase()) || 
-                          inv.mobileNo.includes(search);
+    const matchesSearch = inv.investorName.toLowerCase().includes(search.toLowerCase()) ||
+      inv.mobileNo.includes(search);
     if (!matchesSearch) return false;
-    
+
     if (filter === "Paid") return inv.isPaid;
     if (filter === "Active") return !inv.isPaid;
     return true;
   });
 
   return (
-    <div className="container p-4 space-y-6 relative min-h-[calc(100vh-4rem)] pb-20">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold tracking-tight">Investments</h1>
+    <div className="container p-4 pt-6 md:pt-8 space-y-6 relative min-h-[calc(100vh-4rem)] pb-20">
+      <div className="flex flex-col gap-1 z-10 relative">
+        <h1 className="text-3xl font-bold tracking-tight text-foreground">Investments</h1>
       </div>
 
       <div className="flex flex-col sm:flex-row justify-between gap-4 sm:items-center w-full">
         <div className="relative w-full sm:max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground h-4 w-4" />
-          <Input 
-            placeholder="Search by name or mobile..." 
+          <Input
+            placeholder="Search by name or mobile..."
             className="pl-10 bg-card border-border focus-visible:ring-1 focus-visible:ring-ring text-foreground placeholder:text-muted-foreground h-10 rounded-lg"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
