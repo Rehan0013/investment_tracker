@@ -4,6 +4,7 @@ const InvestmentSchema = new mongoose.Schema(
   {
     investorName: { type: String, required: true },
     amount: { type: Number, required: true },
+    roi: { type: Number, required: true, default: 50, enum: [50, 100] },
     mobileNo: { type: String, required: true, match: /^[6-9]\d{9}$/ },
     aadharNo: { type: String, required: true, match: /^\d{12}$/ },
     investingDate: { type: Date, required: true, default: Date.now },

@@ -14,12 +14,17 @@ export async function createInvestment(data: CreateInvestmentInput) {
     await dbConnect();
 
     // Compute returnDate and returnAmount
-    const returnDate = new Date(data.investingDate);
-    returnDate.setFullYear(returnDate.getFullYear() + 1);
-    const returnAmount = data.amount * 1.5;
+    let returnDate = data.returnDate ? new Date(data.returnDate) : new Date(data.investingDate);
+    if (!data.returnDate) {
+      returnDate.setFullYear(returnDate.getFullYear() + 1);
+    }
+    const roi = data.roi !== undefined ? data.roi : 50;
+    const multiplier = roi === 100 ? 2.0 : 1.5;
+    const returnAmount = data.amount * multiplier;
 
     const investment = await Investment.create({
       ...data,
+      roi,
       returnDate,
       returnAmount,
       userId: session.user.id,
@@ -75,22 +80,32 @@ export async function updateInvestment(id: string, data: UpdateInvestmentInput) 
     const currentInvestment = await Investment.findOne({ _id: id, userId: session.user.id });
     if (!currentInvestment) throw new Error("Investment not found");
 
-    let { amount, investingDate } = data;
+    let { amount, investingDate, roi, returnDate: customReturnDate } = data;
     let returnDate, returnAmount;
 
-    if (amount !== undefined || investingDate !== undefined) {
+    if (amount !== undefined || investingDate !== undefined || roi !== undefined || customReturnDate !== undefined) {
       const finalAmount = amount !== undefined ? amount : currentInvestment.amount;
       const finalInvestingDate = investingDate !== undefined ? new Date(investingDate) : currentInvestment.investingDate;
+      const finalRoi = roi !== undefined ? roi : (currentInvestment.roi !== undefined ? currentInvestment.roi : 50);
 
-      returnAmount = finalAmount * 1.5;
-      returnDate = new Date(finalInvestingDate);
-      returnDate.setFullYear(returnDate.getFullYear() + 1);
+      const multiplier = finalRoi === 100 ? 2.0 : 1.5;
+      returnAmount = finalAmount * multiplier;
+      
+      if (customReturnDate !== undefined) {
+        returnDate = new Date(customReturnDate);
+      } else if (investingDate !== undefined) {
+        returnDate = new Date(finalInvestingDate);
+        returnDate.setFullYear(returnDate.getFullYear() + 1);
+      } else {
+        returnDate = currentInvestment.returnDate;
+      }
     }
 
     const updated = await Investment.findByIdAndUpdate(
       id,
       {
         ...data,
+        ...(roi !== undefined && { roi }),
         ...(returnDate && { returnDate }),
         ...(returnAmount && { returnAmount }),
       },

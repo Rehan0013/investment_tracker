@@ -21,8 +21,9 @@ export function InvestmentDetail({ investment }: { investment: any }) {
   const [isDeleting, startDeleteTransition] = useTransition();
   const [isPaid, setIsPaid] = useState(investment.isPaid);
 
-  const monthlyData = getMonthlyBreakdown(investment.amount, new Date(investment.investingDate));
-  const progress = getCurrentProgress(investment.amount, new Date(investment.investingDate));
+  const roi = investment.roi !== undefined ? investment.roi : 50;
+  const monthlyData = getMonthlyBreakdown(investment.amount, new Date(investment.investingDate), roi);
+  const progress = getCurrentProgress(investment.amount, new Date(investment.investingDate), roi);
   const visibleMonths = progress.monthsElapsed === 12 ? 12 : Math.max(1, progress.monthsElapsed);
   const visibleMonthlyData = monthlyData.slice(0, visibleMonths);
 

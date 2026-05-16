@@ -22,9 +22,11 @@ export function InvestmentEditSheet({ investment }: { investment: any }) {
     defaultValues: {
       investorName: investment.investorName,
       amount: investment.amount,
+      roi: investment.roi !== undefined ? investment.roi : 50,
       mobileNo: investment.mobileNo,
       aadharNo: investment.aadharNo,
       investingDate: format(new Date(investment.investingDate), "yyyy-MM-dd") as unknown as Date,
+      returnDate: investment.returnDate ? format(new Date(investment.returnDate), "yyyy-MM-dd") as unknown as Date : undefined,
     }
   });
 
@@ -32,9 +34,11 @@ export function InvestmentEditSheet({ investment }: { investment: any }) {
     reset({
       investorName: investment.investorName,
       amount: investment.amount,
+      roi: investment.roi !== undefined ? investment.roi : 50,
       mobileNo: investment.mobileNo,
       aadharNo: investment.aadharNo,
       investingDate: format(new Date(investment.investingDate), "yyyy-MM-dd") as unknown as Date,
+      returnDate: investment.returnDate ? format(new Date(investment.returnDate), "yyyy-MM-dd") as unknown as Date : undefined,
     });
   }, [investment, reset]);
 
@@ -82,6 +86,19 @@ export function InvestmentEditSheet({ investment }: { investment: any }) {
           </div>
 
           <div className="space-y-2">
+            <Label htmlFor="edit-roi">Expected ROI</Label>
+            <select
+              id="edit-roi"
+              {...register("roi", { valueAsNumber: true })}
+              className="h-10 w-full rounded-lg border border-input bg-input px-3 py-1 text-base transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary md:text-sm"
+            >
+              <option value={50} className="bg-background text-foreground font-medium">50% ROI</option>
+              <option value={100} className="bg-background text-foreground font-medium">100% ROI</option>
+            </select>
+            {errors.roi && <p className="text-xs text-danger">{errors.roi.message}</p>}
+          </div>
+
+          <div className="space-y-2">
             <Label htmlFor="edit-mobileNo">Mobile Number</Label>
             <Input
               id="edit-mobileNo"
@@ -114,6 +131,18 @@ export function InvestmentEditSheet({ investment }: { investment: any }) {
               className="bg-input focus-visible:ring-primary w-full"
             />
             {errors.investingDate && <p className="text-xs text-danger">{errors.investingDate.message}</p>}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="edit-returnDate">Return Date (Optional)</Label>
+            <Input
+              id="edit-returnDate"
+              type="date"
+              min={investment.investingDate ? new Date(investment.investingDate).toISOString().split('T')[0] : undefined}
+              {...register("returnDate", { valueAsDate: true })}
+              className="bg-input focus-visible:ring-primary w-full"
+            />
+            {errors.returnDate && <p className="text-xs text-danger">{errors.returnDate.message}</p>}
           </div>
 
           <div className="pt-4 flex gap-2">

@@ -15,8 +15,9 @@ export type MonthlySnapshot = {
 };
 
 // Returns array of 12 month snapshots
-export function getMonthlyBreakdown(principal: number, investingDate: Date): MonthlySnapshot[] {
-  const totalProfit = principal * 0.5; // Exactly 50% profit
+export function getMonthlyBreakdown(principal: number, investingDate: Date, roi: number = 50): MonthlySnapshot[] {
+  const profitRate = roi / 100;
+  const totalProfit = principal * profitRate; // Dynamic profit based on ROI
   const seed = principal + investingDate.getTime();
   let currentSeed = seed;
   
@@ -51,9 +52,9 @@ export function getMonthlyBreakdown(principal: number, investingDate: Date): Mon
     balance = newBalance;
   }
   
-  // Ensure the last month exactly hits 1.5x due to floating point inaccuracies
+  // Ensure the last month exactly hits expected total due to floating point inaccuracies
   if (snapshots.length === 12) {
-      snapshots[11].closingBalance = parseFloat((principal * 1.5).toFixed(2));
+      snapshots[11].closingBalance = parseFloat((principal * (1 + profitRate)).toFixed(2));
       snapshots[11].interest = parseFloat((snapshots[11].closingBalance - snapshots[11].openingBalance).toFixed(2));
   }
   
@@ -61,7 +62,7 @@ export function getMonthlyBreakdown(principal: number, investingDate: Date): Mon
 }
 
 // Returns profit earned up to current month (for a live investment)
-export function getCurrentProgress(principal: number, investingDate: Date) {
+export function getCurrentProgress(principal: number, investingDate: Date, roi: number = 50) {
   const today = new Date();
   const monthsElapsed = Math.max(0, differenceInMonths(today, investingDate));
   const clampedMonths = Math.min(monthsElapsed, 12);
@@ -75,7 +76,7 @@ export function getCurrentProgress(principal: number, investingDate: Date) {
     };
   }
 
-  const snapshots = getMonthlyBreakdown(principal, investingDate);
+  const snapshots = getMonthlyBreakdown(principal, investingDate, roi);
   const currentSnapshot = snapshots[clampedMonths - 1];
   const currentValue = currentSnapshot.closingBalance;
   

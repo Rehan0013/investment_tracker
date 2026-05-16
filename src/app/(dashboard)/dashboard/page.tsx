@@ -42,7 +42,7 @@ export default async function DashboardPage() {
           title="Total Profit Expected"
           value={`₹${stats.totalProfitExpected.toLocaleString('en-IN')}`}
           icon={<IndianRupee className="h-4 w-4 text-success" />}
-          description={<span className="text-success flex items-center gap-1.5"><TrendingUp className="h-3.5 w-3.5" /> +50% ROI</span>}
+          description={<span className="text-success flex items-center gap-1.5"><TrendingUp className="h-3.5 w-3.5" /> +{stats.totalAmountInvested > 0 ? (((stats.totalReturnAmount - stats.totalAmountInvested) / stats.totalAmountInvested) * 100).toFixed(1) : "50"}% ROI</span>}
         />
       </div>
 

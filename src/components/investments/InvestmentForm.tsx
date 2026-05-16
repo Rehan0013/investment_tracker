@@ -21,19 +21,28 @@ export function InvestmentForm() {
     resolver: zodResolver(CreateInvestmentSchema),
     defaultValues: {
       investingDate: new Date(),
+      roi: 50,
     }
   });
 
   const amount = watch("amount") || 0;
+  const roi = watch("roi") || 50;
   const investingDateStr = watch("investingDate");
   const investingDate = investingDateStr ? new Date(investingDateStr) : new Date();
+  const customReturnDate = watch("returnDate");
 
-  const returnAmount = amount * 1.5;
-  const profit = amount * 0.5;
+  const multiplier = roi === 100 ? 2.0 : 1.5;
+  const returnAmount = amount * multiplier;
+  const profit = amount * (roi / 100);
 
-  const returnDate = new Date(investingDate);
-  if (!isNaN(returnDate.getTime())) {
-    returnDate.setFullYear(returnDate.getFullYear() + 1);
+  let returnDate = customReturnDate && !isNaN(new Date(customReturnDate).getTime()) 
+    ? new Date(customReturnDate) 
+    : new Date(investingDate);
+
+  if (!customReturnDate || isNaN(new Date(customReturnDate).getTime())) {
+    if (!isNaN(returnDate.getTime())) {
+      returnDate.setFullYear(returnDate.getFullYear() + 1);
+    }
   }
 
   const onSubmit = (data: CreateInvestmentInput) => {
@@ -75,6 +84,19 @@ export function InvestmentForm() {
             </div>
 
             <div className="space-y-2">
+              <Label htmlFor="roi">Expected ROI</Label>
+              <select
+                id="roi"
+                {...register("roi", { valueAsNumber: true })}
+                className="h-10 w-full rounded-lg border border-input bg-input px-3 py-1 text-base transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary md:text-sm"
+              >
+                <option value={50} className="bg-background text-foreground font-medium">50% ROI</option>
+                <option value={100} className="bg-background text-foreground font-medium">100% ROI</option>
+              </select>
+              {errors.roi && <p className="text-xs text-danger">{errors.roi.message}</p>}
+            </div>
+
+            <div className="space-y-2">
               <Label htmlFor="mobileNo">Mobile Number</Label>
               <Input
                 id="mobileNo"
@@ -108,6 +130,18 @@ export function InvestmentForm() {
               />
               {errors.investingDate && <p className="text-xs text-danger">{errors.investingDate.message}</p>}
             </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="returnDate">Return Date (Optional)</Label>
+              <Input
+                id="returnDate"
+                type="date"
+                min={!isNaN(investingDate.getTime()) ? investingDate.toISOString().split('T')[0] : new Date().toISOString().split('T')[0]}
+                {...register("returnDate", { valueAsDate: true })}
+                className="bg-input focus-visible:ring-primary w-full"
+              />
+              {errors.returnDate && <p className="text-xs text-danger">{errors.returnDate.message}</p>}
+            </div>
           </form>
         </CardContent>
       </Card>
@@ -124,7 +158,7 @@ export function InvestmentForm() {
               <span className="font-bold text-lg">₹{amount.toLocaleString("en-IN")}</span>
             </div>
             <div className="flex justify-between items-center border-b border-border pb-3">
-              <span className="text-muted-foreground">Expected Profit (50%)</span>
+              <span className="text-muted-foreground">Expected Profit ({roi}%)</span>
               <span className="font-bold text-success">₹{profit.toLocaleString("en-IN")}</span>
             </div>
             <div className="flex justify-between items-center pb-1">
