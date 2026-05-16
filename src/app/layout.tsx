@@ -50,6 +50,21 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
+            <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+              <div 
+                className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary/10 blur-[120px]" 
+                style={{ animation: 'orb-pulse 15s ease-in-out infinite' }} 
+              />
+              <div 
+                className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-chart-1/20 blur-[120px]" 
+                style={{ animation: 'orb-pulse 18s ease-in-out infinite reverse' }} 
+              />
+              <div 
+                className="absolute top-[40%] left-[60%] w-[30%] h-[30%] rounded-full bg-chart-2/20 blur-[120px]" 
+                style={{ animation: 'orb-pulse 20s ease-in-out infinite' }} 
+              />
+              <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] opacity-5 dark:opacity-10" />
+            </div>
             {children}
             <Toaster />
           </ThemeProvider>

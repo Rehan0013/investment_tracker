@@ -30,7 +30,7 @@ export function InvestmentForm() {
 
   const returnAmount = amount * 1.5;
   const profit = amount * 0.5;
-  
+
   const returnDate = new Date(investingDate);
   if (!isNaN(returnDate.getTime())) {
     returnDate.setFullYear(returnDate.getFullYear() + 1);
@@ -65,48 +65,46 @@ export function InvestmentForm() {
 
             <div className="space-y-2">
               <Label htmlFor="amount">Amount (₹)</Label>
-              <Input 
-                id="amount" 
-                type="number" 
-                {...register("amount", { valueAsNumber: true })} 
-                className="bg-input focus-visible:ring-primary" 
+              <Input
+                id="amount"
+                type="number"
+                {...register("amount", { valueAsNumber: true })}
+                className="bg-input focus-visible:ring-primary"
               />
               {errors.amount && <p className="text-xs text-danger">{errors.amount.message}</p>}
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="mobileNo">Mobile Number</Label>
-              <Input 
-                id="mobileNo" 
-                type="tel" 
+              <Input
+                id="mobileNo"
+                type="tel"
                 inputMode="numeric"
-                {...register("mobileNo")} 
-                className="bg-input focus-visible:ring-primary" 
-                placeholder="9876543210"
+                {...register("mobileNo")}
+                className="bg-input focus-visible:ring-primary"
               />
               {errors.mobileNo && <p className="text-xs text-danger">{errors.mobileNo.message}</p>}
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="aadharNo">Aadhar Number</Label>
-              <Input 
-                id="aadharNo" 
-                type="number" 
-                {...register("aadharNo")} 
-                className="bg-input focus-visible:ring-primary" 
-                placeholder="123412341234"
+              <Input
+                id="aadharNo"
+                type="number"
+                {...register("aadharNo")}
+                className="bg-input focus-visible:ring-primary"
               />
               {errors.aadharNo && <p className="text-xs text-danger">{errors.aadharNo.message}</p>}
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="investingDate">Investing Date</Label>
-              <Input 
-                id="investingDate" 
-                type="date" 
+              <Input
+                id="investingDate"
+                type="date"
                 max={new Date().toISOString().split('T')[0]}
-                {...register("investingDate", { valueAsDate: true })} 
-                className="bg-input focus-visible:ring-primary w-full" 
+                {...register("investingDate", { valueAsDate: true })}
+                className="bg-input focus-visible:ring-primary w-full"
               />
               {errors.investingDate && <p className="text-xs text-danger">{errors.investingDate.message}</p>}
             </div>
