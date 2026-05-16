@@ -43,7 +43,7 @@
   --color-warning: var(--warning);
   --color-danger: var(--danger);
   --color-surface: var(--surface);
-  
+
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -54,88 +54,99 @@
 }
 
 :root {
-  --background: #eef2ff;
-  --foreground: #1e1b4b;
-  --card: #ffffff;
-  --card-foreground: #1e1b4b;
-  --popover: #ffffff;
-  --popover-foreground: #1e1b4b;
-  --primary: #4f46e5;
+  --background: #f0f4f8;
+  --foreground: #0f172a;
+  --card: rgba(255, 255, 255, 0.7);
+  --card-foreground: #0f172a;
+  --popover: rgba(255, 255, 255, 0.8);
+  --popover-foreground: #0f172a;
+  --primary: #3b82f6;
   --primary-foreground: #ffffff;
-  --secondary: #c7d2fe;
-  --secondary-foreground: #3730a3;
-  --muted: #e0e7ff;
-  --muted-foreground: #4f46e5;
-  --accent: #e0e7ff;
-  --accent-foreground: #3730a3;
-  --destructive: #ef4444;
+  --secondary: #e2e8f0;
+  --secondary-foreground: #0f172a;
+  --muted: #e2e8f0;
+  --muted-foreground: #475569;
+  --accent: #e2e8f0;
+  --accent-foreground: #0f172a;
+  --destructive: #93000a;
   --destructive-foreground: #ffffff;
-  --border: #c7d2fe;
-  --input: #c7d2fe;
-  --ring: #818cf8;
-  --success: #10b981;
-  --warning: #f59e0b;
-  --danger: #ef4444;
-  --surface: #ffffff;
-  --chart-1: #4f46e5;
-  --chart-2: #10b981;
-  --chart-3: #f59e0b;
-  --chart-4: #ef4444;
-  --chart-5: #6366f1;
-  --radius: 0.75rem;
+  --border: #94a3b8;
+  --input: #ffffff;
+  --ring: #3b82f6;
+  --success: #00a572;
+  --warning: #ca8100;
+  --danger: #93000a;
+  --surface: rgba(255, 255, 255, 0.5);
+  --chart-1: #3b82f6;
+  --chart-2: #00a572;
+  --chart-3: #ca8100;
+  --chart-4: #93000a;
+  --chart-5: #4d8eff;
+  --radius: 0.5rem;
 }
 
 .dark {
-  --background: #020617;
-  --foreground: #f8fafc;
-  --card: #0f172a;
-  --card-foreground: #f8fafc;
-  --popover: #0f172a;
-  --popover-foreground: #f8fafc;
-  --primary: #818cf8;
+  --background: #090d16;
+  --foreground: #f1f5f9;
+  --card: rgba(16, 20, 27, 0.6);
+  --card-foreground: #f1f5f9;
+  --popover: rgba(16, 20, 27, 0.8);
+  --popover-foreground: #f1f5f9;
+  --primary: #3b82f6;
   --primary-foreground: #ffffff;
-  --secondary: #1e1b4b;
-  --secondary-foreground: #e0e7ff;
+  --secondary: #1e293b;
+  --secondary-foreground: #f1f5f9;
   --muted: #1e293b;
-  --muted-foreground: #818cf8;
+  --muted-foreground: #94a3b8;
   --accent: #1e293b;
-  --accent-foreground: #f8fafc;
-  --destructive: #7f1d1d;
-  --destructive-foreground: #ffffff;
-  --border: #1e293b;
-  --input: #1e293b;
-  --ring: #6366f1;
-  --success: #059669;
-  --warning: #b45309;
-  --danger: #7f1d1d;
-  --surface: #020617;
-  --chart-1: #818cf8;
-  --chart-2: #34d399;
-  --chart-3: #fbbf24;
-  --chart-4: #f87171;
-  --chart-5: #a5b4fc;
-  --radius: 0.75rem;
+  --accent-foreground: #f1f5f9;
+  --destructive: #ffb4ab;
+  --destructive-foreground: #690005;
+  --border: rgba(255, 255, 255, 0.25);
+  --input: rgba(255, 255, 255, 0.454);
+  --ring: #3b82f6;
+  --success: #10b981;
+  --warning: #ffb95f;
+  --danger: #ffb4ab;
+  --surface: rgba(9, 13, 22, 0.5);
+  --chart-1: #3b82f6;
+  --chart-2: #10b981;
+  --chart-3: #ffb95f;
+  --chart-4: #ffb4ab;
+  --chart-5: #d8e2ff;
+  --radius: 0.5rem;
 }
 
 @keyframes gradient-pulse {
   0% {
     background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
   }
+
   100% {
     background-position: 0% 50%;
   }
 }
 
+.animate-gradient-pulse {
+  background-size: 200% 200%;
+  animation: gradient-pulse 15s ease infinite;
+}
+
 @keyframes orb-pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scale(1) translate(0, 0);
   }
+
   33% {
     transform: scale(1.1) translate(3%, -3%);
   }
+
   66% {
     transform: scale(0.9) translate(-3%, 3%);
   }
@@ -145,13 +156,11 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
-    @apply text-foreground min-h-screen;
-    background: linear-gradient(-45deg, var(--background), var(--secondary), var(--muted), var(--background));
-    background-size: 400% 400%;
-    animation: gradient-pulse 15s ease infinite;
-    background-attachment: fixed;
+    @apply text-foreground min-h-screen bg-background;
   }
+
   html {
     @apply font-sans;
   }

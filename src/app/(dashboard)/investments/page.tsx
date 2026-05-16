@@ -34,9 +34,10 @@ export default function InvestmentsPage() {
   });
 
   return (
-    <div className="container p-4 space-y-6 relative min-h-[calc(100vh-4rem)] pb-20">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold tracking-tight">Investments</h1>
+    <div className="container p-4 pt-6 md:pt-8 space-y-6 relative min-h-[calc(100vh-4rem)] pb-20">
+      <div className="flex flex-col gap-1 z-10 relative">
+        <h1 className="text-3xl font-bold tracking-tight text-foreground">Investments</h1>
+        <p className="text-xs text-muted-foreground uppercase tracking-widest font-mono">Liquid Institutional Portfolio Management</p>
       </div>
 
       <div className="flex flex-col sm:flex-row justify-between gap-4 sm:items-center w-full">
