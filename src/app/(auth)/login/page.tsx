@@ -21,6 +21,9 @@ export default function LoginPage() {
       if (res?.error) {
         setError(res.error);
         toast.error(res.error);
+      } else if (res?.success) {
+        toast.success("Signed in successfully");
+        window.location.href = "/";
       }
     });
   };

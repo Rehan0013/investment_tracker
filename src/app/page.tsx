@@ -41,17 +41,17 @@ export default function Home() {
         <div className="flex items-center gap-4">
           <ThemeToggle />
           {isAuthenticated ? (
-            <Link href="/dashboard">
+            <Link href="/dashboard" prefetch={false}>
               <Button className="font-medium gap-2">
                 Go to Dashboard <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
           ) : (
             <>
-              <Link href="/login">
+              <Link href="/login" prefetch={false}>
                 <Button variant="ghost" className="font-medium hidden sm:inline-flex">Sign In</Button>
               </Link>
-              <Link href="/login">
+              <Link href="/login" prefetch={false}>
                 <Button className="font-medium gap-2">
                   Get Started <ArrowRight className="h-4 w-4" />
                 </Button>
@@ -88,12 +88,12 @@ export default function Home() {
             </motion.p>
             
             <motion.div variants={fadeIn} className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
-              <Link href="/dashboard" className="w-full sm:w-auto">
+              <Link href="/dashboard" prefetch={false} className="w-full sm:w-auto">
                 <Button size="lg" className="w-full h-14 px-8 text-base shadow-xl shadow-primary/20 gap-2">
                   Launch Dashboard <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
-              <Link href="#features" className="w-full sm:w-auto">
+              <Link href="#features" prefetch={false} className="w-full sm:w-auto">
                 <Button variant="outline" size="lg" className="w-full h-14 px-8 text-base bg-background/50 backdrop-blur-md">
                   Explore Features
                 </Button>
