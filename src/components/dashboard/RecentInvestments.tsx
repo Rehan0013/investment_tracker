@@ -29,7 +29,7 @@ export function RecentInvestments({ investments }: { investments: any[] }) {
         <CardTitle className="text-foreground text-sm font-semibold tracking-wide uppercase">Recent Investments</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="overflow-x-auto">
+        <div className="hidden md:block overflow-x-auto">
           <Table>
             <TableHeader className="bg-transparent border-b border-border/60">
               <TableRow className="border-none hover:bg-transparent">
@@ -71,6 +71,50 @@ export function RecentInvestments({ investments }: { investments: any[] }) {
               })}
             </TableBody>
           </Table>
+        </div>
+
+        {/* Mobile View */}
+        <div className="md:hidden flex flex-col gap-3">
+          {investments.map((inv) => {
+            const netProfit = inv.returnAmount - inv.amount;
+            const roi = ((netProfit / inv.amount) * 100).toFixed(1);
+            return (
+              <div 
+                key={inv._id} 
+                className="bg-card border border-border/60 rounded-xl p-4 flex flex-col gap-3 active:scale-[0.98] transition-transform cursor-pointer shadow-sm"
+                onClick={() => router.push(`/investments/${inv._id}`)}
+              >
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h4 className="text-foreground font-semibold tracking-tight">{inv.investorName}</h4>
+                    <p className="text-muted-foreground font-mono text-[11px] mt-0.5">{inv.mobileNo}</p>
+                  </div>
+                  <Badge className={inv.isPaid ? "bg-success/10 text-success border border-success/20 rounded px-2 py-0.5 font-mono text-[10px] font-bold" : "bg-warning/10 text-warning border border-warning/20 rounded px-2 py-0.5 font-mono text-[10px] font-bold"}>
+                    {inv.isPaid ? "PAID" : "ACTIVE"}
+                  </Badge>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-2 mt-1">
+                  <div className="bg-muted/30 p-2.5 rounded-lg border border-border/40">
+                    <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider mb-1">Invested</p>
+                    <p className="font-mono text-sm font-medium">₹{inv.amount.toLocaleString('en-IN')}</p>
+                  </div>
+                  <div className="bg-muted/30 p-2.5 rounded-lg border border-border/40">
+                    <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider mb-1">Expected</p>
+                    <p className="font-mono text-sm font-semibold text-foreground">₹{inv.returnAmount.toLocaleString('en-IN')}</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between mt-1 pt-3 border-t border-border/40">
+                  <span className="text-[11px] text-muted-foreground font-medium uppercase tracking-wider">Profit</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-success font-mono text-sm font-bold">+₹{netProfit.toLocaleString('en-IN')}</span>
+                    <span className="text-success bg-success/10 px-1.5 py-0.5 rounded font-bold font-mono text-xs">+{roi}%</span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </CardContent>
     </Card>
