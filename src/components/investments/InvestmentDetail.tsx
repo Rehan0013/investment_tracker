@@ -6,19 +6,13 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MonthlyChart } from "./MonthlyChart";
 import { getMonthlyBreakdown, getCurrentProgress } from "@/lib/utils";
-import { togglePaymentStatus, deleteInvestment } from "@/actions/investment.actions";
+import { togglePaymentStatus } from "@/actions/investment.actions";
 import { toast } from "sonner";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Card, CardContent } from "@/components/ui/card";
-import { InvestmentEditSheet } from "./InvestmentEditSheet";
-import { useRouter } from "next/navigation";
-import { Trash2 } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose, DialogTrigger } from "@/components/ui/dialog";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 export function InvestmentDetail({ investment }: { investment: any }) {
-  const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const [isDeleting, startDeleteTransition] = useTransition();
   const [isPaid, setIsPaid] = useState(investment.isPaid);
 
   const roi = investment.roi !== undefined ? investment.roi : 50;
@@ -39,58 +33,12 @@ export function InvestmentDetail({ investment }: { investment: any }) {
     });
   };
 
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-
-  const handleDelete = () => {
-    startDeleteTransition(async () => {
-      const res = await deleteInvestment(investment._id);
-      if (res.success) {
-        toast.success("Investment deleted successfully");
-        setIsDeleteDialogOpen(false);
-        router.push("/investments");
-      } else {
-        toast.error("Failed to delete investment");
-      }
-    });
-  };
-
   return (
     <div className="space-y-6 pb-24">
       {/* Top Section */}
       <Card className="border-border/60 bg-card/60 dark:bg-card/40 backdrop-blur-2xl shadow-2xl mt-4">
         <CardContent className="p-6 relative">
-          <div className="absolute top-4 right-4 flex items-center gap-2">
-            <InvestmentEditSheet investment={investment} />
-            <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-              <DialogTrigger render={
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="h-10 w-10 text-destructive border-border/60 hover:bg-destructive/10 hover:text-destructive hover:border-destructive transition-colors rounded-xl shadow-sm"
-                />
-              }>
-                <Trash2 className="h-4 w-4" />
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px] bg-card/90 backdrop-blur-2xl border-border/60 shadow-2xl rounded-2xl">
-                <DialogHeader>
-                  <DialogTitle>Delete Investment</DialogTitle>
-                  <DialogDescription>
-                    Are you sure you want to delete this investment? This action cannot be undone and all associated data will be permanently removed.
-                  </DialogDescription>
-                </DialogHeader>
-                <DialogFooter className="mt-4">
-                  <DialogClose render={<Button variant="outline" disabled={isDeleting} className="rounded-xl border-border/60" />}>
-                    Cancel
-                  </DialogClose>
-                  <Button variant="destructive" onClick={handleDelete} disabled={isDeleting} className="rounded-xl">
-                    {isDeleting ? "Deleting..." : "Delete"}
-                  </Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
-          </div>
-
-          <div className="grid gap-6 pr-24">
+          <div className="grid gap-6">
             <div>
               <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider font-semibold font-mono">Investor Name</p>
               <h2 className="text-3xl font-bold tracking-tight text-foreground">{investment.investorName}</h2>

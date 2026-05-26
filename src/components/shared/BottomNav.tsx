@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BarChart, TrendingUp, Plus } from "lucide-react";
+import { BarChart, TrendingUp, Plus, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -19,6 +19,7 @@ export function BottomNav() {
     { href: "/dashboard", label: "Dashboard", icon: BarChart },
     { href: "/investments", label: "Investments", icon: TrendingUp },
     { href: "/investments/new", label: "Add", icon: Plus },
+    { href: "/settings", label: "Settings", icon: Settings },
   ];
 
   const getActiveIndex = () => {
@@ -26,6 +27,7 @@ export function BottomNav() {
     if (currentPath === "/dashboard" || currentPath === "/" || currentPath.startsWith("/dashboard/")) return 0;
     if (currentPath.startsWith("/investments/new")) return 2;
     if (currentPath.startsWith("/investments")) return 1;
+    if (currentPath.startsWith("/settings")) return 3;
     return 0;
   };
 

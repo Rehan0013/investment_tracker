@@ -13,7 +13,7 @@ import { toast } from "sonner";
 import { Edit } from "lucide-react";
 import { format } from "date-fns";
 
-export function InvestmentEditSheet({ investment }: { investment: any }) {
+export function InvestmentEditSheet({ investment, onSuccess }: { investment: any; onSuccess?: () => void }) {
   const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
 
@@ -48,6 +48,7 @@ export function InvestmentEditSheet({ investment }: { investment: any }) {
       if (res.success) {
         toast.success("Investment updated successfully");
         setOpen(false);
+        if (onSuccess) onSuccess();
       } else {
         toast.error(res.error || "Failed to update investment");
       }

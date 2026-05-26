@@ -23,6 +23,7 @@ export async function Navbar() {
               <Link href="/dashboard" className="text-muted-foreground hover:text-foreground transition-colors">Dashboard</Link>
               <Link href="/investments" className="text-muted-foreground hover:text-foreground transition-colors">Investments</Link>
               <Link href="/investments/new" className="text-muted-foreground hover:text-foreground transition-colors">Add</Link>
+              <Link href="/settings" className="text-muted-foreground hover:text-foreground transition-colors">Settings</Link>
             </div>
           </div>
 
