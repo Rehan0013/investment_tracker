@@ -1,28 +1,53 @@
 "use client";
 
 import { useState, useTransition, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableFooter } from "@/components/ui/table";
 import { MonthlyChart } from "./MonthlyChart";
+import { SettleInvestmentDialog } from "./SettleInvestmentDialog";
 import { getMonthlyBreakdown, getCurrentProgress } from "@/lib/utils";
-import { togglePaymentStatus } from "@/actions/investment.actions";
+import { reopenInvestment } from "@/actions/investment.actions";
 import { toast } from "sonner";
-import { CheckCircle2, RotateCcw, Calendar, Phone, ShieldCheck, Sparkles, Clock, AlertCircle } from "lucide-react";
+import {
+  CheckCircle2,
+  RotateCcw,
+  Calendar,
+  Phone,
+  ShieldCheck,
+  Sparkles,
+  Clock,
+  AlertCircle,
+  Landmark,
+  Edit3,
+  User,
+  Hash,
+  Building2,
+  Copy,
+  Check,
+} from "lucide-react";
 
 export function InvestmentDetail({ investment }: { investment: any }) {
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const [isPaid, setIsPaid] = useState(investment.isPaid);
+  const [investmentData, setInvestmentData] = useState(investment);
+  const [isSettleModalOpen, setIsSettleModalOpen] = useState(false);
   const [tableMode, setTableMode] = useState<"accrued" | "all">("accrued");
+  const [copiedField, setCopiedField] = useState<string | null>(null);
 
-  const roi = investment.roi !== undefined ? investment.roi : 50;
-  const monthlyData = getMonthlyBreakdown(investment.amount, new Date(investment.investingDate), roi);
-  const progress = getCurrentProgress(investment.amount, new Date(investment.investingDate), roi);
-  const isMatured = new Date() >= new Date(investment.returnDate);
-  const netProfit = investment.returnAmount - investment.amount;
-  const initial = investment.investorName?.charAt(0)?.toUpperCase() || "I";
+  const isPaid = Boolean(investmentData.isPaid);
+  const hasBankDetails = Boolean(
+    investmentData.accountNo || investmentData.bankName || investmentData.ifscCode
+  );
+  const roi = investmentData.roi !== undefined ? investmentData.roi : 50;
+  const monthlyData = getMonthlyBreakdown(investmentData.amount, new Date(investmentData.investingDate), roi);
+  const progress = getCurrentProgress(investmentData.amount, new Date(investmentData.investingDate), roi);
+  const isMatured = new Date() >= new Date(investmentData.returnDate);
+  const netProfit = investmentData.returnAmount - investmentData.amount;
+  const initial = investmentData.investorName?.charAt(0)?.toUpperCase() || "I";
   const now = new Date();
 
   // Filter: strictly only months whose date has already crossed / elapsed
@@ -39,24 +64,34 @@ export function InvestmentDetail({ investment }: { investment: any }) {
   }, [tableMode, crossedMonths, monthlyData]);
 
   const totalProfitInTable = displayedTableData.reduce((acc, curr) => acc + curr.interest, 0);
-  const latestValuation = displayedTableData.length > 0 ? displayedTableData[displayedTableData.length - 1].closingBalance : investment.amount;
+  const latestValuation = displayedTableData.length > 0 ? displayedTableData[displayedTableData.length - 1].closingBalance : investmentData.amount;
 
-  const handleTogglePayment = () => {
+  const handleReopen = () => {
     startTransition(async () => {
-      const res = await togglePaymentStatus(investment._id);
+      const res = await reopenInvestment(investmentData._id);
       if (res.success) {
-        setIsPaid(res.isPaid);
-        if (res.isPaid) {
-          toast.success("Contract settled successfully! Payout confirmed.", {
-            description: `Full contractual maturity payment of ₹${investment.returnAmount.toLocaleString("en-IN")} recorded.`,
-          });
-        } else {
-          toast.info("Contract reopened to active status.");
-        }
+        setInvestmentData((prev: any) => ({ ...prev, isPaid: false }));
+        toast.info("Contract reopened to active status.");
       } else {
-        toast.error("Failed to update contract status");
+        toast.error(res.error || "Failed to reopen contract");
       }
     });
+  };
+
+  const handleCopy = (text: string, field: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedField(field);
+    toast.success("Copied to clipboard");
+    setTimeout(() => setCopiedField(null), 2000);
+  };
+
+  const handleSettlementSuccess = (updated: any) => {
+    if (updated) {
+      setInvestmentData(updated);
+    } else {
+      setInvestmentData((prev: any) => ({ ...prev, isPaid: true, settledAt: new Date() }));
+    }
+    router.refresh();
   };
 
   return (
@@ -71,7 +106,7 @@ export function InvestmentDetail({ investment }: { investment: any }) {
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
                 <h1 className="text-lg sm:text-2xl font-bold tracking-tight text-foreground truncate">
-                  {investment.investorName}
+                  {investmentData.investorName}
                 </h1>
                 {isPaid ? (
                   <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded-full shrink-0">
@@ -88,35 +123,41 @@ export function InvestmentDetail({ investment }: { investment: any }) {
                 )}
               </div>
               <p className="text-xs text-muted-foreground font-mono mt-0.5 truncate">
-                Contract ID: {investment._id} • Fixed Term 12 Mo
+                Contract ID: {investmentData._id} • Fixed Term 12 Mo
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-2.5 w-full sm:w-auto">
-            <Button
-              onClick={handleTogglePayment}
-              disabled={isPending}
-              variant={isPaid ? "outline" : "default"}
-              size="sm"
-              className={`w-full sm:w-auto justify-center gap-2 text-xs font-semibold shadow-xs cursor-pointer ${
-                !isPaid
-                  ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white hover:brightness-110"
-                  : ""
-              }`}
-            >
-              {isPaid ? (
-                <>
+            {!isPaid && !isMatured ? (
+              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary border border-border text-xs text-muted-foreground font-mono">
+                <Clock className="h-3.5 w-3.5 text-blue-500" />
+                <span>Matures on {format(new Date(investmentData.returnDate), "dd MMM yyyy")}</span>
+              </div>
+            ) : !isPaid && isMatured ? (
+              <Button
+                onClick={() => setIsSettleModalOpen(true)}
+                disabled={isPending}
+                size="sm"
+                className="w-full sm:w-auto justify-center gap-2 text-xs font-semibold shadow-xs cursor-pointer bg-gradient-to-r from-orange-500 via-orange-600 to-amber-500 text-white hover:brightness-110"
+              >
+                <CheckCircle2 className="h-3.5 w-3.5 text-white stroke-[2.5]" />
+                <span>Mark as Settled</span>
+              </Button>
+            ) : (
+              <div className="flex items-center gap-2 w-full sm:w-auto">
+                <Button
+                  onClick={handleReopen}
+                  disabled={isPending}
+                  variant="outline"
+                  size="sm"
+                  className="w-full sm:w-auto justify-center gap-1.5 text-xs text-muted-foreground hover:text-foreground cursor-pointer"
+                >
                   <RotateCcw className="h-3.5 w-3.5 text-muted-foreground" />
-                  Reopen Contract
-                </>
-              ) : (
-                <>
-                  <CheckCircle2 className="h-3.5 w-3.5 text-white" />
-                  Mark as Settled
-                </>
-              )}
-            </Button>
+                  <span>Reopen Contract</span>
+                </Button>
+              </div>
+            )}
           </div>
         </div>
 
@@ -125,13 +166,13 @@ export function InvestmentDetail({ investment }: { investment: any }) {
           <div className="p-3 sm:p-3.5 rounded-xl bg-secondary/50 border border-border/60">
             <span className="text-[10px] sm:text-[11px] text-muted-foreground uppercase font-semibold">Principal Capital</span>
             <p className="font-mono text-sm sm:text-lg font-bold text-foreground tabular-nums mt-0.5 truncate">
-              ₹{investment.amount.toLocaleString("en-IN")}
+              ₹{investmentData.amount.toLocaleString("en-IN")}
             </p>
           </div>
           <div className="p-3 sm:p-3.5 rounded-xl bg-secondary/50 border border-border/60">
             <span className="text-[10px] sm:text-[11px] text-muted-foreground uppercase font-semibold">Maturity Payout</span>
             <p className="font-mono text-sm sm:text-lg font-bold text-foreground tabular-nums mt-0.5 truncate">
-              ₹{investment.returnAmount.toLocaleString("en-IN")}
+              ₹{investmentData.returnAmount.toLocaleString("en-IN")}
             </p>
           </div>
           <div className="p-3 sm:p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
@@ -149,6 +190,118 @@ export function InvestmentDetail({ investment }: { investment: any }) {
         </div>
       </Card>
 
+      {/* Settlement & Payout Banking Record Card - shows when settled OR whenever bank details are on record */}
+      {(isPaid || hasBankDetails) && (
+        <Card className="p-4 sm:p-5 border-emerald-500/30 bg-emerald-500/5 dark:bg-emerald-950/20 text-card-foreground shadow-sm">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3.5 border-b border-emerald-500/20">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 shadow-xs">
+                <Landmark className="w-5 h-5 stroke-[2.2]" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-sm font-bold text-foreground">
+                    Settlement & Bank Payout Details
+                  </h3>
+                  {isPaid ? (
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 flex items-center gap-1">
+                      <CheckCircle2 className="w-3 h-3" /> Settled & Disbursed
+                    </span>
+                  ) : (
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/30 flex items-center gap-1">
+                      <Clock className="w-3 h-3" /> Banking Recorded (Pending Settlement)
+                    </span>
+                  )}
+                </div>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  Official banking credentials recorded for maturity disbursement of ₹{investmentData.returnAmount.toLocaleString("en-IN")}.
+                </p>
+              </div>
+            </div>
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsSettleModalOpen(true)}
+              className="text-xs h-8 gap-1.5 border-emerald-500/30 hover:bg-emerald-500/10 text-foreground cursor-pointer self-start sm:self-auto"
+            >
+              <Edit3 className="w-3.5 h-3.5 text-muted-foreground" />
+              <span>Edit Bank Details</span>
+            </Button>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-3.5 text-xs font-mono">
+            <div className="p-3 rounded-xl bg-card border border-border/80 space-y-1">
+              <span className="text-[10px] uppercase font-sans tracking-wider text-muted-foreground font-semibold flex items-center gap-1.5">
+                <User className="w-3.5 h-3.5 text-muted-foreground" /> Account Holder
+              </span>
+              <p className="font-semibold text-foreground truncate text-xs sm:text-sm">
+                {investmentData.accountHolderName || investmentData.investorName}
+              </p>
+            </div>
+
+            <div className="p-3 rounded-xl bg-card border border-border/80 space-y-1">
+              <span className="text-[10px] uppercase font-sans tracking-wider text-muted-foreground font-semibold flex items-center gap-1.5">
+                <Building2 className="w-3.5 h-3.5 text-muted-foreground" /> Bank Name
+              </span>
+              <p className="font-semibold text-foreground truncate text-xs sm:text-sm">
+                {investmentData.bankName || "Recorded Bank"}
+              </p>
+            </div>
+
+            <div className="p-3 rounded-xl bg-card border border-border/80 space-y-1">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] uppercase font-sans tracking-wider text-muted-foreground font-semibold flex items-center gap-1.5">
+                  <Hash className="w-3.5 h-3.5 text-muted-foreground" /> Account Number
+                </span>
+                {investmentData.accountNo && (
+                  <button
+                    onClick={() => handleCopy(investmentData.accountNo, "acc")}
+                    className="text-[10px] text-muted-foreground hover:text-foreground cursor-pointer"
+                    title="Copy Account Number"
+                  >
+                    {copiedField === "acc" ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />}
+                  </button>
+                )}
+              </div>
+              <p className="font-bold text-foreground text-xs sm:text-sm tracking-wider">
+                {investmentData.accountNo || "—"}
+              </p>
+            </div>
+
+            <div className="p-3 rounded-xl bg-card border border-border/80 space-y-1">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] uppercase font-sans tracking-wider text-muted-foreground font-semibold flex items-center gap-1.5">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" /> IFSC Code
+                </span>
+                {investmentData.ifscCode && (
+                  <button
+                    onClick={() => handleCopy(investmentData.ifscCode, "ifsc")}
+                    className="text-[10px] text-muted-foreground hover:text-foreground cursor-pointer"
+                    title="Copy IFSC Code"
+                  >
+                    {copiedField === "ifsc" ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />}
+                  </button>
+                )}
+              </div>
+              <p className="font-bold text-emerald-600 dark:text-emerald-400 text-xs sm:text-sm uppercase font-mono">
+                {investmentData.ifscCode || "—"}
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-3 pt-2.5 border-t border-emerald-500/20 flex flex-wrap items-center justify-between gap-2 text-[11px] text-muted-foreground font-mono">
+            <span className="flex items-center gap-1.5">
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+              <span>Full payout of ₹{investmentData.returnAmount.toLocaleString("en-IN")} confirmed</span>
+            </span>
+            {investmentData.settledAt && (
+              <span>Settled on {format(new Date(investmentData.settledAt), "dd MMM yyyy, hh:mm a")}</span>
+            )}
+          </div>
+        </Card>
+      )}
+
       {/* Contract Verification & Schedule Details */}
       <div className="grid gap-4 sm:grid-cols-3">
         <Card className="p-4 border-border bg-card text-card-foreground shadow-xs">
@@ -157,7 +310,7 @@ export function InvestmentDetail({ investment }: { investment: any }) {
             <span className="text-xs font-semibold uppercase tracking-wider">Contact Number</span>
           </div>
           <p className="font-mono text-sm font-bold text-foreground">
-            {investment.mobileNo}
+            {investmentData.mobileNo}
           </p>
         </Card>
 
@@ -167,7 +320,7 @@ export function InvestmentDetail({ investment }: { investment: any }) {
             <span className="text-xs font-semibold uppercase tracking-wider">Aadhaar Verification</span>
           </div>
           <p className="font-mono text-sm font-bold text-foreground">
-            {investment.aadharNo ? investment.aadharNo.replace(/(\d{4})\d{4}(\d{4})/, "$1 ●●●● $2") : "Not Recorded"}
+            {investmentData.aadharNo ? investmentData.aadharNo.replace(/(\d{4})\d{4}(\d{4})/, "$1 ●●●● $2") : "Not Recorded"}
           </p>
         </Card>
 
@@ -177,10 +330,10 @@ export function InvestmentDetail({ investment }: { investment: any }) {
             <span className="text-xs font-semibold uppercase tracking-wider">Maturity Date</span>
           </div>
           <p className="font-mono text-sm font-bold text-foreground">
-            {format(new Date(investment.returnDate), "dd MMM yyyy")}
+            {format(new Date(investmentData.returnDate), "dd MMM yyyy")}
           </p>
           <span className="text-[10px] text-muted-foreground">
-            Initiated on {format(new Date(investment.investingDate), "dd MMM yyyy")}
+            Initiated on {format(new Date(investmentData.investingDate), "dd MMM yyyy")}
           </span>
         </Card>
       </div>
@@ -211,7 +364,7 @@ export function InvestmentDetail({ investment }: { investment: any }) {
       </Card>
 
       {/* Monthly Chart: displays ONLY up to the current crossed month */}
-      <MonthlyChart data={monthlyData} investingDate={investment.investingDate} />
+      <MonthlyChart data={monthlyData} investingDate={investmentData.investingDate} />
 
       {/* Accrual Ledger Breakdown Table: strictly shows only elapsed/crossed months by default */}
       <Card className="p-4 sm:p-5 border-border bg-card text-card-foreground shadow-xs">
@@ -346,6 +499,14 @@ export function InvestmentDetail({ investment }: { investment: any }) {
           </div>
         </CardContent>
       </Card>
+
+      {/* Settle Investment Banking Modal */}
+      <SettleInvestmentDialog
+        open={isSettleModalOpen}
+        onOpenChange={setIsSettleModalOpen}
+        investment={investmentData}
+        onSuccess={handleSettlementSuccess}
+      />
     </div>
   );
 }

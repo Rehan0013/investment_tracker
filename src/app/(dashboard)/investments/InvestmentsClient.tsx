@@ -10,7 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Search, Plus, LayoutGrid, List, ArrowUpRight, X, Sparkles, CheckCircle2, Clock, AlertCircle } from "lucide-react";
+import { Search, Plus, LayoutGrid, List, ArrowUpRight, X, Sparkles, CheckCircle2, Clock, AlertCircle, Landmark } from "lucide-react";
 import Link from "next/link";
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
@@ -241,7 +241,15 @@ export function InvestmentsClient({ initialInvestments }: { initialInvestments: 
                       onClick={() => router.push(`/investments/${inv._id}`)}
                     >
                       <TableCell className="py-3.5 font-semibold text-xs text-foreground">
-                        {inv.investorName}
+                        <div>{inv.investorName}</div>
+                        {(inv.accountNo || inv.bankName) && (
+                          <div className="flex items-center gap-1 text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-normal mt-0.5">
+                            <Landmark className="w-2.5 h-2.5 shrink-0" />
+                            <span>
+                              {inv.bankName || "Bank"}: ••••{inv.accountNo ? inv.accountNo.slice(-4) : "—"}
+                            </span>
+                          </div>
+                        )}
                       </TableCell>
                       <TableCell className="py-3.5 text-xs font-mono text-muted-foreground">
                         <div>{inv.mobileNo}</div>

@@ -10,7 +10,26 @@ export const CreateInvestmentSchema = z.object({
   returnDate: z.date().optional(),
 });
 
-export const UpdateInvestmentSchema = CreateInvestmentSchema.partial();
+export const SettleInvestmentSchema = z.object({
+  accountHolderName: z.string().trim().min(2, "Account holder name is required").max(100),
+  accountNo: z.string().trim().min(6, "Valid account number is required (min 6 digits)").max(30),
+  ifscCode: z
+    .string()
+    .trim()
+    .min(4, "Valid IFSC code is required")
+    .max(15)
+    .toUpperCase(),
+  bankName: z.string().trim().min(2, "Bank name is required").max(100),
+});
+
+export const UpdateInvestmentSchema = CreateInvestmentSchema.partial().extend({
+  accountHolderName: z.string().optional(),
+  accountNo: z.string().optional(),
+  ifscCode: z.string().optional(),
+  bankName: z.string().optional(),
+  isPaid: z.boolean().optional(),
+});
 
 export type CreateInvestmentInput = z.infer<typeof CreateInvestmentSchema>;
 export type UpdateInvestmentInput = z.infer<typeof UpdateInvestmentSchema>;
+export type SettleInvestmentInput = z.infer<typeof SettleInvestmentSchema>;

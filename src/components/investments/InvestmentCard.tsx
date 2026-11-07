@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { format, differenceInMonths } from "date-fns";
-import { ArrowUpRight, CheckCircle2, Clock, AlertCircle } from "lucide-react";
+import { ArrowUpRight, CheckCircle2, Clock, AlertCircle, Landmark } from "lucide-react";
 
 interface InvestmentCardProps {
   investment: {
@@ -14,6 +14,10 @@ interface InvestmentCardProps {
     returnDate: string | Date;
     isPaid: boolean;
     roi?: number;
+    accountHolderName?: string;
+    accountNo?: string;
+    ifscCode?: string;
+    bankName?: string;
   };
 }
 
@@ -49,6 +53,14 @@ export function InvestmentCard({ investment }: InvestmentCardProps) {
                   {investment.mobileNo}
                   {investment.aadharNo ? ` • ●●●● ${investment.aadharNo.slice(-4)}` : ""}
                 </p>
+                {(investment.accountNo || investment.bankName) && (
+                  <div className="flex items-center gap-1.5 text-[10px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 w-fit mt-1">
+                    <Landmark className="w-2.5 h-2.5 shrink-0" />
+                    <span className="truncate">
+                      {investment.bankName || "Bank"}: ••••{investment.accountNo ? investment.accountNo.slice(-4) : "—"}
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
 

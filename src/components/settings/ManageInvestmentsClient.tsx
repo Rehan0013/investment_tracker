@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { format } from "date-fns";
-import { ChevronLeft, Search, Trash2 } from "lucide-react";
+import { ChevronLeft, Search, Trash2, Landmark } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 
@@ -133,6 +133,16 @@ export function ManageInvestmentsClient({ initialInvestments }: { initialInvestm
                       <span>•</span>
                       <span>Date: {format(new Date(inv.investingDate), "dd MMM yyyy")}</span>
                     </div>
+
+                    {(inv.accountNo || inv.bankName) && (
+                      <div className="flex items-center gap-1.5 text-[11px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 w-fit mt-1">
+                        <Landmark className="w-3 h-3 shrink-0" />
+                        <span>
+                          {inv.bankName || "Bank"}: A/C ••••{inv.accountNo ? inv.accountNo.slice(-4) : "—"}{" "}
+                          {inv.ifscCode ? `(${inv.ifscCode})` : ""}
+                        </span>
+                      </div>
+                    )}
                   </div>
 
                   <div className="flex items-center gap-2 w-full sm:w-auto justify-end pt-2 sm:pt-0 border-t sm:border-t-0 border-border/40">

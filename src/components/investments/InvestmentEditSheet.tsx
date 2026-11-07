@@ -40,6 +40,10 @@ export function InvestmentEditSheet({
       returnDate: investment.returnDate
         ? (format(new Date(investment.returnDate), "yyyy-MM-dd") as unknown as Date)
         : undefined,
+      accountHolderName: investment.accountHolderName || "",
+      bankName: investment.bankName || "",
+      accountNo: investment.accountNo || "",
+      ifscCode: investment.ifscCode || "",
     },
   });
 
@@ -54,6 +58,10 @@ export function InvestmentEditSheet({
       returnDate: investment.returnDate
         ? (format(new Date(investment.returnDate), "yyyy-MM-dd") as unknown as Date)
         : undefined,
+      accountHolderName: investment.accountHolderName || "",
+      bankName: investment.bankName || "",
+      accountNo: investment.accountNo || "",
+      ifscCode: investment.ifscCode || "",
     });
   }, [investment, reset]);
 
@@ -172,6 +180,41 @@ export function InvestmentEditSheet({
               {...register("returnDate", { valueAsDate: true })}
             />
             {errors.returnDate && <p className="text-xs text-destructive">{errors.returnDate.message}</p>}
+          </div>
+
+          <div className="pt-3 border-t border-border/70 space-y-3">
+            <span className="text-xs font-semibold text-foreground block">
+              Investor Banking & Payout Details
+            </span>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="edit-accountHolderName" className="text-xs font-medium text-foreground">
+                Account Holder Name
+              </Label>
+              <Input id="edit-accountHolderName" placeholder="Full name as in bank account" {...register("accountHolderName")} />
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="edit-bankName" className="text-xs font-medium text-foreground">
+                Bank Name
+              </Label>
+              <Input id="edit-bankName" placeholder="e.g. State Bank of India, HDFC Bank" {...register("bankName")} />
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label htmlFor="edit-accountNo" className="text-xs font-medium text-foreground">
+                  Account Number
+                </Label>
+                <Input id="edit-accountNo" placeholder="Bank account no." {...register("accountNo")} />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="edit-ifscCode" className="text-xs font-medium text-foreground">
+                  IFSC Code
+                </Label>
+                <Input id="edit-ifscCode" placeholder="e.g. SBIN0001234" className="uppercase font-mono" {...register("ifscCode")} />
+              </div>
+            </div>
           </div>
 
           <div className="pt-3 flex gap-2">
