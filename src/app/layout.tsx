@@ -7,6 +7,15 @@ import { SessionProvider } from "@/components/session-provider";
 export const metadata: Metadata = {
   title: "InvestTracker — Private Investment & Return Ledger",
   description: "Accurate portfolio tracking, return calculations, and investor ledger management.",
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "any" },
+    ],
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,

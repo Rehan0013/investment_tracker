@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { toast } from "sonner";
-import { ArrowRight, Lock } from "lucide-react";
+import { ArrowRight, Lock, Eye } from "lucide-react";
 
 export default function LoginPage() {
   const [isPending, startTransition] = useTransition();
@@ -35,8 +35,8 @@ export default function LoginPage() {
       <div className="w-full max-w-sm space-y-4">
         {/* Brand Header */}
         <div className="flex flex-col items-center text-center space-y-2">
-          <div className="h-10 w-10 rounded-lg bg-foreground text-background flex items-center justify-center font-bold text-sm tracking-tight shadow-xs">
-            IT
+          <div className="h-11 w-11 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shadow-xs">
+            <Eye className="w-5 h-5 stroke-[2.2]" />
           </div>
           <div>
             <h1 className="text-xl font-bold tracking-tight text-foreground">

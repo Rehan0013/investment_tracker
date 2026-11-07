@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
+import { motion } from "framer-motion";
 import {
   Eye,
   Home,
@@ -18,37 +19,46 @@ interface SidebarRailProps {
   className?: string;
 }
 
+const NAV_ITEMS = [
+  {
+    href: "/dashboard",
+    label: "Dashboard Overview",
+    icon: Home,
+    checkActive: (path: string) => path === "/dashboard" || path === "/",
+  },
+  {
+    href: "/investments",
+    label: "Portfolio Positions",
+    icon: LayoutGrid,
+    checkActive: (path: string) =>
+      path === "/investments" || (path.startsWith("/investments/") && path !== "/investments/new"),
+  },
+  {
+    href: "/investments/new",
+    label: "Record Position",
+    icon: PlusCircle,
+    checkActive: (path: string) => path === "/investments/new",
+  },
+  {
+    href: "/simulator",
+    label: "ROI Simulator",
+    icon: Calculator,
+    checkActive: (path: string) => path === "/simulator",
+  },
+  {
+    href: "/settings",
+    label: "System Settings",
+    icon: Settings,
+    checkActive: (path: string) => path.startsWith("/settings"),
+  },
+];
+
 export function SidebarRail({ className }: SidebarRailProps) {
   const pathname = usePathname();
 
-  const navItems = [
-    {
-      href: "/dashboard",
-      label: "Dashboard Overview",
-      icon: Home,
-      isActive: pathname === "/dashboard",
-    },
-    {
-      href: "/investments",
-      label: "Portfolio Positions",
-      icon: LayoutGrid,
-      isActive: pathname === "/investments" || (pathname.startsWith("/investments/") && pathname !== "/investments/new"),
-    },
-    {
-      href: "/investments/new",
-      label: "Record Position",
-      icon: PlusCircle,
-      isActive: pathname === "/investments/new",
-    },
-    {
-      href: "/simulator",
-      label: "ROI Simulator",
-      icon: Calculator,
-      isActive: pathname === "/simulator",
-    },
-  ];
-
-  const isSettingsActive = pathname.startsWith("/settings");
+  // Active tab index matching the current route
+  const activeIndex = NAV_ITEMS.findIndex((item) => item.checkActive(pathname));
+  const validIndex = activeIndex >= 0 ? activeIndex : 0;
 
   return (
     <aside
@@ -57,8 +67,8 @@ export function SidebarRail({ className }: SidebarRailProps) {
         className
       )}
     >
-      {/* Top: Eye Brand Logo */}
-      <div className="flex flex-col items-center gap-6">
+      {/* Top: Eye Brand Logo + Nav Stack */}
+      <div className="flex flex-col items-center gap-6 w-full">
         <Link
           href="/dashboard"
           className="group relative flex items-center justify-center h-11 w-11 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 hover:scale-105 transition-all shadow-[0_0_20px_rgba(16,185,129,0.15)]"
@@ -67,56 +77,68 @@ export function SidebarRail({ className }: SidebarRailProps) {
           <Eye className="w-5 h-5 stroke-[2.2] transition-transform group-hover:scale-110" />
         </Link>
 
-        {/* Navigation Icon Stack */}
-        <nav className="flex flex-col items-center gap-2.5">
-          {navItems.map((item) => {
+        {/* Navigation Icon Stack with Sliding Orange Circle */}
+        <nav className="relative flex flex-col items-center gap-2.5 w-full">
+          {/* Sliding Orange Circle Indicator: animates smoothly between items with spring physics */}
+          <motion.div
+            className="absolute top-0 left-1/2 -translate-x-1/2 w-11 h-11 pointer-events-none z-10 flex items-center justify-center"
+            initial={false}
+            animate={{
+              y: validIndex * 54,
+              opacity: activeIndex >= 0 ? 1 : 0,
+              scale: activeIndex >= 0 ? 1 : 0.8,
+            }}
+            transition={{
+              type: "spring",
+              stiffness: 420,
+              damping: 28,
+              mass: 0.8,
+            }}
+          >
+            <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-orange-500 via-orange-600 to-amber-400 shadow-xl shadow-orange-500/40 ring-2 ring-card/80" />
+          </motion.div>
+
+          {/* Navigation Links */}
+          {NAV_ITEMS.map((item, idx) => {
             const Icon = item.icon;
+            const isActive = idx === activeIndex;
 
             return (
               <Link
-                key={item.label}
+                key={item.href}
                 href={item.href}
-                className={cn(
-                  "relative flex items-center justify-center h-11 w-11 rounded-2xl transition-all duration-150 group",
-                  item.isActive
-                    ? "bg-gradient-to-br from-orange-500 to-amber-600 text-white shadow-lg shadow-orange-500/25 scale-100 font-semibold"
-                    : "text-muted-foreground hover:text-foreground hover:bg-secondary active:scale-95"
-                )}
+                className="relative flex items-center justify-center h-11 w-11 rounded-full z-20 group"
                 title={item.label}
               >
-                <Icon
-                  className={cn(
-                    "w-5 h-5 transition-transform group-hover:scale-105",
-                    item.isActive ? "stroke-[2.2]" : "stroke-[1.8]"
-                  )}
-                />
+                <motion.div
+                  whileHover={{ scale: 1.06 }}
+                  whileTap={{ scale: 0.92 }}
+                  transition={{ duration: 0.15 }}
+                  className="flex items-center justify-center w-full h-full"
+                >
+                  <Icon
+                    className={cn(
+                      "w-5 h-5 transition-colors duration-200",
+                      isActive
+                        ? "text-white stroke-[2.2]"
+                        : "text-muted-foreground stroke-[1.8] group-hover:text-foreground"
+                    )}
+                  />
+                </motion.div>
               </Link>
             );
           })}
         </nav>
       </div>
 
-      {/* Bottom: Settings & Logout */}
-      <div className="flex flex-col items-center gap-2.5 pt-4 border-t border-border">
-        <Link
-          href="/settings"
-          className={cn(
-            "flex items-center justify-center h-11 w-11 rounded-2xl transition-all duration-150",
-            isSettingsActive
-              ? "bg-gradient-to-br from-orange-500 to-amber-600 text-white shadow-lg shadow-orange-500/25 font-semibold"
-              : "text-muted-foreground hover:text-foreground hover:bg-secondary active:scale-95"
-          )}
-          title="Account & System Settings"
-        >
-          <Settings className="w-5 h-5 stroke-[1.8]" />
-        </Link>
-
+      {/* Bottom: Sign Out Action */}
+      <div className="flex flex-col items-center pt-4 border-t border-border w-full">
         <button
           onClick={() => signOut({ callbackUrl: "/login" })}
-          className="flex items-center justify-center h-11 w-11 rounded-2xl text-muted-foreground hover:text-rose-500 hover:bg-rose-500/10 transition-all duration-150 active:scale-95 cursor-pointer"
+          className="flex items-center justify-center h-11 w-11 rounded-2xl text-muted-foreground hover:text-rose-500 hover:bg-rose-500/10 transition-all duration-150 active:scale-95 cursor-pointer group"
           title="Sign Out"
         >
-          <LogOut className="w-5 h-5 stroke-[1.8]" />
+          <LogOut className="w-5 h-5 stroke-[1.8] transition-transform group-hover:scale-105" />
         </button>
       </div>
     </aside>

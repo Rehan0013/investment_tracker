@@ -11,6 +11,7 @@ import {
   Sparkles,
   Layers,
   Percent,
+  Eye,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -46,8 +47,8 @@ export default function Home() {
       <header className="border-b border-border/80 bg-background/95 backdrop-blur-md sticky top-0 z-40">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="h-8 w-8 rounded-lg bg-foreground text-background flex items-center justify-center font-bold text-xs tracking-tight shadow-sm group-hover:scale-105 transition-transform">
-              IT
+            <div className="h-8 w-8 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
+              <Eye className="w-4 h-4 stroke-[2.2]" />
             </div>
             <div className="flex flex-col">
               <span className="font-semibold text-sm tracking-tight text-foreground leading-none">

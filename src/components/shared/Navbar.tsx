@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { LogoutButton } from "./LogoutButton";
 import { NavLinks } from "./NavLinks";
+import { Eye } from "lucide-react";
 
 export async function Navbar() {
   const session = await auth();
@@ -15,8 +16,8 @@ export async function Navbar() {
         {/* Brand Mark */}
         <div className="flex items-center gap-6">
           <Link href="/dashboard" className="flex items-center gap-2.5 group">
-            <div className="h-7 w-7 rounded-md bg-foreground text-background flex items-center justify-center font-bold text-xs tracking-tight shadow-xs">
-              IT
+            <div className="h-7 w-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
+              <Eye className="w-4 h-4 stroke-[2.2]" />
             </div>
             <div className="flex flex-col">
               <span className="font-semibold text-sm tracking-tight text-foreground leading-none">
