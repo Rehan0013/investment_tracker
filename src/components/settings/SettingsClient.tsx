@@ -4,9 +4,9 @@ import { useTheme } from "next-themes";
 import { signOut } from "next-auth/react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Sun, Moon, LogOut, ChevronRight, UserCog } from "lucide-react";
+import { Sun, Moon, Laptop, LogOut, ChevronRight, Database, User, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 
 interface SettingsClientProps {
   user: {
@@ -31,91 +31,112 @@ export function SettingsClient({ user }: SettingsClientProps) {
 
   if (!mounted) return null;
 
-  const displayName = user.name || user.email?.split("@")[0] || "User";
+  const displayName = user.name || user.email?.split("@")[0] || "Investor";
+  const email = user.email || "adnan@investment.com";
   const initials = displayName.charAt(0).toUpperCase();
 
   return (
     <div className="space-y-6">
-      {/* User Profile & Dark Mode Card */}
-      <Card className="border border-border/60 bg-card/60 dark:bg-card/40 backdrop-blur-2xl shadow-2xl">
-        <CardContent className="p-6 space-y-6">
-          
-          {/* User Info Header */}
-          <div className="flex items-center gap-4">
-            <div className="h-16 w-16 rounded-full bg-success/10 border border-success/20 flex items-center justify-center text-success text-2xl font-bold font-sans">
+      {/* Account Section */}
+      <Card className="p-5">
+        <div className="flex items-center justify-between pb-4 border-b border-border/60">
+          <div className="flex items-center gap-3.5">
+            <div className="h-11 w-11 rounded-full bg-secondary border border-border flex items-center justify-center text-foreground font-semibold text-base">
               {initials}
             </div>
-            <div className="space-y-0.5">
-              <h2 className="text-xl font-bold uppercase tracking-wide text-foreground font-sans">
-                {displayName}
-              </h2>
-              <p className="text-xs text-muted-foreground font-medium font-sans">
-                System Administrator
-              </p>
+            <div>
+              <h2 className="text-sm font-semibold text-foreground">{displayName}</h2>
+              <p className="text-xs text-muted-foreground font-mono">{email}</p>
             </div>
           </div>
-
-          <div className="h-px bg-border/40 w-full" />
-
-          {/* Dark Mode Toggle Section */}
-          <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
-              <h3 className="text-sm font-bold tracking-wider text-foreground uppercase font-sans">
-                Dark Mode
-              </h3>
-              <p className="text-xs text-muted-foreground font-sans">
-                Toggle visual interface colors
-              </p>
-            </div>
-            
-            <Button
-              variant="outline"
-              size="icon"
-              className="h-12 w-12 rounded-full border border-border/60 bg-background/50 hover:bg-muted/50 transition-colors shadow-sm"
-              onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-            >
-              {theme === "dark" ? (
-                <Sun className="h-5 w-5 text-foreground animate-pulse" />
-              ) : (
-                <Moon className="h-5 w-5 text-foreground" />
-              )}
-            </Button>
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-secondary text-[11px] font-medium text-muted-foreground border border-border">
+            <Shield className="h-3 w-3 text-emerald-600" />
+            Authenticated
           </div>
+        </div>
 
-          {/* Log Out Button */}
+        <div className="pt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-muted-foreground">
+          <span>Active Session ID: Private Investment Manager</span>
           <Button
+            variant="destructive"
+            size="sm"
             onClick={handleLogout}
             disabled={isLoggingOut}
-            className="w-full h-14 border border-rose-500/20 bg-rose-500/5 hover:bg-rose-500/10 text-rose-400 font-bold rounded-2xl transition-all duration-300 gap-3 shadow-md shadow-rose-950/5"
+            className="text-xs gap-1.5 self-start sm:self-auto cursor-pointer"
           >
-            <LogOut className="h-5 w-5 rotate-180" />
-            <span className="tracking-widest uppercase text-sm font-sans">
-              {isLoggingOut ? "LOGGING OUT..." : "LOG OUT SESSION"}
-            </span>
+            <LogOut className="h-3.5 w-3.5" />
+            {isLoggingOut ? "Ending Session..." : "Sign Out"}
           </Button>
-
-        </CardContent>
+        </div>
       </Card>
 
-      {/* Operations Navigation Card */}
+      {/* Interface Theme Section */}
+      <Card className="p-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h3 className="text-sm font-semibold text-foreground">Color Theme</h3>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              Select your preferred visual scheme for charts and ledgers
+            </p>
+          </div>
+
+          <div className="flex items-center gap-1 bg-secondary p-1 rounded-lg border border-border">
+            <button
+              onClick={() => setTheme("light")}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors cursor-pointer ${
+                theme === "light"
+                  ? "bg-card text-foreground shadow-xs font-semibold"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <Sun className="h-3.5 w-3.5" />
+              Light
+            </button>
+            <button
+              onClick={() => setTheme("dark")}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors cursor-pointer ${
+                theme === "dark"
+                  ? "bg-card text-foreground shadow-xs font-semibold"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <Moon className="h-3.5 w-3.5" />
+              Dark
+            </button>
+            <button
+              onClick={() => setTheme("system")}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors cursor-pointer ${
+                theme === "system"
+                  ? "bg-card text-foreground shadow-xs font-semibold"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <Laptop className="h-3.5 w-3.5" />
+              Auto
+            </button>
+          </div>
+        </div>
+      </Card>
+
+      {/* Operations & Ledger Management Link */}
       <Link href="/settings/manage" className="block group">
-        <Card className="border border-border/60 bg-card/60 dark:bg-card/40 backdrop-blur-2xl hover:border-primary/40 transition-all duration-300 shadow-2xl cursor-pointer">
-          <CardContent className="p-5 flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="h-12 w-12 rounded-2xl bg-success/10 border border-success/20 flex items-center justify-center text-success group-hover:scale-105 transition-transform">
-                <UserCog className="h-6 w-6" />
+        <Card className="p-5 hover:border-foreground/30 transition-colors">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3.5">
+              <div className="h-10 w-10 rounded-lg bg-secondary border border-border flex items-center justify-center text-foreground group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                <Database className="h-4 w-4" />
               </div>
-              <div className="space-y-0.5">
-                <h3 className="font-bold text-foreground text-sm tracking-wide font-sans">
-                  Manage Investments
+              <div>
+                <h3 className="text-sm font-semibold text-foreground">
+                  Ledger Records & Data Management
                 </h3>
-                <p className="text-xs text-muted-foreground font-sans">
-                  Search, Edit, or Delete Investments
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  Inspect, batch modify, or remove investment records and client accounts
                 </p>
               </div>
             </div>
-            <ChevronRight className="h-5 w-5 text-muted-foreground group-hover:text-foreground group-hover:translate-x-0.5 transition-all" />
-          </CardContent>
+            <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-foreground group-hover:translate-x-0.5 transition-all" />
+          </div>
         </Card>
       </Link>
     </div>

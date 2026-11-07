@@ -5,13 +5,15 @@ import { loginAction } from "@/actions/auth.actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { toast } from "sonner";
-import { Wallet } from "lucide-react";
+import { ArrowRight, Lock } from "lucide-react";
 
 export default function LoginPage() {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -22,41 +24,97 @@ export default function LoginPage() {
         setError(res.error);
         toast.error(res.error);
       } else if (res?.success) {
-        toast.success("Signed in successfully");
-        window.location.href = "/";
+        toast.success("Authentication successful");
+        window.location.href = "/dashboard";
       }
     });
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4">
-      <Card className="w-full max-w-sm shadow-xl border-border bg-card">
-        <CardHeader className="space-y-1 text-center">
-          <div className="flex justify-center mb-4">
-            <div className="bg-primary/10 p-3 rounded-full">
-              <Wallet className="w-8 h-8 text-primary" />
-            </div>
+    <div className="flex min-h-screen items-center justify-center p-4 bg-background">
+      <div className="w-full max-w-sm space-y-4">
+        {/* Brand Header */}
+        <div className="flex flex-col items-center text-center space-y-2">
+          <div className="h-10 w-10 rounded-lg bg-foreground text-background flex items-center justify-center font-bold text-sm tracking-tight shadow-xs">
+            IT
           </div>
-          <CardTitle className="text-2xl font-bold tracking-tight text-foreground">InvestTracker</CardTitle>
-          <CardDescription className="text-muted-foreground">Enter your credentials to access your account</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-foreground">Email</Label>
-              <Input id="email" name="email" type="email" placeholder="m@example.com" required className="bg-input border-border text-foreground" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password" className="text-foreground">Password</Label>
-              <Input id="password" name="password" type="password" required className="bg-input border-border text-foreground" />
-            </div>
-            {error && <p className="text-sm text-danger font-medium">{error}</p>}
-            <Button type="submit" className="w-full bg-primary text-primary-foreground hover:bg-primary/90" disabled={isPending}>
-              {isPending ? "Signing in..." : "Sign in"}
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
+          <div>
+            <h1 className="text-xl font-bold tracking-tight text-foreground">
+              InvestTracker
+            </h1>
+            <p className="text-xs text-muted-foreground">
+              Institutional Private Portfolio & Return Ledger
+            </p>
+          </div>
+        </div>
+
+        {/* Login Card */}
+        <Card className="p-6 border-border shadow-xs">
+          <CardHeader className="p-0 pb-4 text-left">
+            <CardTitle className="text-sm font-semibold text-foreground">
+              Sign In to Portfolio
+            </CardTitle>
+            <CardDescription className="text-xs text-muted-foreground mt-0.5">
+              Enter your credentials to access your account.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="p-0">
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="space-y-1.5">
+                <Label htmlFor="email" className="text-xs font-medium text-foreground">
+                  Email Address
+                </Label>
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="name@investment.com"
+                  required
+                  autoComplete="email"
+                  className="h-9 text-xs"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="password" className="text-xs font-medium text-foreground">
+                    Password
+                  </Label>
+                </div>
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••••••"
+                  required
+                  autoComplete="current-password"
+                  className="h-9 text-xs font-mono"
+                />
+              </div>
+
+              {error && (
+                <div className="p-2.5 rounded-md bg-destructive/10 border border-destructive/20 text-xs text-destructive font-medium">
+                  {error}
+                </div>
+              )}
+
+              <Button type="submit" className="w-full h-9 gap-2 text-xs font-medium" disabled={isPending}>
+                {isPending ? "Authenticating..." : "Access Ledger"}
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+
+        {/* Security Footer */}
+        <p className="text-center text-[11px] text-muted-foreground flex items-center justify-center gap-1.5 font-mono">
+          <Lock className="h-3 w-3" /> Encrypted Session • Mongoose & NextAuth
+        </p>
+      </div>
     </div>
   );
 }

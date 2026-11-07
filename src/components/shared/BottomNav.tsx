@@ -2,115 +2,129 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BarChart, TrendingUp, Plus, Settings } from "lucide-react";
+import { Home, LayoutGrid, Plus, Calculator, Settings } from "lucide-react";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useState } from "react";
+
+const NAV_ITEMS = [
+  {
+    href: "/dashboard",
+    label: "Dashboard",
+    icon: Home,
+    checkActive: (path: string) => path === "/dashboard" || path === "/",
+  },
+  {
+    href: "/investments",
+    label: "Portfolio",
+    icon: LayoutGrid,
+    checkActive: (path: string) =>
+      path === "/investments" || (path.startsWith("/investments/") && path !== "/investments/new"),
+  },
+  {
+    href: "/investments/new",
+    label: "Add",
+    icon: Plus,
+    checkActive: (path: string) => path === "/investments/new",
+  },
+  {
+    href: "/simulator",
+    label: "Simulator",
+    icon: Calculator,
+    checkActive: (path: string) => path === "/simulator",
+  },
+  {
+    href: "/settings",
+    label: "Settings",
+    icon: Settings,
+    checkActive: (path: string) => path.startsWith("/settings"),
+  },
+];
 
 export function BottomNav() {
   const pathname = usePathname();
-  const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const links = [
-    { href: "/dashboard", label: "Dashboard", icon: BarChart },
-    { href: "/investments", label: "Investments", icon: TrendingUp },
-    { href: "/investments/new", label: "Add", icon: Plus },
-    { href: "/settings", label: "Settings", icon: Settings },
-  ];
-
-  const getActiveIndex = () => {
-    const currentPath = pathname || "/dashboard";
-    if (currentPath === "/dashboard" || currentPath === "/" || currentPath.startsWith("/dashboard/")) return 0;
-    if (currentPath.startsWith("/investments/new")) return 2;
-    if (currentPath.startsWith("/investments")) return 1;
-    if (currentPath.startsWith("/settings")) return 3;
-    return 0;
-  };
-
-  const activeIndex = getActiveIndex();
-
-  if (!mounted) return null;
+  // Determine active tab index among the 5 items
+  const activeIndex = NAV_ITEMS.findIndex((item) => item.checkActive(pathname));
+  const validIndex = activeIndex >= 0 ? activeIndex : 0;
 
   return (
-    <div className="fixed bottom-4 left-0 right-0 z-50 w-full flex justify-center px-4 pb-[env(safe-area-inset-bottom)] md:hidden pointer-events-none">
-      <nav className="w-full max-w-sm rounded-full border border-border bg-card/60 backdrop-blur-xl shadow-2xl pointer-events-auto overflow-visible">
-        <div className="flex h-16 items-center justify-between relative px-2">
-          {links.map((link, index) => {
-            const isActive = activeIndex === index;
-            const Icon = link.icon;
+    <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden border-t border-border bg-card/95 backdrop-blur-xl pb-[env(safe-area-inset-bottom)] transition-colors select-none">
+      <nav className="relative grid grid-cols-5 h-16 max-w-lg mx-auto">
+        {/* Sliding Popped-Up Orange Ball Indicator: 20% width across the 5 grid columns */}
+        <motion.div
+          className="absolute inset-y-0 left-0 pointer-events-none flex items-center justify-center z-10"
+          style={{ width: "20%" }}
+          animate={{
+            x: `${validIndex * 100}%`,
+          }}
+          transition={{
+            type: "spring",
+            stiffness: 420,
+            damping: 28,
+            mass: 0.8,
+          }}
+        >
+          {/* Popped-up circle: elevated by -12px above the bar */}
+          <div className="w-11 h-11 -translate-y-3 rounded-full bg-gradient-to-tr from-orange-500 via-orange-600 to-amber-400 shadow-xl shadow-orange-500/40 ring-4 ring-card flex items-center justify-center" />
+        </motion.div>
 
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="relative flex flex-1 flex-col items-center h-full justify-center group"
+        {/* The 5 Navigation Items */}
+        {NAV_ITEMS.map((item) => {
+          const isActive = item.checkActive(pathname);
+          const Icon = item.icon;
+
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="relative flex flex-col items-center justify-center h-full z-20"
+            >
+              <motion.div
+                animate={{
+                  y: isActive ? -12 : 0,
+                }}
+                transition={{
+                  type: "spring",
+                  stiffness: 420,
+                  damping: 28,
+                }}
+                whileTap={{ scale: 0.88 }}
+                className="flex flex-col items-center justify-center w-full"
               >
-                {/* Active Indicator (The Sliding Pill) */}
-                <AnimatePresence>
-                  {isActive && (
-                    <motion.div
-                      layoutId="nav-indicator"
-                      className="absolute h-14 w-14 bg-foreground rounded-full shadow-xl border border-white/10 z-0"
-                      initial={false}
-                      transition={{
-                        type: "spring",
-                        stiffness: 380,
-                        damping: 30,
-                      }}
-                      style={{ 
-                        top: "-24px"
-                      }}
-                    >
-                      {/* Glossy Reflection */}
-                      <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-white/20 to-transparent opacity-40" />
-                      
-                      {/* Subtle Outer Glow */}
-                      <div className="absolute inset-[-4px] rounded-full bg-foreground/10 blur-md -z-10" />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                {/* Icon: pops up with the ball and turns white when active */}
+                <div className="w-11 h-11 flex items-center justify-center">
+                  <Icon
+                    className={cn(
+                      "w-4.5 h-4.5 transition-colors duration-200",
+                      isActive
+                        ? "text-white stroke-[2.5]"
+                        : "text-muted-foreground stroke-[1.8] hover:text-foreground"
+                    )}
+                  />
+                </div>
 
-                {/* Icon Container */}
-                <motion.div 
+                {/* Text Label: smoothly hides when the item is active and popped up */}
+                <motion.span
+                  initial={false}
                   animate={{
-                    y: isActive ? -26 : 0,
-                    scale: isActive ? 1.15 : 1,
+                    opacity: isActive ? 0 : 1,
+                    scale: isActive ? 0.75 : 1,
+                    y: isActive ? 4 : 0,
                   }}
-                  transition={{
-                    type: "spring",
-                    stiffness: 400,
-                    damping: 25,
-                  }}
+                  transition={{ duration: 0.18, ease: "easeOut" }}
                   className={cn(
-                    "z-10 flex items-center justify-center transition-colors duration-300",
-                    isActive ? "text-background" : "text-muted-foreground group-hover:text-foreground"
+                    "text-[10px] tracking-tight transition-colors -mt-1.5 pointer-events-none select-none",
+                    isActive
+                      ? "invisible text-transparent"
+                      : "visible text-muted-foreground font-medium"
                   )}
                 >
-                  <Icon className="h-6 w-6" />
-                </motion.div>
-
-                {/* Label */}
-                <motion.span 
-                  animate={{
-                    opacity: isActive ? 1 : 0.5,
-                    y: isActive ? 8 : 0,
-                    fontWeight: isActive ? 700 : 500,
-                  }}
-                  className={cn(
-                    "absolute bottom-2 text-[9px] tracking-widest uppercase transition-all duration-300",
-                    isActive ? "text-foreground" : "text-muted-foreground"
-                  )}
-                >
-                  {link.label}
+                  {item.label}
                 </motion.span>
-              </Link>
-            );
-          })}
-        </div>
+              </motion.div>
+            </Link>
+          );
+        })}
       </nav>
     </div>
   );

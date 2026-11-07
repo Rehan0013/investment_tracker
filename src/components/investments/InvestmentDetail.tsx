@@ -4,12 +4,13 @@ import { useState, useTransition } from "react";
 import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { MonthlyChart } from "./MonthlyChart";
 import { getMonthlyBreakdown, getCurrentProgress } from "@/lib/utils";
 import { togglePaymentStatus } from "@/actions/investment.actions";
 import { toast } from "sonner";
-import { Card, CardContent } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { CheckCircle2, RotateCcw, Calendar, Phone, ShieldCheck, Sparkles, Clock, AlertCircle } from "lucide-react";
 
 export function InvestmentDetail({ investment }: { investment: any }) {
   const [isPending, startTransition] = useTransition();
@@ -18,150 +19,259 @@ export function InvestmentDetail({ investment }: { investment: any }) {
   const roi = investment.roi !== undefined ? investment.roi : 50;
   const monthlyData = getMonthlyBreakdown(investment.amount, new Date(investment.investingDate), roi);
   const progress = getCurrentProgress(investment.amount, new Date(investment.investingDate), roi);
-  const visibleMonths = progress.monthsElapsed === 12 ? 12 : Math.max(1, progress.monthsElapsed);
-  const visibleMonthlyData = monthlyData.slice(0, visibleMonths);
+  const isMatured = new Date() >= new Date(investment.returnDate);
+  const netProfit = investment.returnAmount - investment.amount;
+  const initial = investment.investorName?.charAt(0)?.toUpperCase() || "I";
+  const now = new Date();
 
   const handleTogglePayment = () => {
     startTransition(async () => {
       const res = await togglePaymentStatus(investment._id);
       if (res.success) {
         setIsPaid(res.isPaid);
-        toast.success(`Marked as ${res.isPaid ? 'Paid' : 'Active'}`);
+        if (res.isPaid) {
+          toast.success("Contract settled successfully! Payout confirmed.", {
+            description: `Full contractual maturity payment of ₹${investment.returnAmount.toLocaleString("en-IN")} recorded.`,
+          });
+        } else {
+          toast.info("Contract reopened to active status.");
+        }
       } else {
-        toast.error("Failed to update status");
+        toast.error("Failed to update contract status");
       }
     });
   };
 
   return (
-    <div className="space-y-6 pb-24">
-      {/* Top Section */}
-      <Card className="border-border/60 bg-card/60 dark:bg-card/40 backdrop-blur-2xl shadow-2xl mt-4">
-        <CardContent className="p-6 relative">
-          <div className="grid gap-6">
-            <div>
-              <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider font-semibold font-mono">Investor Name</p>
-              <h2 className="text-3xl font-bold tracking-tight text-foreground">{investment.investorName}</h2>
+    <div className="space-y-6">
+      {/* Top Dossier Header Card */}
+      <Card className="p-6 border-border shadow-sm bg-card text-card-foreground">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-border/70">
+          <div className="flex items-center gap-3.5">
+            <div className="h-12 w-12 rounded-xl bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20 flex items-center justify-center font-bold text-lg shadow-xs">
+              {initial}
             </div>
-
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 pt-4 border-t border-border/40">
-              <div>
-                <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider font-semibold font-mono">Mobile Number</p>
-                <p className="font-bold text-sm text-foreground font-mono">{investment.mobileNo}</p>
+            <div>
+              <div className="flex items-center gap-2">
+                <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
+                  {investment.investorName}
+                </h1>
+                {isPaid ? (
+                  <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded-full">
+                    <CheckCircle2 className="h-3.5 w-3.5" /> Settled
+                  </span>
+                ) : isMatured ? (
+                  <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-amber-600 dark:text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2.5 py-0.5 rounded-full">
+                    <AlertCircle className="h-3.5 w-3.5" /> Matured (Due)
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-blue-600 dark:text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2.5 py-0.5 rounded-full">
+                    <Clock className="h-3.5 w-3.5" /> Active Contract
+                  </span>
+                )}
               </div>
-              <div>
-                <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider font-semibold font-mono">Amount</p>
-                <p className="font-bold text-sm text-foreground font-mono">₹{investment.amount.toLocaleString("en-IN")}</p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider font-semibold font-mono">Status</p>
-                <Badge className={`px-3 py-1 text-xs font-bold rounded-lg shadow-sm ${isPaid ? "text-success bg-success/10 border border-success/20" : "text-[#f59e0b] bg-[#f59e0b]/10 border border-[#f59e0b]/20"}`}>
-                  {isPaid ? "Paid" : "Active"}
-                </Badge>
-              </div>
+              <p className="text-xs text-muted-foreground font-mono mt-0.5">
+                Contract ID: {investment._id} • Fixed Term 12 Mo
+              </p>
             </div>
           </div>
-        </CardContent>
+
+          <div className="flex items-center gap-2.5">
+            <Button
+              onClick={handleTogglePayment}
+              disabled={isPending}
+              variant={isPaid ? "outline" : "default"}
+              size="sm"
+              className={`gap-2 text-xs font-semibold shadow-xs cursor-pointer ${
+                !isPaid
+                  ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white hover:brightness-110"
+                  : ""
+              }`}
+            >
+              {isPaid ? (
+                <>
+                  <RotateCcw className="h-3.5 w-3.5 text-muted-foreground" />
+                  Reopen Contract
+                </>
+              ) : (
+                <>
+                  <CheckCircle2 className="h-3.5 w-3.5 text-white" />
+                  Mark as Settled
+                </>
+              )}
+            </Button>
+          </div>
+        </div>
+
+        {/* Contract Key Attributes Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-5">
+          <div className="p-3.5 rounded-xl bg-secondary/50 border border-border/60">
+            <span className="text-[11px] text-muted-foreground uppercase font-semibold">Principal Capital</span>
+            <p className="font-mono text-base sm:text-lg font-bold text-foreground tabular-nums mt-0.5">
+              ₹{investment.amount.toLocaleString("en-IN")}
+            </p>
+          </div>
+          <div className="p-3.5 rounded-xl bg-secondary/50 border border-border/60">
+            <span className="text-[11px] text-muted-foreground uppercase font-semibold">Maturity Payout</span>
+            <p className="font-mono text-base sm:text-lg font-bold text-foreground tabular-nums mt-0.5">
+              ₹{investment.returnAmount.toLocaleString("en-IN")}
+            </p>
+          </div>
+          <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+            <span className="text-[11px] text-emerald-600 dark:text-emerald-400 uppercase font-semibold">Contract Gain</span>
+            <p className="font-mono text-base sm:text-lg font-bold text-emerald-600 dark:text-emerald-400 tabular-nums mt-0.5">
+              +₹{netProfit.toLocaleString("en-IN")} (+{roi}%)
+            </p>
+          </div>
+          <div className="p-3.5 rounded-xl bg-secondary/50 border border-border/60">
+            <span className="text-[11px] text-muted-foreground uppercase font-semibold">Contract Term</span>
+            <p className="font-mono text-base sm:text-lg font-bold text-foreground tabular-nums mt-0.5">
+              12 Months
+            </p>
+          </div>
+        </div>
       </Card>
 
-      {/* Info Grid */}
-      <div className="grid grid-cols-2 gap-4">
-        <Card className="border-border/60 bg-card/60 dark:bg-card/40 backdrop-blur-2xl shadow-2xl">
-          <CardContent className="p-4 text-center">
-            <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider font-semibold font-mono">Invested On</p>
-            <p className="font-bold text-sm text-foreground font-mono">{format(new Date(investment.investingDate), "dd MMM yyyy")}</p>
-          </CardContent>
+      {/* Contract Verification & Schedule Details */}
+      <div className="grid gap-4 sm:grid-cols-3">
+        <Card className="p-4 border-border bg-card text-card-foreground shadow-xs">
+          <div className="flex items-center gap-2 text-muted-foreground mb-1.5">
+            <Phone className="h-3.5 w-3.5 text-orange-500" />
+            <span className="text-xs font-semibold uppercase tracking-wider">Contact Number</span>
+          </div>
+          <p className="font-mono text-sm font-bold text-foreground">
+            {investment.mobileNo}
+          </p>
         </Card>
-        <Card className="border-border/60 bg-card/60 dark:bg-card/40 backdrop-blur-2xl shadow-2xl">
-          <CardContent className="p-4 text-center">
-            <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider font-semibold font-mono">Returns On</p>
-            <p className="font-bold text-sm text-foreground font-mono">{format(new Date(investment.returnDate), "dd MMM yyyy")}</p>
-          </CardContent>
+
+        <Card className="p-4 border-border bg-card text-card-foreground shadow-xs">
+          <div className="flex items-center gap-2 text-muted-foreground mb-1.5">
+            <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" />
+            <span className="text-xs font-semibold uppercase tracking-wider">Aadhaar Verification</span>
+          </div>
+          <p className="font-mono text-sm font-bold text-foreground">
+            {investment.aadharNo ? investment.aadharNo.replace(/(\d{4})\d{4}(\d{4})/, "$1 ●●●● $2") : "Not Recorded"}
+          </p>
         </Card>
-        <Card className="border-border/60 bg-card/60 dark:bg-card/40 backdrop-blur-2xl col-span-2 shadow-2xl">
-          <CardContent className="p-5 flex justify-between items-center">
-            <div>
-              <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider font-semibold font-mono">Aadhar Number</p>
-              <p className="font-bold text-sm font-mono tracking-widest text-foreground">{investment.aadharNo.replace(/(\d{4})\d{4}(\d{4})/, '$1 ●●●● $2')}</p>
-            </div>
-            <div className="text-right border-l border-border/40 pl-6">
-              <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider font-semibold font-mono">Expected Return</p>
-              <p className="font-bold text-base text-success font-mono">₹{investment.returnAmount.toLocaleString("en-IN")}</p>
-            </div>
-          </CardContent>
+
+        <Card className="p-4 border-border bg-card text-card-foreground shadow-xs">
+          <div className="flex items-center gap-2 text-muted-foreground mb-1.5">
+            <Calendar className="h-3.5 w-3.5 text-amber-500" />
+            <span className="text-xs font-semibold uppercase tracking-wider">Maturity Date</span>
+          </div>
+          <p className="font-mono text-sm font-bold text-foreground">
+            {format(new Date(investment.returnDate), "dd MMM yyyy")}
+          </p>
+          <span className="text-[10px] text-muted-foreground">
+            Initiated on {format(new Date(investment.investingDate), "dd MMM yyyy")}
+          </span>
         </Card>
       </div>
 
-      {/* Progress Section */}
-      <Card className="border-border/60 bg-card/60 dark:bg-card/40 backdrop-blur-2xl shadow-2xl">
-        <CardContent className="p-6 space-y-4">
-          <div className="flex justify-between items-center text-sm">
-            <span className="font-semibold text-muted-foreground font-mono">{progress.monthsElapsed} of 12 months completed</span>
-            <span className="font-bold text-primary font-mono text-base">{progress.percentageComplete}%</span>
+      {/* Lifecycle Progress Bar */}
+      <Card className="p-5 border-border bg-card text-card-foreground space-y-3 shadow-xs">
+        <div className="flex justify-between items-center text-xs">
+          <div className="flex items-center gap-2">
+            <Sparkles className="h-3.5 w-3.5 text-orange-500" />
+            <span className="font-semibold text-foreground">Contract Lifecycle Progression</span>
           </div>
-          <div className="w-full bg-background/80 rounded-full h-3 border border-border/40 overflow-hidden p-0.5 shadow-inner">
-            <div
-              className="bg-primary h-full rounded-full transition-all duration-1000 ease-in-out shadow-sm"
-              style={{ width: `${progress.percentageComplete}%` }}
-            />
-          </div>
-          <div className="grid grid-cols-2 gap-4 pt-6 border-t border-border/40 mt-6">
-            <div>
-              <p className="text-xs text-muted-foreground font-mono uppercase tracking-wider">Current Value</p>
-              <p className="font-bold text-2xl text-foreground font-mono mt-1">₹{progress.currentValue.toLocaleString("en-IN")}</p>
-            </div>
-            <div className="text-right">
-              <p className="text-xs text-muted-foreground font-mono uppercase tracking-wider">Profit So Far</p>
-              <p className="font-bold text-2xl text-success font-mono mt-1">+₹{progress.profitSoFar.toLocaleString("en-IN")}</p>
-            </div>
+          <span className="font-mono text-muted-foreground">
+            {progress.monthsElapsed} of 12 Months Elapsed ({progress.percentageComplete}%)
+          </span>
+        </div>
+        <div className="w-full bg-secondary h-2.5 rounded-full overflow-hidden p-0.5">
+          <div
+            className={`h-full rounded-full transition-all duration-500 ${
+              isPaid
+                ? "bg-emerald-500"
+                : isMatured
+                ? "bg-amber-500"
+                : "bg-gradient-to-r from-orange-500 to-amber-500"
+            }`}
+            style={{ width: `${Math.min(progress.percentageComplete, 100)}%` }}
+          />
+        </div>
+      </Card>
+
+      {/* Monthly Chart: displays ONLY up to the current crossed month */}
+      <MonthlyChart data={monthlyData} investingDate={investment.investingDate} />
+
+      {/* Accrual Ledger Breakdown Table */}
+      <Card className="p-5 border-border bg-card text-card-foreground shadow-xs">
+        <CardHeader className="p-0 pb-3">
+          <CardTitle className="text-sm font-bold text-foreground">
+            Accrual Ledger Schedule
+          </CardTitle>
+          <CardDescription className="text-xs text-muted-foreground">
+            Month-by-month compounding and distribution schedule
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="p-0">
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow className="border-b border-border bg-secondary/80 hover:bg-transparent">
+                  <TableHead className="text-xs font-semibold text-muted-foreground py-2.5 pl-2">
+                    Period
+                  </TableHead>
+                  <TableHead className="text-xs font-semibold text-muted-foreground py-2.5 text-center">
+                    Status
+                  </TableHead>
+                  <TableHead className="text-xs font-semibold text-muted-foreground py-2.5 text-right">
+                    Opening Capital
+                  </TableHead>
+                  <TableHead className="text-xs font-semibold text-muted-foreground py-2.5 text-right">
+                    Monthly Profit
+                  </TableHead>
+                  <TableHead className="text-xs font-semibold text-muted-foreground py-2.5 text-right pr-2">
+                    Closing Valuation
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {monthlyData.map((item, idx) => {
+                  const itemDate = new Date(item.date);
+                  const isCrossed = itemDate <= now;
+                  const isCurrentMonth = item.month === progress.monthsElapsed;
+
+                  return (
+                    <TableRow
+                      key={idx}
+                      className={`border-b border-border/60 hover:bg-muted/40 font-mono text-xs tabular-nums transition-colors ${
+                        isCurrentMonth ? "bg-orange-500/10 font-semibold" : ""
+                      }`}
+                    >
+                      <TableCell className="py-2.5 pl-2 text-foreground font-sans flex items-center gap-2">
+                        <span>{format(itemDate, "MMMM yyyy")} (Month {item.month})</span>
+                      </TableCell>
+                      <TableCell className="py-2.5 text-center">
+                        {isCrossed ? (
+                          <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.2 rounded-full">
+                            <CheckCircle2 className="h-2.5 w-2.5" /> Accrued
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-muted-foreground bg-muted border border-border px-2 py-0.2 rounded-full">
+                            <Clock className="h-2.5 w-2.5" /> Scheduled
+                          </span>
+                        )}
+                      </TableCell>
+                      <TableCell className="py-2.5 text-right text-muted-foreground">
+                        ₹{item.openingBalance.toLocaleString("en-IN")}
+                      </TableCell>
+                      <TableCell className="py-2.5 text-right text-emerald-600 dark:text-emerald-400 font-semibold">
+                        +₹{item.interest.toLocaleString("en-IN")}
+                      </TableCell>
+                      <TableCell className="py-2.5 text-right font-bold text-foreground pr-2">
+                        ₹{item.closingBalance.toLocaleString("en-IN")}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
           </div>
         </CardContent>
       </Card>
-
-      <MonthlyChart data={visibleMonthlyData} />
-
-      {/* Monthly Table */}
-      <Card className="border-border/60 bg-card/60 dark:bg-card/40 backdrop-blur-2xl overflow-hidden shadow-2xl">
-        <div className="overflow-x-auto">
-          <Table>
-            <TableHeader className="bg-transparent border-b border-border/60">
-              <TableRow className="border-none hover:bg-transparent">
-                <TableHead className="w-12 text-muted-foreground font-semibold text-xs tracking-wider uppercase font-mono">M</TableHead>
-                <TableHead className="text-muted-foreground font-semibold text-xs tracking-wider uppercase font-mono">Opening</TableHead>
-                <TableHead className="text-muted-foreground font-semibold text-xs tracking-wider uppercase font-mono">Interest</TableHead>
-                <TableHead className="text-right text-muted-foreground font-semibold text-xs tracking-wider uppercase font-mono">Closing</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {visibleMonthlyData.map((d, i) => (
-                <TableRow
-                  key={d.month}
-                  className={`border-b border-border/40 transition-colors hover:bg-muted/30 ${i + 1 === progress.monthsElapsed && !isPaid ? 'bg-primary/10 font-bold' : ''}`}
-                >
-                  <TableCell className="font-medium text-xs text-muted-foreground font-mono">{d.month}</TableCell>
-                  <TableCell className="text-sm text-foreground font-mono font-semibold">₹{Math.round(d.openingBalance).toLocaleString("en-IN")}</TableCell>
-                  <TableCell className="text-sm text-success font-mono font-semibold">+₹{Math.round(d.interest).toLocaleString("en-IN")}</TableCell>
-                  <TableCell className="text-sm text-right font-semibold text-foreground font-mono">₹{Math.round(d.closingBalance).toLocaleString("en-IN")}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      </Card>
-
-      {/* Action Section */}
-      {progress.monthsElapsed === 12 && (
-        <div className="fixed bottom-16 left-0 w-full p-4 bg-background/80 backdrop-blur-2xl border-t border-border/60 sm:relative sm:bottom-0 sm:bg-transparent sm:border-0 sm:p-0 z-40">
-          <Button
-            onClick={handleTogglePayment}
-            disabled={isPending}
-            variant={isPaid ? "outline" : "default"}
-            className={`w-full h-14 text-lg font-bold rounded-2xl shadow-2xl transition-all duration-300 ${!isPaid ? 'bg-success hover:bg-success/90 text-white shadow-success/25' : 'border-border/60 text-foreground hover:bg-muted/30'}`}
-          >
-            {isPending ? "Updating..." : (isPaid ? "Revert Transfer" : "Money Transferred ✓")}
-          </Button>
-        </div>
-      )}
     </div>
   );
 }

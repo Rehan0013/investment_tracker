@@ -8,22 +8,22 @@ import { notFound } from "next/navigation";
 export default async function InvestmentPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;
   const res = await getInvestmentById(resolvedParams.id);
-  
+
   if (!res.success || !res.investment) {
     return notFound();
   }
 
   return (
-    <div className="container p-4">
-      <div className="flex items-center gap-2 mb-2">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-4">
+      <div className="flex items-center gap-2">
         <Link href="/investments">
-          <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground">
-            <ChevronLeft className="h-5 w-5" />
+          <Button variant="ghost" size="sm" className="h-8 gap-1 pl-1 text-muted-foreground hover:text-foreground">
+            <ChevronLeft className="h-4 w-4" />
+            <span className="text-xs font-medium">Portfolio Ledger</span>
           </Button>
         </Link>
-        <span className="font-medium text-muted-foreground text-sm">Back to Investments</span>
       </div>
-      
+
       <InvestmentDetail investment={res.investment} />
     </div>
   );
