@@ -41,23 +41,23 @@ export default async function DashboardPage() {
   const barChartData =
     monthlyData.length >= 4
       ? monthlyData.slice(-6).map((m, idx, arr) => ({
-          month: m.month,
-          value: m.totalReturn || m.totalInvested || 30000,
-          isPeak: idx === arr.length - 2,
-        }))
+        month: m.month,
+        value: m.totalReturn || m.totalInvested || 30000,
+        isPeak: idx === arr.length - 2,
+      }))
       : [
-          { month: "Sep", value: 30000 },
-          { month: "Oct", value: 45000 },
-          { month: "Nov", value: 65000 },
-          { month: "Dec", value: 85000 },
-          { month: "Jan", value: 120000, isPeak: true },
-          { month: "Feb", value: 95000 },
-        ];
+        { month: "Sep", value: 30000 },
+        { month: "Oct", value: 45000 },
+        { month: "Nov", value: 65000 },
+        { month: "Dec", value: 85000 },
+        { month: "Jan", value: 120000, isPeak: true },
+        { month: "Feb", value: 95000 },
+      ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Top Header Strip with Welcome & Action Buttons */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-border">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 pb-2 border-b border-border">
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
@@ -73,15 +73,15 @@ export default async function DashboardPage() {
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5">
-          <Link href="/investments">
-            <button className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-secondary hover:bg-muted text-foreground text-xs font-medium border border-border transition-all active:scale-95 cursor-pointer">
+        <div className="grid grid-cols-2 sm:flex items-center gap-2 sm:gap-2.5 w-full sm:w-auto">
+          <Link href="/investments" className="w-full sm:w-auto">
+            <button className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-3 sm:px-3.5 py-2 rounded-full bg-secondary hover:bg-muted text-foreground text-xs font-medium border border-border transition-all active:scale-95 cursor-pointer">
               <span>All Contracts</span>
               <ArrowUpRight className="h-3 w-3 stroke-[2]" />
             </button>
           </Link>
-          <Link href="/investments/new">
-            <button className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-gradient-to-r from-orange-500 via-orange-600 to-amber-500 hover:brightness-110 text-white text-xs font-semibold shadow-lg shadow-orange-500/25 transition-all active:scale-95 cursor-pointer">
+          <Link href="/investments/new" className="w-full sm:w-auto">
+            <button className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-3 sm:px-4 py-2 rounded-full bg-gradient-to-r from-orange-500 via-orange-600 to-amber-500 hover:brightness-110 text-white text-xs font-semibold shadow-lg shadow-orange-500/25 transition-all active:scale-95 cursor-pointer">
               <Plus className="h-3.5 w-3.5 stroke-[2.5]" />
               <span>Record Position</span>
             </button>
@@ -94,9 +94,9 @@ export default async function DashboardPage() {
         {/* Metric 1: Total Investors */}
         <StatCard
           title="Total Investors"
-          value={uniqueInvestorsCount}
-          badge={`${totalInvestments} Contracts`}
-          description={`${pendingCount} active commitments maturing`}
+          value={totalInvestments}
+          // badge={`${pendingCount} active commitments maturing`}
+          description={`${uniqueInvestorsCount} Unique investors`}
           icon={<Users className="h-4 w-4" />}
           accent="purple"
         />

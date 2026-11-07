@@ -79,67 +79,50 @@ export function TopHeader({ userName = "Adnan Khan", userEmail = "adnan@investme
   const userHandle = `@${userEmail.split("@")[0] || "investor"}`;
 
   return (
-    <header className="w-full flex items-center justify-between gap-4 py-3.5 px-4 sm:px-6 lg:px-8 border-b border-border bg-card/85 backdrop-blur-md sticky top-0 z-40 select-none transition-colors">
-      {/* Left: Search Bar Pill with ⌘ + Space badge */}
+    <header className="w-full flex items-center justify-between gap-2.5 sm:gap-4 py-2.5 sm:py-3.5 px-3 sm:px-6 lg:px-8 border-b border-border bg-card/85 backdrop-blur-md sticky top-0 z-40 select-none transition-colors">
+      {/* Left: Search Bar Pill */}
       <form
         onSubmit={handleSearchSubmit}
-        className={`relative flex items-center w-full max-w-md h-10 px-3.5 rounded-full bg-secondary/80 border transition-all duration-200 ${isSearchFocused
+        className={`relative flex items-center w-full max-w-md h-9 sm:h-10 px-3 sm:px-3.5 rounded-full bg-secondary/80 border transition-all duration-200 ${isSearchFocused
           ? "border-primary/60 ring-2 ring-primary/10 shadow-sm"
           : "border-border hover:border-border/80"
           }`}
       >
-        <Search className="w-4 h-4 text-muted-foreground mr-2 shrink-0 stroke-[1.8]" />
+        <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-muted-foreground mr-1.5 sm:mr-2 shrink-0 stroke-[1.8]" />
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           onFocus={() => setIsSearchFocused(true)}
           onBlur={() => setIsSearchFocused(false)}
-          placeholder="Search ledger, investors, contracts..."
-          className="w-full bg-transparent text-xs text-foreground placeholder:text-muted-foreground focus:outline-none"
+          placeholder="Search contracts, investors..."
+          className="w-full bg-transparent text-xs sm:text-xs text-foreground placeholder:text-muted-foreground focus:outline-none"
         />
-        {/* <div className="flex items-center gap-1 shrink-0 ml-2">
-          <kbd className="hidden sm:inline-flex items-center gap-0.5 px-2 py-0.5 text-[10px] font-mono text-muted-foreground bg-muted border border-border rounded-full">
-            ⌘ + Space
-          </kbd>
-        </div> */}
       </form>
 
       {/* Right Controls: Refresh, Theme Toggle, Profile Dropdown */}
-      <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+      <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
         {/* Refresh Button */}
         <button
           onClick={handleRefresh}
-          className="flex items-center justify-center h-9 w-9 rounded-full bg-secondary border border-border text-muted-foreground hover:text-foreground hover:bg-muted transition-all active:scale-95 cursor-pointer"
+          className="flex items-center justify-center h-8.5 w-8.5 sm:h-9 sm:w-9 rounded-full bg-secondary border border-border text-muted-foreground hover:text-foreground hover:bg-muted transition-all active:scale-95 cursor-pointer"
           title="Refresh Data"
         >
           <RotateCw
-            className={`w-4 h-4 stroke-[1.8] ${isRefreshing ? "animate-spin text-primary" : ""}`}
+            className={`w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[1.8] ${isRefreshing ? "animate-spin text-primary" : ""}`}
           />
         </button>
-
-        {/* Notifications Bell */}
-        {/* <div className="relative">
-          <Link
-            href="/investments"
-            className="flex items-center justify-center h-9 w-9 rounded-full bg-secondary border border-border text-muted-foreground hover:text-foreground hover:bg-muted transition-all active:scale-95"
-            title="Portfolio Notifications"
-          >
-            <Bell className="w-4 h-4 stroke-[1.8]" />
-          </Link>
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-orange-500 ring-2 ring-card animate-pulse" />
-        </div> */}
 
         {/* Theme Toggle (Moon / Sun) */}
         <button
           onClick={handleToggleTheme}
-          className="flex items-center justify-center h-9 w-9 rounded-full bg-secondary border border-border text-muted-foreground hover:text-foreground hover:bg-muted transition-all active:scale-95 cursor-pointer"
+          className="flex items-center justify-center h-8.5 w-8.5 sm:h-9 sm:w-9 rounded-full bg-secondary border border-border text-muted-foreground hover:text-foreground hover:bg-muted transition-all active:scale-95 cursor-pointer"
           title="Toggle Light/Dark Theme"
         >
           {!isDark ? (
-            <Sun className="w-4 h-4 text-zinc-700 stroke-[1.8]" />
+            <Sun className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-zinc-700 stroke-[1.8]" />
           ) : (
-            <Moon className="w-4 h-4 text-amber-400 stroke-[1.8]" />
+            <Moon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400 stroke-[1.8]" />
           )}
         </button>
 
@@ -147,13 +130,13 @@ export function TopHeader({ userName = "Adnan Khan", userEmail = "adnan@investme
         <div className="relative" ref={dropdownRef}>
           <button
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="flex items-center gap-2.5 pl-1.5 pr-3 py-1 rounded-full bg-secondary border border-border hover:bg-muted transition-all group cursor-pointer"
+            className="flex items-center gap-1.5 sm:gap-2.5 pl-1 sm:pl-1.5 pr-2 sm:pr-3 py-1 rounded-full bg-secondary border border-border hover:bg-muted transition-all group cursor-pointer"
             aria-expanded={isDropdownOpen}
             aria-haspopup="true"
           >
             {/* Avatar with emerald online badge */}
             <div className="relative">
-              <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-orange-500 to-amber-500 flex items-center justify-center text-white text-[11px] font-bold shadow-xs">
+              <div className="w-6.5 h-6.5 sm:w-7 sm:h-7 rounded-full bg-gradient-to-tr from-orange-500 to-amber-500 flex items-center justify-center text-white text-[11px] font-bold shadow-xs">
                 {userName.charAt(0).toUpperCase()}
               </div>
               <span className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-secondary" />
@@ -177,7 +160,7 @@ export function TopHeader({ userName = "Adnan Khan", userEmail = "adnan@investme
 
           {/* Pop-up Dropdown Menu */}
           {isDropdownOpen && (
-            <div className="absolute right-0 mt-2 w-64 rounded-2xl bg-popover text-popover-foreground border border-border shadow-xl p-2 z-50 animate-in fade-in-0 zoom-in-95 duration-150">
+            <div className="absolute right-0 mt-2 w-64 max-w-[calc(100vw-1.5rem)] rounded-2xl bg-popover text-popover-foreground border border-border shadow-xl p-2 z-50 animate-in fade-in-0 zoom-in-95 duration-150">
               {/* User Details Header */}
               <div className="px-3 py-2.5 border-b border-border/80 flex items-center gap-3">
                 <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-orange-500 to-amber-500 flex items-center justify-center text-white font-bold text-sm shadow-xs">

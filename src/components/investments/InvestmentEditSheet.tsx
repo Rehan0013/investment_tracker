@@ -77,7 +77,7 @@ export function InvestmentEditSheet({
           <Edit className="w-3.5 h-3.5" /> Edit
         </span>
       </SheetTrigger>
-      <SheetContent side="bottom" className="h-[85vh] sm:h-full sm:w-[420px] overflow-y-auto bg-card border-border p-6">
+      <SheetContent side="bottom" className="h-[85dvh] sm:h-full sm:w-[420px] overflow-y-auto bg-card border-border p-4 sm:p-6 pb-[calc(2rem+env(safe-area-inset-bottom))]">
         <SheetHeader className="mb-4">
           <SheetTitle className="text-sm font-semibold text-foreground">Edit Investment Position</SheetTitle>
           <SheetDescription className="text-xs text-muted-foreground">

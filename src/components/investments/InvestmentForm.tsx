@@ -68,7 +68,7 @@ export function InvestmentForm() {
   return (
     <div className="grid gap-6 lg:grid-cols-12 items-start">
       {/* Form Details (7 cols) */}
-      <Card className="p-5 lg:col-span-7">
+      <Card className="p-4 sm:p-5 lg:col-span-7">
         <CardHeader className="p-0 pb-4">
           <CardTitle className="text-sm font-semibold text-foreground">
             Contract Terms & Investor Details
@@ -116,7 +116,7 @@ export function InvestmentForm() {
                 <select
                   id="roi"
                   {...register("roi", { valueAsNumber: true })}
-                  className="h-9 w-full rounded-md border border-input bg-card px-3 py-1.5 text-xs text-foreground transition-colors outline-none focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring cursor-pointer"
+                  className="h-9 w-full rounded-md border border-input bg-card px-3 py-1.5 text-base sm:text-xs text-foreground transition-colors outline-none focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring cursor-pointer"
                 >
                   <option value={50}>50% Contractual ROI (1.5x Multiplier)</option>
                   <option value={100}>100% Contractual ROI (2.0x Multiplier)</option>
@@ -199,7 +199,7 @@ export function InvestmentForm() {
       </Card>
 
       {/* Live Financial Calculation Preview (5 cols) */}
-      <Card className="p-5 lg:col-span-5 space-y-5">
+      <Card className="p-4 sm:p-5 lg:col-span-5 space-y-5">
         <CardHeader className="p-0 pb-3">
           <div className="flex items-center gap-2">
             <Calculator className="h-4 w-4 text-muted-foreground" />

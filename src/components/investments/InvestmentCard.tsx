@@ -30,39 +30,39 @@ export function InvestmentCard({ investment }: InvestmentCardProps) {
 
   return (
     <Link href={`/investments/${investment._id}`} className="block group">
-      <div className="p-5 rounded-2xl bg-card text-card-foreground border border-border hover:border-primary/50 transition-all duration-200 shadow-sm hover:shadow-md flex flex-col justify-between h-full">
+      <div className="p-4 sm:p-5 rounded-2xl bg-card text-card-foreground border border-border hover:border-primary/50 transition-all duration-200 shadow-sm hover:shadow-md flex flex-col justify-between h-full">
         <div className="space-y-4">
           {/* Header Row with Avatar & Status */}
-          <div className="flex items-start justify-between gap-3 pb-3 border-b border-border/70">
-            <div className="flex items-center gap-3">
-              <div className="h-9 w-9 rounded-xl bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20 flex items-center justify-center font-bold text-xs tracking-tight shadow-xs">
+          <div className="flex items-start justify-between gap-2.5 sm:gap-3 pb-3 border-b border-border/70">
+            <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+              <div className="h-8.5 w-8.5 sm:h-9 sm:w-9 rounded-xl bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20 flex items-center justify-center font-bold text-xs tracking-tight shrink-0 shadow-xs">
                 {initial}
               </div>
-              <div>
+              <div className="min-w-0">
                 <div className="flex items-center gap-1.5">
-                  <h3 className="font-semibold text-sm text-foreground tracking-tight group-hover:text-primary transition-colors">
+                  <h3 className="font-semibold text-sm text-foreground tracking-tight group-hover:text-primary transition-colors truncate">
                     {investment.investorName}
                   </h3>
-                  <ArrowUpRight className="h-3 w-3 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <ArrowUpRight className="h-3 w-3 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
                 </div>
-                <p className="text-[11px] text-muted-foreground font-mono mt-0.5">
+                <p className="text-[11px] text-muted-foreground font-mono mt-0.5 truncate">
                   {investment.mobileNo}
-                  {investment.aadharNo ? ` • Aadhaar: ●●●● ${investment.aadharNo.slice(-4)}` : ""}
+                  {investment.aadharNo ? ` • ●●●● ${investment.aadharNo.slice(-4)}` : ""}
                 </p>
               </div>
             </div>
 
-            <div>
+            <div className="shrink-0">
               {investment.isPaid ? (
-                <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded-full">
+                <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 sm:px-2.5 py-0.5 rounded-full whitespace-nowrap">
                   <CheckCircle2 className="h-3 w-3" /> Settled
                 </span>
               ) : isMatured ? (
-                <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-amber-600 dark:text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2.5 py-0.5 rounded-full">
+                <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-amber-600 dark:text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 sm:px-2.5 py-0.5 rounded-full whitespace-nowrap">
                   <AlertCircle className="h-3 w-3" /> Matured
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-blue-600 dark:text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2.5 py-0.5 rounded-full">
+                <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-blue-600 dark:text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2 sm:px-2.5 py-0.5 rounded-full whitespace-nowrap">
                   <Clock className="h-3 w-3" /> Active
                 </span>
               )}

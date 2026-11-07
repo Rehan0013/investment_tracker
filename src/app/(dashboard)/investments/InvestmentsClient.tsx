@@ -52,19 +52,19 @@ export function InvestmentsClient({ initialInvestments }: { initialInvestments: 
   return (
     <div className="space-y-6">
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 pb-4 border-b border-border">
         <div>
           <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
             Portfolio Positions
           </h1>
-          <p className="text-xs text-muted-foreground mt-1">
+          <p className="text-xs text-muted-foreground mt-0.5">
             {initialInvestments.length} Total Registered Contracts • Currency: INR (₹)
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto">
           {/* View Mode Toggle */}
-          <div className="flex items-center bg-secondary p-1 rounded-full border border-border">
+          <div className="flex items-center bg-secondary p-1 rounded-full border border-border shrink-0">
             <button
               onClick={() => setViewMode("grid")}
               className={`p-1.5 rounded-full text-xs transition-all cursor-pointer ${
@@ -89,8 +89,8 @@ export function InvestmentsClient({ initialInvestments }: { initialInvestments: 
             </button>
           </div>
 
-          <Link href="/investments/new">
-            <button className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-gradient-to-r from-orange-500 via-orange-600 to-amber-500 hover:brightness-110 text-white text-xs font-semibold shadow-lg shadow-orange-500/25 transition-all active:scale-95 cursor-pointer">
+          <Link href="/investments/new" className="shrink-0">
+            <button className="inline-flex items-center gap-1.5 px-3.5 sm:px-4 py-2 rounded-full bg-gradient-to-r from-orange-500 via-orange-600 to-amber-500 hover:brightness-110 text-white text-xs font-semibold shadow-lg shadow-orange-500/25 transition-all active:scale-95 cursor-pointer">
               <Plus className="h-3.5 w-3.5 stroke-[2.5]" />
               <span>Record Position</span>
             </button>
@@ -119,7 +119,7 @@ export function InvestmentsClient({ initialInvestments }: { initialInvestments: 
         </div>
 
         {/* Dynamic Filter Badges */}
-        <div className="flex items-center gap-1.5 bg-secondary p-1 rounded-full border border-border overflow-x-auto text-xs">
+        <div className="flex items-center gap-1.5 bg-secondary p-1 rounded-full border border-border overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden text-xs">
           {(["All", "Active", "Matured", "Paid"] as const).map((tab) => {
             const count = counts[tab];
             const isSelected = filter === tab;
@@ -160,7 +160,7 @@ export function InvestmentsClient({ initialInvestments }: { initialInvestments: 
               Showing <strong className="text-foreground">{filtered.length}</strong> of {initialInvestments.length} contracts
             </span>
           </div>
-          <div className="flex items-center gap-4 font-mono tabular-nums text-[11px]">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 font-mono tabular-nums text-[11px]">
             <span>
               Principal: <strong className="text-foreground">₹{totalFilteredPrincipal.toLocaleString("en-IN")}</strong>
             </span>

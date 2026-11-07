@@ -44,7 +44,7 @@ export function TotalBalanceCard({
 
   // Base dataset: use real monthly data or fallback 12-month sample
   const baseData = useMemo(() => {
-    if (monthlyData && monthlyData.length >= 4) {
+    if (monthlyData && monthlyData.length > 0) {
       return monthlyData.map((d) => ({
         month: d.month,
         invested: d.totalInvested,
@@ -72,7 +72,7 @@ export function TotalBalanceCard({
   const filteredData = useMemo(() => {
     switch (activeFilter) {
       case "1 month":
-        return baseData.slice(-2);
+        return baseData.slice(-1);
       case "3 month":
         return baseData.slice(-3);
       case "6 month":
@@ -84,10 +84,35 @@ export function TotalBalanceCard({
   }, [baseData, activeFilter]);
 
   // Dynamically compute totals for active filter window
-  const activeReturnTotal = filteredData.length > 0 ? filteredData[filteredData.length - 1].returnAmount : totalBalance;
-  const activeInvestedTotal = filteredData.length > 0 ? filteredData[filteredData.length - 1].invested : totalInvested;
-  const activeProfit = activeReturnTotal - activeInvestedTotal;
-  const activeRoi = activeInvestedTotal > 0 ? ((activeProfit / activeInvestedTotal) * 100).toFixed(1) : growthPercent;
+  const { activeReturnTotal, activeInvestedTotal, activeProfit, activeRoi } = useMemo(() => {
+    if (!filteredData || filteredData.length === 0) {
+      const profit = totalBalance - totalInvested;
+      const roi = totalInvested > 0 ? ((profit / totalInvested) * 100).toFixed(1) : String(growthPercent);
+      return {
+        activeReturnTotal: totalBalance,
+        activeInvestedTotal: totalInvested,
+        activeProfit: profit,
+        activeRoi: roi,
+      };
+    }
+
+    const returnSum = filteredData.reduce((acc, curr) => acc + (curr.returnAmount || 0), 0);
+    const investedSum = filteredData.reduce((acc, curr) => acc + (curr.invested || 0), 0);
+
+    const isFallbackData = !monthlyData || monthlyData.length === 0;
+    const finalReturn = returnSum === 0 && isFallbackData && activeFilter === "1 year" ? totalBalance : returnSum;
+    const finalInvested = investedSum === 0 && isFallbackData && activeFilter === "1 year" ? totalInvested : investedSum;
+
+    const profit = finalReturn - finalInvested;
+    const roi = finalInvested > 0 ? ((profit / finalInvested) * 100).toFixed(1) : "0.0";
+
+    return {
+      activeReturnTotal: finalReturn,
+      activeInvestedTotal: finalInvested,
+      activeProfit: profit,
+      activeRoi: roi,
+    };
+  }, [filteredData, monthlyData, totalBalance, totalInvested, growthPercent, activeFilter]);
 
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
@@ -140,12 +165,12 @@ export function TotalBalanceCard({
   };
 
   return (
-    <div className="bg-card border border-border rounded-3xl p-5 sm:p-6 shadow-sm relative overflow-hidden flex flex-col justify-between transition-colors">
+    <div className="bg-card border border-border rounded-3xl p-4 sm:p-6 shadow-sm relative overflow-hidden flex flex-col justify-between transition-colors">
       {/* Top ambient warm glow for dark mode */}
       <div className="absolute top-0 left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-orange-500/30 to-transparent pointer-events-none" />
 
       {/* Top Header: Title, Metric, Growth Badge, and Time Filter Pills */}
-      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-3">
+      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 sm:gap-4 mb-3">
         <div>
           <div className="flex items-center gap-2">
             <span className="text-xs font-medium text-muted-foreground">
@@ -156,15 +181,22 @@ export function TotalBalanceCard({
             </span>
           </div>
 
-          <div className="flex flex-wrap items-baseline gap-3 mt-1.5">
+          <div className="flex flex-wrap items-baseline gap-2 sm:gap-3 mt-1.5">
             <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground tabular-nums">
               ₹{activeReturnTotal.toLocaleString("en-IN")}
             </h2>
-            <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-0.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">
-                ↑ +{activeRoi}% Net Yield
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+              <span
+                className={`inline-flex items-center gap-0.5 text-xs font-semibold px-2 py-0.5 rounded-full ${
+                  Number(activeRoi) >= 0
+                    ? "text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20"
+                    : "text-rose-600 dark:text-rose-400 bg-rose-500/10 border border-rose-500/20"
+                }`}
+              >
+                {Number(activeRoi) >= 0 ? "↑ +" : "↓ "}
+                {activeRoi}% Net Yield
               </span>
-              <span className="text-xs text-muted-foreground">
+              <span className="text-xs text-muted-foreground whitespace-nowrap">
                 (Principal: ₹{activeInvestedTotal.toLocaleString("en-IN")})
               </span>
             </div>
@@ -172,12 +204,12 @@ export function TotalBalanceCard({
         </div>
 
         {/* Dynamic Filter Pills */}
-        <div className="flex items-center bg-secondary p-1 rounded-full border border-border self-start">
+        <div className="w-full sm:w-auto grid grid-cols-4 sm:flex gap-1 bg-secondary p-1 rounded-full border border-border">
           {filters.map((f) => (
             <button
               key={f}
               onClick={() => setActiveFilter(f)}
-              className={`px-3 py-1 rounded-full text-xs font-medium transition-all cursor-pointer ${
+              className={`text-center px-1.5 sm:px-3 py-1 rounded-full text-[11px] sm:text-xs font-medium transition-all cursor-pointer whitespace-nowrap ${
                 activeFilter === f
                   ? "bg-card text-foreground shadow-xs font-semibold"
                   : "text-muted-foreground hover:text-foreground"
@@ -190,7 +222,7 @@ export function TotalBalanceCard({
       </div>
 
       {/* Dual Area Chart: Invested (Orange) + Return Valuation (Emerald) */}
-      <div className="h-[230px] w-full relative -mx-2">
+      <div className="h-[200px] sm:h-[235px] w-full relative -mx-2">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={filteredData} margin={{ top: 20, right: 16, left: -16, bottom: 0 }}>
             <defs>
@@ -237,6 +269,11 @@ export function TotalBalanceCard({
               stroke="#f97316"
               strokeWidth={2.5}
               fill="url(#warmOrangeGradient)"
+              dot={
+                filteredData.length <= 3
+                  ? { r: 5, strokeWidth: 2, fill: "#f97316", stroke: "#ffffff" }
+                  : false
+              }
               activeDot={{
                 r: 5,
                 fill: "#ffffff",
@@ -253,6 +290,11 @@ export function TotalBalanceCard({
               stroke="#10b981"
               strokeWidth={2.5}
               fill="url(#emeraldReturnGradient)"
+              dot={
+                filteredData.length <= 3
+                  ? { r: 5, strokeWidth: 2, fill: "#10b981", stroke: "#ffffff" }
+                  : false
+              }
               activeDot={{
                 r: 5,
                 fill: "#ffffff",
@@ -274,18 +316,18 @@ export function TotalBalanceCard({
         </div>
 
         {/* Bottom Legend & Annual Stat */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
-          <div className="text-muted-foreground">
-            Projected Profit:{" "}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs">
+          <div className="text-muted-foreground flex flex-wrap items-baseline gap-1">
+            <span>Projected Profit:</span>
             <span className="text-foreground font-semibold tabular-nums">
-              +₹{activeProfit.toLocaleString("en-IN")}
+              {activeProfit >= 0 ? "+" : "-"}₹{Math.abs(activeProfit).toLocaleString("en-IN")}
             </span>{" "}
-            <span className="text-[11px] text-muted-foreground">
+            <span className="text-[11px] text-muted-foreground whitespace-nowrap">
               (Avg rate: ₹{averageAnnualRate.toLocaleString("en-IN")})
             </span>
           </div>
 
-          <div className="flex items-center gap-4 text-[11px] text-muted-foreground">
+          <div className="flex items-center gap-3 sm:gap-4 text-[11px] text-muted-foreground">
             <div className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded-full bg-orange-500 shadow-xs" />
               <span className="font-medium text-foreground">Invested Capital</span>

@@ -62,44 +62,44 @@ export function InvestmentDetail({ investment }: { investment: any }) {
   return (
     <div className="space-y-6">
       {/* Top Dossier Header Card */}
-      <Card className="p-6 border-border shadow-sm bg-card text-card-foreground">
+      <Card className="p-4 sm:p-6 border-border shadow-sm bg-card text-card-foreground">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-border/70">
-          <div className="flex items-center gap-3.5">
-            <div className="h-12 w-12 rounded-xl bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20 flex items-center justify-center font-bold text-lg shadow-xs">
+          <div className="flex items-center gap-3 sm:gap-3.5 min-w-0">
+            <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20 flex items-center justify-center font-bold text-base sm:text-lg shrink-0 shadow-xs">
               {initial}
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
+            <div className="min-w-0">
+              <div className="flex flex-wrap items-center gap-2">
+                <h1 className="text-lg sm:text-2xl font-bold tracking-tight text-foreground truncate">
                   {investment.investorName}
                 </h1>
                 {isPaid ? (
-                  <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded-full">
+                  <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded-full shrink-0">
                     <CheckCircle2 className="h-3.5 w-3.5" /> Settled
                   </span>
                 ) : isMatured ? (
-                  <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-amber-600 dark:text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2.5 py-0.5 rounded-full">
+                  <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-amber-600 dark:text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2.5 py-0.5 rounded-full shrink-0">
                     <AlertCircle className="h-3.5 w-3.5" /> Matured (Due)
                   </span>
                 ) : (
-                  <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-blue-600 dark:text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2.5 py-0.5 rounded-full">
+                  <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-blue-600 dark:text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2.5 py-0.5 rounded-full shrink-0">
                     <Clock className="h-3.5 w-3.5" /> Active Contract
                   </span>
                 )}
               </div>
-              <p className="text-xs text-muted-foreground font-mono mt-0.5">
+              <p className="text-xs text-muted-foreground font-mono mt-0.5 truncate">
                 Contract ID: {investment._id} • Fixed Term 12 Mo
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2.5 w-full sm:w-auto">
             <Button
               onClick={handleTogglePayment}
               disabled={isPending}
               variant={isPaid ? "outline" : "default"}
               size="sm"
-              className={`gap-2 text-xs font-semibold shadow-xs cursor-pointer ${
+              className={`w-full sm:w-auto justify-center gap-2 text-xs font-semibold shadow-xs cursor-pointer ${
                 !isPaid
                   ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white hover:brightness-110"
                   : ""
@@ -121,28 +121,28 @@ export function InvestmentDetail({ investment }: { investment: any }) {
         </div>
 
         {/* Contract Key Attributes Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-5">
-          <div className="p-3.5 rounded-xl bg-secondary/50 border border-border/60">
-            <span className="text-[11px] text-muted-foreground uppercase font-semibold">Principal Capital</span>
-            <p className="font-mono text-base sm:text-lg font-bold text-foreground tabular-nums mt-0.5">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-4 pt-5">
+          <div className="p-3 sm:p-3.5 rounded-xl bg-secondary/50 border border-border/60">
+            <span className="text-[10px] sm:text-[11px] text-muted-foreground uppercase font-semibold">Principal Capital</span>
+            <p className="font-mono text-sm sm:text-lg font-bold text-foreground tabular-nums mt-0.5 truncate">
               ₹{investment.amount.toLocaleString("en-IN")}
             </p>
           </div>
-          <div className="p-3.5 rounded-xl bg-secondary/50 border border-border/60">
-            <span className="text-[11px] text-muted-foreground uppercase font-semibold">Maturity Payout</span>
-            <p className="font-mono text-base sm:text-lg font-bold text-foreground tabular-nums mt-0.5">
+          <div className="p-3 sm:p-3.5 rounded-xl bg-secondary/50 border border-border/60">
+            <span className="text-[10px] sm:text-[11px] text-muted-foreground uppercase font-semibold">Maturity Payout</span>
+            <p className="font-mono text-sm sm:text-lg font-bold text-foreground tabular-nums mt-0.5 truncate">
               ₹{investment.returnAmount.toLocaleString("en-IN")}
             </p>
           </div>
-          <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
-            <span className="text-[11px] text-emerald-600 dark:text-emerald-400 uppercase font-semibold">Contract Gain</span>
-            <p className="font-mono text-base sm:text-lg font-bold text-emerald-600 dark:text-emerald-400 tabular-nums mt-0.5">
+          <div className="p-3 sm:p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+            <span className="text-[10px] sm:text-[11px] text-emerald-600 dark:text-emerald-400 uppercase font-semibold">Contract Gain</span>
+            <p className="font-mono text-sm sm:text-lg font-bold text-emerald-600 dark:text-emerald-400 tabular-nums mt-0.5 truncate">
               +₹{netProfit.toLocaleString("en-IN")} (+{roi}%)
             </p>
           </div>
-          <div className="p-3.5 rounded-xl bg-secondary/50 border border-border/60">
-            <span className="text-[11px] text-muted-foreground uppercase font-semibold">Contract Term</span>
-            <p className="font-mono text-base sm:text-lg font-bold text-foreground tabular-nums mt-0.5">
+          <div className="p-3 sm:p-3.5 rounded-xl bg-secondary/50 border border-border/60">
+            <span className="text-[10px] sm:text-[11px] text-muted-foreground uppercase font-semibold">Contract Term</span>
+            <p className="font-mono text-sm sm:text-lg font-bold text-foreground tabular-nums mt-0.5 truncate">
               12 Months
             </p>
           </div>
@@ -214,7 +214,7 @@ export function InvestmentDetail({ investment }: { investment: any }) {
       <MonthlyChart data={monthlyData} investingDate={investment.investingDate} />
 
       {/* Accrual Ledger Breakdown Table: strictly shows only elapsed/crossed months by default */}
-      <Card className="p-5 border-border bg-card text-card-foreground shadow-xs">
+      <Card className="p-4 sm:p-5 border-border bg-card text-card-foreground shadow-xs">
         <CardHeader className="p-0 pb-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
@@ -242,26 +242,26 @@ export function InvestmentDetail({ investment }: { investment: any }) {
             </div>
 
             {/* Toggle: Accrued vs Full Projection */}
-            <div className="flex items-center bg-secondary p-1 rounded-full border border-border self-start sm:self-auto text-xs">
+            <div className="w-full sm:w-auto grid grid-cols-2 sm:flex items-center bg-secondary p-1 rounded-full border border-border text-xs">
               <button
                 onClick={() => setTableMode("accrued")}
-                className={`px-3 py-1 rounded-full font-medium transition-all cursor-pointer ${
+                className={`text-center px-2 sm:px-3 py-1 rounded-full font-medium transition-all cursor-pointer whitespace-nowrap text-[11px] sm:text-xs ${
                   tableMode === "accrued"
                     ? "bg-card text-foreground shadow-xs font-semibold"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
-                Upto Current Month ({crossedMonths.length})
+                Accrued ({crossedMonths.length} Mo)
               </button>
               <button
                 onClick={() => setTableMode("all")}
-                className={`px-3 py-1 rounded-full font-medium transition-all cursor-pointer ${
+                className={`text-center px-2 sm:px-3 py-1 rounded-full font-medium transition-all cursor-pointer whitespace-nowrap text-[11px] sm:text-xs ${
                   tableMode === "all"
                     ? "bg-card text-foreground shadow-xs font-semibold"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
-                Full Schedule (12 Mo)
+                Full (12 Mo)
               </button>
             </div>
           </div>

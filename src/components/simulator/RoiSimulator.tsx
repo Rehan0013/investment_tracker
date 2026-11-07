@@ -25,7 +25,7 @@ export function RoiSimulator() {
   return (
     <div className="space-y-6">
       {/* Simulator Control Card */}
-      <div className="rounded-3xl border border-border bg-card p-6 sm:p-8 space-y-6 shadow-sm relative overflow-hidden transition-colors">
+      <div className="rounded-3xl border border-border bg-card p-4 sm:p-8 space-y-6 shadow-sm relative overflow-hidden transition-colors">
         {/* Ambient warm top glow in dark mode */}
         <div className="absolute top-0 left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-orange-500/30 to-transparent pointer-events-none" />
 
@@ -205,7 +205,7 @@ export function RoiSimulator() {
           </div>
 
           {/* Month Segment Pills */}
-          <div className="grid grid-cols-6 sm:grid-cols-12 gap-1.5">
+          <div className="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-12 gap-1.5">
             {Array.from({ length: 12 }).map((_, i) => {
               const currentVal = calcAmount + monthlyAccrual * (i + 1);
               return (
@@ -226,12 +226,12 @@ export function RoiSimulator() {
         {/* Action Button: Record This Position */}
         <div className="pt-4 border-t border-border/80 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
-            <ShieldCheck className="h-4 w-4 text-emerald-500" />
+            <ShieldCheck className="h-4 w-4 text-emerald-500 shrink-0" />
             <span>Guaranteed contractual calculation based on standard ledger formulas.</span>
           </div>
 
-          <Link href="/investments/new">
-            <button className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-gradient-to-r from-orange-500 via-orange-600 to-amber-500 hover:brightness-110 text-white text-xs font-semibold shadow-lg shadow-orange-500/25 transition-all active:scale-95 cursor-pointer">
+          <Link href="/investments/new" className="w-full sm:w-auto">
+            <button className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full bg-gradient-to-r from-orange-500 via-orange-600 to-amber-500 hover:brightness-110 text-white text-xs font-semibold shadow-lg shadow-orange-500/25 transition-all active:scale-95 cursor-pointer">
               <span>Record Position With These Terms</span>
               <ArrowRight className="h-3.5 w-3.5 stroke-[2.5]" />
             </button>

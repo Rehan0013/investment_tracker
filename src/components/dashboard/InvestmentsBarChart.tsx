@@ -58,7 +58,7 @@ export function InvestmentsBarChart({
   const formattedMetric = `₹${totalExpected.toLocaleString("en-IN")}`;
 
   return (
-    <div className="bg-card border border-border rounded-3xl p-5 sm:p-6 shadow-sm relative overflow-hidden flex flex-col justify-between transition-colors">
+    <div className="bg-card border border-border rounded-3xl p-4 sm:p-6 shadow-sm relative overflow-hidden flex flex-col justify-between transition-colors">
       {/* Top Header: Title, Metric, Growth Badge, and Working Controls */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
         <div>
@@ -76,10 +76,10 @@ export function InvestmentsBarChart({
         </div>
 
         {/* Right Working Controls: Sort & Range Pills */}
-        <div className="flex items-center gap-2 self-start sm:self-auto">
+        <div className="flex items-center gap-2 self-start sm:self-auto w-full sm:w-auto">
           <button
             onClick={() => setSortMode(sortMode === "chrono" ? "value" : "chrono")}
-            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border transition-all cursor-pointer active:scale-95 ${
+            className={`flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border transition-all cursor-pointer active:scale-95 ${
               sortMode === "value"
                 ? "bg-primary text-white border-primary shadow-xs font-semibold"
                 : "bg-secondary text-muted-foreground hover:text-foreground border-border"
@@ -92,7 +92,7 @@ export function InvestmentsBarChart({
 
           <button
             onClick={() => setRangeMode(rangeMode === "6m" ? "3m" : "6m")}
-            className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-secondary text-muted-foreground hover:text-foreground text-xs font-medium border border-border transition-all cursor-pointer active:scale-95"
+            className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1 px-3 py-1 rounded-full bg-secondary text-muted-foreground hover:text-foreground text-xs font-medium border border-border transition-all cursor-pointer active:scale-95"
             title="Toggle range: 6 Months vs 3 Months"
           >
             <Calendar className="w-3 h-3 stroke-[2]" />
@@ -102,7 +102,7 @@ export function InvestmentsBarChart({
       </div>
 
       {/* Bar Chart Columns */}
-      <div className="h-[160px] w-full flex items-end justify-between gap-2 pt-6 px-1">
+      <div className="h-[160px] w-full flex items-end justify-between gap-1 sm:gap-2 pt-6 px-0.5 sm:px-1">
         {displayedBars.map((bar) => {
           const heightPercent = Math.max(Math.round((bar.value / maxValue) * 100), 12);
           const isPeak = bar.isPeak;

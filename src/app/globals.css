@@ -125,9 +125,25 @@
     @apply border-border outline-ring/40;
   }
 
+  html {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
+  }
+
   body {
     @apply text-foreground min-h-screen bg-background font-sans antialiased;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  /* Prevent iOS Safari from auto-zooming on input focus */
+  @media (max-width: 640px), (pointer: coarse) {
+    input, textarea, select {
+      font-size: 16px;
+    }
+  }
+
+  button, a, [role="button"] {
+    touch-action: manipulation;
   }
 
   .tabular-nums {

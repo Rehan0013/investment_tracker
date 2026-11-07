@@ -92,7 +92,7 @@ export function MonthlyChart({ data, investingDate }: MonthlyChartProps) {
   };
 
   return (
-    <Card className="p-5 border-border bg-card text-card-foreground shadow-sm transition-colors">
+    <Card className="p-4 sm:p-5 border-border bg-card text-card-foreground shadow-sm transition-colors">
       <CardHeader className="p-0 pb-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
@@ -114,26 +114,26 @@ export function MonthlyChart({ data, investingDate }: MonthlyChartProps) {
           </div>
 
           {/* Toggle: Accrued (Current) vs Full Schedule */}
-          <div className="flex items-center bg-secondary p-1 rounded-full border border-border self-start sm:self-auto text-xs">
+          <div className="w-full sm:w-auto grid grid-cols-2 sm:flex items-center bg-secondary p-1 rounded-full border border-border text-xs">
             <button
               onClick={() => setViewMode("accrued")}
-              className={`px-3 py-1 rounded-full font-medium transition-all cursor-pointer ${
+              className={`text-center px-2 sm:px-3 py-1 rounded-full font-medium transition-all cursor-pointer whitespace-nowrap text-[11px] sm:text-xs ${
                 viewMode === "accrued"
                   ? "bg-card text-foreground shadow-xs font-semibold"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              Upto Current Month ({crossedCount})
+              Accrued ({crossedCount} Mo)
             </button>
             <button
               onClick={() => setViewMode("all")}
-              className={`px-3 py-1 rounded-full font-medium transition-all cursor-pointer ${
+              className={`text-center px-2 sm:px-3 py-1 rounded-full font-medium transition-all cursor-pointer whitespace-nowrap text-[11px] sm:text-xs ${
                 viewMode === "all"
                   ? "bg-card text-foreground shadow-xs font-semibold"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              Full Schedule (12 Mo)
+              Full (12 Mo)
             </button>
           </div>
         </div>

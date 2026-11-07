@@ -135,7 +135,7 @@ export function ManageInvestmentsClient({ initialInvestments }: { initialInvestm
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2 self-end sm:self-auto pt-2 sm:pt-0">
+                  <div className="flex items-center gap-2 w-full sm:w-auto justify-end pt-2 sm:pt-0 border-t sm:border-t-0 border-border/40">
                     <InvestmentEditSheet investment={inv} onSuccess={handleRefresh} />
                     <Button
                       variant="destructive"

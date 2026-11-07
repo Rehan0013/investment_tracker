@@ -43,25 +43,25 @@ export function StatCard({
   return (
     <div
       className={cn(
-        "p-5 rounded-2xl bg-card border border-border shadow-sm flex flex-col justify-between transition-all duration-200 group/stat",
+        "p-3.5 sm:p-5 rounded-2xl bg-card border border-border shadow-sm flex flex-col justify-between transition-all duration-200 group/stat",
         accentStyles[accent],
         className
       )}
     >
-      <div className="flex items-center justify-between gap-2">
-        <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+      <div className="flex items-center justify-between gap-1.5 sm:gap-2">
+        <span className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-muted-foreground truncate">
           {title}
         </span>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           {badge && (
-            <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+            <span className="px-1.5 sm:px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
               {badge}
             </span>
           )}
           {icon && (
             <div
               className={cn(
-                "h-7 w-7 rounded-lg border flex items-center justify-center transition-transform group-hover/stat:scale-110",
+                "h-6 w-6 sm:h-7 sm:w-7 rounded-lg border flex items-center justify-center transition-transform group-hover/stat:scale-110",
                 iconBgStyles[accent]
               )}
             >
@@ -71,17 +71,17 @@ export function StatCard({
         </div>
       </div>
 
-      <div className="mt-3.5">
+      <div className="mt-2.5 sm:mt-3.5">
         <div
           className={cn(
-            "text-2xl sm:text-3xl font-bold tracking-tight tabular-nums text-foreground",
+            "text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight tabular-nums text-foreground truncate",
             valueClassName
           )}
         >
           {value}
         </div>
         {description && (
-          <div className="text-xs text-muted-foreground mt-1.5 flex items-center gap-1.5 font-medium">
+          <div className="text-[10px] sm:text-xs text-muted-foreground mt-1 sm:mt-1.5 flex items-center gap-1 sm:gap-1.5 font-medium truncate">
             {description}
           </div>
         )}
