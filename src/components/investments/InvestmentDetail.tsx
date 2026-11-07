@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useMemo } from "react";
 import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableFooter } from "@/components/ui/table";
 import { MonthlyChart } from "./MonthlyChart";
 import { getMonthlyBreakdown, getCurrentProgress } from "@/lib/utils";
 import { togglePaymentStatus } from "@/actions/investment.actions";
@@ -15,6 +15,7 @@ import { CheckCircle2, RotateCcw, Calendar, Phone, ShieldCheck, Sparkles, Clock,
 export function InvestmentDetail({ investment }: { investment: any }) {
   const [isPending, startTransition] = useTransition();
   const [isPaid, setIsPaid] = useState(investment.isPaid);
+  const [tableMode, setTableMode] = useState<"accrued" | "all">("accrued");
 
   const roi = investment.roi !== undefined ? investment.roi : 50;
   const monthlyData = getMonthlyBreakdown(investment.amount, new Date(investment.investingDate), roi);
@@ -23,6 +24,22 @@ export function InvestmentDetail({ investment }: { investment: any }) {
   const netProfit = investment.returnAmount - investment.amount;
   const initial = investment.investorName?.charAt(0)?.toUpperCase() || "I";
   const now = new Date();
+
+  // Filter: strictly only months whose date has already crossed / elapsed
+  const crossedMonths = useMemo(() => {
+    return monthlyData.filter((item) => new Date(item.date) <= now);
+  }, [monthlyData, now]);
+
+  const displayedTableData = useMemo(() => {
+    if (tableMode === "accrued") {
+      // If investment was just booked and no full month has crossed yet, show month 1 as active period
+      return crossedMonths.length > 0 ? crossedMonths : monthlyData.slice(0, 1);
+    }
+    return monthlyData;
+  }, [tableMode, crossedMonths, monthlyData]);
+
+  const totalProfitInTable = displayedTableData.reduce((acc, curr) => acc + curr.interest, 0);
+  const latestValuation = displayedTableData.length > 0 ? displayedTableData[displayedTableData.length - 1].closingBalance : investment.amount;
 
   const handleTogglePayment = () => {
     startTransition(async () => {
@@ -196,16 +213,60 @@ export function InvestmentDetail({ investment }: { investment: any }) {
       {/* Monthly Chart: displays ONLY up to the current crossed month */}
       <MonthlyChart data={monthlyData} investingDate={investment.investingDate} />
 
-      {/* Accrual Ledger Breakdown Table */}
+      {/* Accrual Ledger Breakdown Table: strictly shows only elapsed/crossed months by default */}
       <Card className="p-5 border-border bg-card text-card-foreground shadow-xs">
-        <CardHeader className="p-0 pb-3">
-          <CardTitle className="text-sm font-bold text-foreground">
-            Accrual Ledger Schedule
-          </CardTitle>
-          <CardDescription className="text-xs text-muted-foreground">
-            Month-by-month compounding and distribution schedule
-          </CardDescription>
+        <CardHeader className="p-0 pb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <div className="flex items-center gap-2">
+                <CardTitle className="text-sm font-bold text-foreground">
+                  Accrual Ledger Schedule
+                </CardTitle>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                  {crossedMonths.length} Months Elapsed
+                </span>
+              </div>
+              <CardDescription className="text-xs text-muted-foreground mt-0.5">
+                {tableMode === "accrued" ? (
+                  <>
+                    Showing accrued monthly return up to current month (Realized:{" "}
+                    <strong className="text-emerald-600 dark:text-emerald-400">
+                      +₹{totalProfitInTable.toLocaleString("en-IN")}
+                    </strong>
+                    )
+                  </>
+                ) : (
+                  "Full 12-month compounding and distribution schedule"
+                )}
+              </CardDescription>
+            </div>
+
+            {/* Toggle: Accrued vs Full Projection */}
+            <div className="flex items-center bg-secondary p-1 rounded-full border border-border self-start sm:self-auto text-xs">
+              <button
+                onClick={() => setTableMode("accrued")}
+                className={`px-3 py-1 rounded-full font-medium transition-all cursor-pointer ${
+                  tableMode === "accrued"
+                    ? "bg-card text-foreground shadow-xs font-semibold"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Upto Current Month ({crossedMonths.length})
+              </button>
+              <button
+                onClick={() => setTableMode("all")}
+                className={`px-3 py-1 rounded-full font-medium transition-all cursor-pointer ${
+                  tableMode === "all"
+                    ? "bg-card text-foreground shadow-xs font-semibold"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Full Schedule (12 Mo)
+              </button>
+            </div>
+          </div>
         </CardHeader>
+
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <Table>
@@ -229,7 +290,7 @@ export function InvestmentDetail({ investment }: { investment: any }) {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {monthlyData.map((item, idx) => {
+                {displayedTableData.map((item, idx) => {
                   const itemDate = new Date(item.date);
                   const isCrossed = itemDate <= now;
                   const isCurrentMonth = item.month === progress.monthsElapsed;
@@ -268,6 +329,19 @@ export function InvestmentDetail({ investment }: { investment: any }) {
                   );
                 })}
               </TableBody>
+              <TableFooter className="bg-secondary/40 font-mono text-xs">
+                <TableRow>
+                  <TableCell colSpan={3} className="py-2.5 pl-2 font-sans font-semibold text-foreground">
+                    Total Elapsed Valuation (Through {displayedTableData.length} Periods)
+                  </TableCell>
+                  <TableCell className="py-2.5 text-right font-bold text-emerald-600 dark:text-emerald-400">
+                    +₹{totalProfitInTable.toLocaleString("en-IN")}
+                  </TableCell>
+                  <TableCell className="py-2.5 text-right font-bold text-foreground pr-2">
+                    ₹{latestValuation.toLocaleString("en-IN")}
+                  </TableCell>
+                </TableRow>
+              </TableFooter>
             </Table>
           </div>
         </CardContent>
