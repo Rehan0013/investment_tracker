@@ -2,6 +2,7 @@ import { InvestmentForm } from "@/components/investments/InvestmentForm";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { Suspense } from "react";
 
 export default function NewInvestmentPage() {
   return (
@@ -24,7 +25,9 @@ export default function NewInvestmentPage() {
         </p>
       </div>
 
-      <InvestmentForm />
+      <Suspense fallback={<div className="p-8 text-center text-xs text-muted-foreground">Loading investment form...</div>}>
+        <InvestmentForm />
+      </Suspense>
     </div>
   );
 }

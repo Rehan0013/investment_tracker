@@ -27,6 +27,7 @@ import {
   Coins,
   Receipt,
   UserCheck,
+  Gift,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
@@ -89,14 +90,14 @@ export default function Home() {
     });
   }, []);
 
+  // Contractual Multiplier & Dynamic Bonus: ₹5,000 for 50% ROI, ₹15,000 for 100% ROI
   const multiplier = calcRoi === 100 ? 2.0 : 1.5;
-  const maturityPayout = calcAmount * multiplier;
-  const netProfit = calcAmount * (calcRoi / 100);
-  const monthlyAccrual = netProfit / 12;
-
-  // Investor & Owner Bonus Model
-  const investorBonus = calcAmount * 0.05;
-  const ownerBonus = calcAmount * 0.025;
+  const investorBonus = calcRoi === 100 ? 15000 : 5000;
+  const ownerBonus = calcRoi === 100 ? 7500 : 2500;
+  const baseProfit = calcAmount * (calcRoi / 100);
+  const totalInvestorProfit = baseProfit + investorBonus;
+  const maturityPayout = calcAmount + totalInvestorProfit;
+  const monthlyAccrual = totalInvestorProfit / 12;
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground antialiased selection:bg-[#8b5cf6] selection:text-white overflow-x-hidden transition-colors">
@@ -718,6 +719,10 @@ export default function Home() {
                         {calcRoi === 50 && <span className="text-[10px] text-[#8b5cf6]">✓</span>}
                       </div>
                       <div className="text-[10px] text-muted-foreground font-mono mt-1">1.5x Return</div>
+                      <div className="mt-1.5 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-violet-500/10 text-violet-600 dark:text-violet-400 font-semibold text-[10px] border border-violet-500/20">
+                        <Gift className="w-2.5 h-2.5" />
+                        +₹5,000 Bonus
+                      </div>
                     </button>
                     <button
                       onClick={() => setCalcRoi(100)}
@@ -731,6 +736,10 @@ export default function Home() {
                         {calcRoi === 100 && <span className="text-[10px] text-[#8b5cf6]">✓</span>}
                       </div>
                       <div className="text-[10px] text-muted-foreground font-mono mt-1">2.0x Double Return</div>
+                      <div className="mt-1.5 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-semibold text-[10px] border border-emerald-500/20">
+                        <Gift className="w-2.5 h-2.5" />
+                        +₹15,000 Bonus
+                      </div>
                     </button>
                   </div>
                 </div>
@@ -748,18 +757,19 @@ export default function Home() {
                 </div>
                 <div className="p-3.5 rounded-xl bg-secondary/50 dark:bg-white/[0.03] border border-border dark:border-white/[0.08]">
                   <span className="text-[10px] font-sans text-muted-foreground uppercase font-medium block">
-                    Contractual Profit
+                    Base Profit (+{calcRoi}%)
                   </span>
                   <p className="text-base font-bold text-emerald-600 dark:text-emerald-400 mt-1">
-                    +₹{netProfit.toLocaleString("en-IN")}
+                    +₹{baseProfit.toLocaleString("en-IN")}
                   </p>
                 </div>
-                <div className="p-3.5 rounded-xl bg-secondary/50 dark:bg-white/[0.03] border border-border dark:border-white/[0.08]">
-                  <span className="text-[10px] font-sans text-muted-foreground uppercase font-medium block">
-                    Monthly Accrual
+                <div className="p-3.5 rounded-xl bg-violet-500/10 border border-violet-500/20">
+                  <span className="text-[10px] font-sans text-violet-600 dark:text-violet-400 uppercase font-medium block">
+                    Investor Bonus
                   </span>
-                  <p className="text-base font-bold text-[#8b5cf6] mt-1">
-                    +₹{monthlyAccrual.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} / mo
+                  <p className="text-base font-bold text-violet-600 dark:text-violet-400 mt-1 flex items-center gap-1">
+                    <Gift className="w-3.5 h-3.5 text-[#8b5cf6]" />
+                    +₹{investorBonus.toLocaleString("en-IN")}
                   </p>
                 </div>
                 <div className="p-3.5 rounded-xl violet-gradient-card">
@@ -776,15 +786,25 @@ export default function Home() {
               <div className="p-4 rounded-xl bg-secondary/40 dark:bg-white/[0.02] border border-border/80 dark:border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
                 <div className="flex items-center gap-2">
                   <Coins className="w-4 h-4 text-[#8b5cf6]" />
-                  <span className="text-foreground font-medium">Automatic Bonus Allocation:</span>
+                  <span className="text-foreground font-semibold">Automatic Bonus Allocation:</span>
                 </div>
-                <div className="flex items-center gap-4 font-mono text-[11px]">
+                <div className="flex flex-wrap items-center gap-4 font-mono text-[11px]">
                   <span className="text-foreground">
-                    Investor Bonus: <strong className="text-emerald-600 dark:text-emerald-400">+₹{investorBonus.toLocaleString("en-IN")}</strong>
+                    Investor Bonus:{" "}
+                    <strong className="text-emerald-600 dark:text-emerald-400">
+                      +₹{investorBonus.toLocaleString("en-IN")}
+                    </strong>
                   </span>
                   <span className="text-muted-foreground">•</span>
                   <span className="text-foreground">
-                    Owner Bonus: <strong className="text-[#8b5cf6]">+₹{ownerBonus.toLocaleString("en-IN")}</strong>
+                    Total Return:{" "}
+                    <strong className="text-[#8b5cf6]">
+                      +₹{totalInvestorProfit.toLocaleString("en-IN")}
+                    </strong>
+                  </span>
+                  <span className="text-muted-foreground">•</span>
+                  <span className="text-foreground">
+                    Monthly Accrual: ~₹{Math.round(monthlyAccrual).toLocaleString("en-IN")}/mo
                   </span>
                 </div>
               </div>

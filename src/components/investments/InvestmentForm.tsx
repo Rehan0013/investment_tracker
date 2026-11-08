@@ -10,13 +10,18 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useTransition } from "react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { format } from "date-fns";
 import { ArrowRight, Calculator, Gift } from "lucide-react";
 
 export function InvestmentForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
+
+  const paramAmount = searchParams?.get("amount") ? Number(searchParams.get("amount")) : undefined;
+  const paramRoi = searchParams?.get("roi") ? (Number(searchParams.get("roi")) as 50 | 100) : 50;
+  const paramBonus = searchParams?.get("investorBonus") ? Number(searchParams.get("investorBonus")) : 0;
 
   const {
     register,
@@ -26,9 +31,10 @@ export function InvestmentForm() {
   } = useForm<CreateInvestmentInput>({
     resolver: zodResolver(CreateInvestmentSchema),
     defaultValues: {
+      amount: paramAmount,
       investingDate: new Date(),
-      roi: 50,
-      investorBonus: 0,
+      roi: paramRoi || 50,
+      investorBonus: paramBonus,
       ownerBonus: 0,
     },
   });

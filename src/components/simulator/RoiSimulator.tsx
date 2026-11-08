@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Calculator, Sparkles, TrendingUp, Wallet, ShieldCheck, Check } from "lucide-react";
+import { ArrowRight, Calculator, Sparkles, TrendingUp, Wallet, ShieldCheck, Check, Gift, Coins } from "lucide-react";
 import { motion } from "framer-motion";
 
 const PRESET_AMOUNTS = [
@@ -17,10 +17,13 @@ export function RoiSimulator() {
   const [calcAmount, setCalcAmount] = useState<number>(100000);
   const [calcRoi, setCalcRoi] = useState<number>(50);
 
+  // Contractual Bonus: ₹5,000 for 50% ROI, ₹15,000 for 100% ROI
+  const bonus = calcRoi === 100 ? 15000 : 5000;
   const multiplier = calcRoi === 100 ? 2.0 : 1.5;
-  const returnAmount = calcAmount * multiplier;
-  const netProfit = calcAmount * (calcRoi / 100);
-  const monthlyAccrual = netProfit / 12;
+  const baseProfit = calcAmount * (calcRoi / 100);
+  const totalProfit = baseProfit + bonus;
+  const returnAmount = calcAmount + totalProfit;
+  const monthlyAccrual = totalProfit / 12;
 
   return (
     <div className="space-y-6">
@@ -127,6 +130,10 @@ export function RoiSimulator() {
                 <p className="text-[11px] text-muted-foreground font-mono mt-1">
                   1.5x Multiplier Payout
                 </p>
+                <div className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-violet-500/10 text-violet-600 dark:text-violet-400 font-semibold text-[10px] border border-violet-500/20">
+                  <Gift className="w-3 h-3 text-[#8b5cf6]" />
+                  <span>+₹5,000 Bonus</span>
+                </div>
               </button>
 
               <button
@@ -148,6 +155,10 @@ export function RoiSimulator() {
                 <p className="text-[11px] text-muted-foreground font-mono mt-1">
                   2.0x Double Return Payout
                 </p>
+                <div className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-semibold text-[10px] border border-emerald-500/20">
+                  <Gift className="w-3 h-3 text-emerald-500" />
+                  <span>+₹15,000 Bonus</span>
+                </div>
               </button>
             </div>
           </div>
@@ -166,29 +177,54 @@ export function RoiSimulator() {
 
           <div className="p-4 rounded-2xl bg-secondary/50 border border-border/80">
             <span className="text-[10px] font-sans text-muted-foreground uppercase font-semibold block">
-              Monthly Credit
-            </span>
-            <p className="text-base sm:text-lg font-bold text-foreground mt-1">
-              ₹{Math.round(monthlyAccrual).toLocaleString("en-IN")}
-            </p>
-          </div>
-
-          <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20">
-            <span className="text-[10px] font-sans text-emerald-600 dark:text-emerald-400 uppercase font-semibold block">
-              Net Gain (+{calcRoi}%)
+              Base Profit (+{calcRoi}%)
             </span>
             <p className="text-base sm:text-lg font-bold text-emerald-600 dark:text-emerald-400 mt-1">
-              +₹{netProfit.toLocaleString("en-IN")}
+              +₹{baseProfit.toLocaleString("en-IN")}
             </p>
           </div>
 
           <div className="p-4 rounded-2xl bg-violet-500/10 border border-violet-500/20">
             <span className="text-[10px] font-sans text-violet-600 dark:text-violet-400 uppercase font-semibold block">
-              Maturity Payout ({multiplier}x)
+              Contract Bonus
             </span>
-            <p className="text-base sm:text-lg font-bold text-violet-600 dark:text-violet-400 mt-1">
+            <p className="text-base sm:text-lg font-bold text-violet-600 dark:text-violet-400 mt-1 flex items-center gap-1.5">
+              <Gift className="w-4 h-4 text-[#8b5cf6]" />
+              +₹{bonus.toLocaleString("en-IN")}
+            </p>
+          </div>
+
+          <div className="p-4 rounded-2xl violet-gradient-card">
+            <span className="text-[10px] font-sans text-white/90 uppercase font-semibold block">
+              Total Maturity Payout
+            </span>
+            <p className="text-base sm:text-lg font-extrabold text-white mt-1">
               ₹{returnAmount.toLocaleString("en-IN")}
             </p>
+          </div>
+        </div>
+
+        {/* Bonus Breakdown Strip */}
+        <div className="p-4 rounded-2xl bg-secondary/40 border border-border/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+          <div className="flex items-center gap-2">
+            <Coins className="w-4 h-4 text-[#8b5cf6]" />
+            <span className="text-foreground font-semibold">Bonus & Accrual Summary:</span>
+          </div>
+          <div className="flex flex-wrap items-center gap-4 font-mono text-[11px]">
+            <span className="text-foreground">
+              Total Profit:{" "}
+              <strong className="text-emerald-600 dark:text-emerald-400">
+                +₹{totalProfit.toLocaleString("en-IN")}
+              </strong>{" "}
+              (Base + Bonus)
+            </span>
+            <span className="text-muted-foreground">•</span>
+            <span className="text-foreground">
+              Monthly Accrual:{" "}
+              <strong className="text-[#8b5cf6]">
+                ~₹{Math.round(monthlyAccrual).toLocaleString("en-IN")}/mo
+              </strong>
+            </span>
           </div>
         </div>
 
@@ -197,7 +233,7 @@ export function RoiSimulator() {
           <div className="flex justify-between items-center text-xs">
             <span className="font-semibold text-foreground flex items-center gap-1.5">
               <TrendingUp className="h-4 w-4 text-violet-500" />
-              12-Month Capital Growth Projection
+              12-Month Capital Growth Projection (Including Bonus)
             </span>
             <span className="font-mono text-muted-foreground text-[11px]">
               Rate: ₹{Math.round(monthlyAccrual).toLocaleString("en-IN")} / month
@@ -230,7 +266,10 @@ export function RoiSimulator() {
             <span>Guaranteed contractual calculation based on standard ledger formulas.</span>
           </div>
 
-          <Link href="/investments/new" className="w-full sm:w-auto">
+          <Link
+            href={`/investments/new?amount=${calcAmount}&roi=${calcRoi}&investorBonus=${bonus}`}
+            className="w-full sm:w-auto"
+          >
             <button className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 hover:brightness-110 text-white text-xs font-semibold shadow-lg shadow-violet-500/25 transition-all active:scale-95 cursor-pointer">
               <span>Record Position With These Terms</span>
               <ArrowRight className="h-3.5 w-3.5 stroke-[2.5]" />
