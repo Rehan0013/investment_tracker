@@ -26,29 +26,20 @@ export async function compressImageFile(file: File): Promise<{
     img.onload = () => {
       URL.revokeObjectURL(objectUrl);
 
-      // Desired 16:9 target resolution (max width 1920)
-      const targetAspect = 16 / 9;
-      const originalAspect = img.width / img.height;
+      // Preserve full image content without cropping
+      const MAX_DIMENSION = 1920;
+      let targetWidth = img.width;
+      let targetHeight = img.height;
 
-      let sx = 0;
-      let sy = 0;
-      let sWidth = img.width;
-      let sHeight = img.height;
-
-      // Center-crop to 16:9
-      if (originalAspect > targetAspect) {
-        // Wider than 16:9: crop horizontally
-        sWidth = Math.round(img.height * targetAspect);
-        sx = Math.round((img.width - sWidth) / 2);
-      } else if (originalAspect < targetAspect) {
-        // Taller than 16:9: crop vertically
-        sHeight = Math.round(img.width / targetAspect);
-        sy = Math.round((img.height - sHeight) / 2);
+      if (targetWidth > MAX_DIMENSION || targetHeight > MAX_DIMENSION) {
+        if (targetWidth > targetHeight) {
+          targetHeight = Math.round((targetHeight * MAX_DIMENSION) / targetWidth);
+          targetWidth = MAX_DIMENSION;
+        } else {
+          targetWidth = Math.round((targetWidth * MAX_DIMENSION) / targetHeight);
+          targetHeight = MAX_DIMENSION;
+        }
       }
-
-      // Target canvas output dimensions (capped at 1920x1080)
-      const targetWidth = Math.min(sWidth, 1920);
-      const targetHeight = Math.round(targetWidth / targetAspect);
 
       const canvas = document.createElement("canvas");
       canvas.width = targetWidth;
@@ -64,7 +55,8 @@ export async function compressImageFile(file: File): Promise<{
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = "high";
 
-      ctx.drawImage(img, sx, sy, sWidth, sHeight, 0, 0, targetWidth, targetHeight);
+      // Draw full uncropped image
+      ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, targetWidth, targetHeight);
 
       // Export as webp with 0.82 quality
       canvas.toBlob(

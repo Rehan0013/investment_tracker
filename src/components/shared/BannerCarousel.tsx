@@ -35,13 +35,22 @@ function BannerCard({ banner, isLanding, priority, compact }: BannerCardProps) {
   return (
     <div
       className={cn(
-        "group relative w-full h-full overflow-hidden rounded-xl sm:rounded-2xl border transition-all duration-300",
+        "group relative w-full h-full overflow-hidden rounded-xl sm:rounded-2xl border bg-black transition-all duration-300",
         isLanding
-          ? "border-border dark:border-white/[0.12] bg-card dark:bg-[#101116] shadow-sm hover:shadow-[0_12px_36px_rgba(139,92,246,0.18)] hover:border-[#8b5cf6]/50"
-          : "border-border/80 dark:border-white/[0.08] bg-card dark:bg-[#101116] shadow-xs hover:border-[#8b5cf6]/40"
+          ? "border-border dark:border-white/[0.12] shadow-sm hover:shadow-[0_12px_36px_rgba(139,92,246,0.18)] hover:border-[#8b5cf6]/50"
+          : "border-border/80 dark:border-white/[0.08] shadow-xs hover:border-[#8b5cf6]/40"
       )}
     >
-      {/* 16:9 Banner Image */}
+      {/* Ambient Blurred Fill Backing */}
+      <Image
+        src={banner.imageUrl}
+        alt=""
+        fill
+        aria-hidden="true"
+        className="object-cover w-full h-full blur-xl opacity-35 scale-110 pointer-events-none"
+      />
+
+      {/* Uncropped Full Fitted Banner Image */}
       <Image
         src={banner.imageUrl}
         alt={banner.title || "Festival & Bonus Announcement"}
@@ -52,11 +61,11 @@ function BannerCard({ banner, isLanding, priority, compact }: BannerCardProps) {
             : "(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
         }
         priority={priority}
-        className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700 ease-out"
+        className="object-contain w-full h-full group-hover:scale-105 transition-transform duration-500 ease-out relative z-[1]"
       />
 
       {/* Dark gradient overlay for text readability */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-transparent pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent pointer-events-none z-[2]" />
 
       {/* Horizon glow effect for landing variant */}
       {isLanding && (
@@ -303,24 +312,33 @@ function Landing3DArcCarousel({
                 willChange: "transform, opacity",
               }}
               className={cn(
-                "absolute aspect-[16/9] rounded-2xl sm:rounded-3xl overflow-hidden border transition-all duration-300",
+                "absolute aspect-[16/9] rounded-2xl sm:rounded-3xl overflow-hidden border bg-black transition-all duration-300",
                 isCenter
                   ? "border-[#8b5cf6]/60 ring-2 ring-[#8b5cf6]/30 shadow-[0_20px_60px_-10px_rgba(139,92,246,0.35)] dark:shadow-[0_25px_70px_-15px_rgba(0,0,0,0.95)] cursor-default"
                   : "border-border dark:border-white/[0.12] shadow-xl hover:border-[#8b5cf6]/40 cursor-pointer"
               )}
             >
-              {/* 16:9 Banner Image */}
+              {/* Ambient Blurred Fill Backing */}
+              <Image
+                src={banner.imageUrl}
+                alt=""
+                fill
+                aria-hidden="true"
+                className="object-cover w-full h-full blur-xl opacity-35 scale-110 pointer-events-none"
+              />
+
+              {/* Uncropped Full Fitted Banner Image */}
               <Image
                 src={banner.imageUrl}
                 alt={banner.title || "Festival & Bonus"}
                 fill
                 sizes="(max-width: 640px) 270px, (max-width: 1024px) 340px, 420px"
                 priority={isCenter}
-                className="object-cover w-full h-full transition-transform duration-700 ease-out"
+                className="object-contain w-full h-full transition-transform duration-500 ease-out relative z-[1]"
               />
 
               {/* Dark Gradient Overlay for Crisp Legibility */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-transparent pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent pointer-events-none z-[2]" />
 
               {/* Center Glow Accent */}
               {isCenter && (

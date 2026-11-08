@@ -253,7 +253,7 @@ export function BannerManager({ initialBanners }: BannerManagerProps) {
                   {selectedFile ? selectedFile.name : "Click to select banner image"}
                 </p>
                 <p className="text-[11px] text-muted-foreground mt-0.5">
-                  PNG, JPG, WebP up to 10MB. Will be compressed and cropped to 16:9 automatically.
+                  PNG, JPG, WebP up to 10MB. Will be compressed to fit cleanly without cropping.
                 </p>
               </div>
             </div>
@@ -264,16 +264,23 @@ export function BannerManager({ initialBanners }: BannerManagerProps) {
             <div className="space-y-2 pt-2">
               <span className="text-xs font-semibold text-foreground flex items-center gap-1.5">
                 <ImageIcon className="w-3.5 h-3.5 text-[#8b5cf6]" />
-                <span>16:9 Aspect Ratio Preview</span>
+                <span>Banner Live Preview</span>
               </span>
-              <div className="relative w-full aspect-[16/9] max-w-lg rounded-xl overflow-hidden border border-border shadow-md bg-black">
+              <div className="relative w-full aspect-[16/9] max-w-lg rounded-xl overflow-hidden border border-border shadow-md bg-black flex items-center justify-center">
+                <Image
+                  src={previewUrl}
+                  alt=""
+                  fill
+                  aria-hidden="true"
+                  className="object-cover blur-xl opacity-35 scale-110 pointer-events-none"
+                />
                 <Image
                   src={previewUrl}
                   alt="Preview"
                   fill
-                  className="object-cover"
+                  className="object-contain relative z-[1]"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none z-[2]" />
                 {(title || description) && (
                   <div className="absolute bottom-3 left-3 right-3 text-white pointer-events-none">
                     {title && <h4 className="text-sm font-bold truncate">{title}</h4>}
@@ -338,14 +345,21 @@ export function BannerManager({ initialBanners }: BannerManagerProps) {
                 className="rounded-xl border border-border bg-secondary/30 overflow-hidden flex flex-col justify-between group shadow-xs hover:border-primary/40 transition-all"
               >
                 {/* 16:9 Thumbnail */}
-                <div className="relative w-full aspect-[16/9] bg-black">
+                <div className="relative w-full aspect-[16/9] bg-black flex items-center justify-center overflow-hidden">
+                  <Image
+                    src={banner.imageUrl}
+                    alt=""
+                    fill
+                    aria-hidden="true"
+                    className="object-cover blur-xl opacity-35 scale-110 pointer-events-none"
+                  />
                   <Image
                     src={banner.imageUrl}
                     alt={banner.title || "Banner"}
                     fill
-                    className="object-cover"
+                    className="object-contain relative z-[1]"
                   />
-                  <div className="absolute top-2 right-2 flex items-center gap-1.5">
+                  <div className="absolute top-2 right-2 flex items-center gap-1.5 z-[2]">
                     <span
                       className={`px-2 py-0.5 rounded-full text-[9px] font-bold font-mono ${
                         banner.active
