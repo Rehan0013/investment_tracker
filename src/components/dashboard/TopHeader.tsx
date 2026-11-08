@@ -16,6 +16,7 @@ import {
   LayoutGrid,
   SlidersHorizontal,
   ShieldCheck,
+  Eye,
 } from "lucide-react";
 import { useTheme } from "next-themes";
 
@@ -80,6 +81,19 @@ export function TopHeader({ userName = "Adnan Khan", userEmail = "adnan@investme
 
   return (
     <header className="w-full flex items-center justify-between gap-2.5 sm:gap-4 py-2.5 sm:py-3.5 px-3 sm:px-6 lg:px-8 border-b border-border dark:border-white/[0.08] bg-card/90 dark:bg-[#0c0d12]/90 backdrop-blur-xl sticky top-0 z-40 select-none transition-colors">
+      {/* Mobile Brand Logo & Name (visible when sidebar is hidden on small screens) */}
+      {/* <Link
+        href="/dashboard"
+        className="flex md:hidden items-center gap-2 mr-1 sm:mr-2 shrink-0 group"
+      >
+        <div className="h-8 w-8 rounded-xl bg-gradient-to-tr from-[#a855f7] via-[#8b5cf6] to-[#6d28d9] text-white flex items-center justify-center shadow-md shadow-violet-500/30">
+          <Eye className="w-4 h-4 stroke-[2.2]" />
+        </div>
+        <span className="font-extrabold text-xs tracking-tight text-foreground uppercase hidden xs:inline">
+          EYE-VISON
+        </span>
+      </Link> */}
+
       {/* Left: Search Bar Pill */}
       <form
         onSubmit={handleSearchSubmit}
@@ -122,7 +136,7 @@ export function TopHeader({ userName = "Adnan Khan", userEmail = "adnan@investme
           {!isDark ? (
             <Sun className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500 stroke-[1.8]" />
           ) : (
-            <Moon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-orange-400 stroke-[1.8]" />
+            <Moon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-violet-400 stroke-[1.8]" />
           )}
         </button>
 
@@ -136,7 +150,7 @@ export function TopHeader({ userName = "Adnan Khan", userEmail = "adnan@investme
           >
             {/* Avatar with emerald online badge */}
             <div className="relative">
-              <div className="w-6.5 h-6.5 sm:w-7 sm:h-7 rounded-full bg-gradient-to-tr from-orange-500 to-amber-500 flex items-center justify-center text-white text-[11px] font-bold shadow-xs">
+              <div className="w-6.5 h-6.5 sm:w-7 sm:h-7 rounded-full bg-gradient-to-tr from-violet-500 to-purple-600 flex items-center justify-center text-white text-[11px] font-bold shadow-xs">
                 {userName.charAt(0).toUpperCase()}
               </div>
               <span className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-secondary" />
@@ -163,7 +177,7 @@ export function TopHeader({ userName = "Adnan Khan", userEmail = "adnan@investme
             <div className="absolute right-0 mt-2 w-64 max-w-[calc(100vw-1.5rem)] rounded-2xl bg-popover text-popover-foreground border border-border shadow-xl p-2 z-50 animate-in fade-in-0 zoom-in-95 duration-150">
               {/* User Details Header */}
               <div className="px-3 py-2.5 border-b border-border/80 flex items-center gap-3">
-                <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-orange-500 to-amber-500 flex items-center justify-center text-white font-bold text-sm shadow-xs">
+                <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-violet-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm shadow-xs">
                   {userName.charAt(0).toUpperCase()}
                 </div>
                 <div className="flex-1 min-w-0">

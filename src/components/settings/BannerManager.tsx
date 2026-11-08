@@ -167,14 +167,14 @@ export function BannerManager({ initialBanners }: BannerManagerProps) {
         <div className="flex items-center justify-between pb-3 border-b border-border/70">
           <div>
             <h3 className="text-sm sm:text-base font-bold text-foreground flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-[#ff5722]" />
+              <Sparkles className="w-4 h-4 text-[#8b5cf6]" />
               <span>Festival & Bonus Banners (ImageKit Carousel)</span>
             </h3>
             <p className="text-xs text-muted-foreground mt-0.5">
               Upload 16:9 banners wishing festivals or announcing bonuses. Visible on landing page and dashboard.
             </p>
           </div>
-          <span className="text-[10px] font-mono text-[#ff5722] bg-[#ff5722]/10 border border-[#ff5722]/20 px-2.5 py-0.5 rounded-full font-semibold shrink-0">
+          <span className="text-[10px] font-mono text-[#8b5cf6] bg-[#8b5cf6]/10 border border-[#8b5cf6]/20 px-2.5 py-0.5 rounded-full font-semibold shrink-0">
             16:9 Ratio
           </span>
         </div>
@@ -263,7 +263,7 @@ export function BannerManager({ initialBanners }: BannerManagerProps) {
           {previewUrl && (
             <div className="space-y-2 pt-2">
               <span className="text-xs font-semibold text-foreground flex items-center gap-1.5">
-                <ImageIcon className="w-3.5 h-3.5 text-[#ff5722]" />
+                <ImageIcon className="w-3.5 h-3.5 text-[#8b5cf6]" />
                 <span>16:9 Aspect Ratio Preview</span>
               </span>
               <div className="relative w-full aspect-[16/9] max-w-lg rounded-xl overflow-hidden border border-border shadow-md bg-black">
@@ -291,7 +291,7 @@ export function BannerManager({ initialBanners }: BannerManagerProps) {
             <Button
               type="submit"
               disabled={isUploading || isCompressing || !compressedFile}
-              className="rounded-full bg-[#ff5722] hover:bg-[#f4511e] text-white text-xs font-semibold h-10 px-6 shadow-md cursor-pointer"
+              className="rounded-full bg-[#8b5cf6] hover:bg-[#7c3aed] text-white text-xs font-semibold h-10 px-6 shadow-md cursor-pointer"
             >
               {isUploading ? (
                 <>

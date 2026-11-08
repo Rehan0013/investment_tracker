@@ -33,21 +33,21 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-background text-foreground selection:bg-[#ff5722] selection:text-white relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-background text-foreground selection:bg-[#8b5cf6] selection:text-white relative overflow-hidden">
       {/* Top right theme toggle */}
       <div className="absolute top-4 right-4 z-20">
         <ThemeToggle />
       </div>
 
       {/* Ambient Horizon Glow Arc in Background */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-72 bg-gradient-to-b from-[#ff5722]/15 dark:from-[#ff5722]/20 via-[#ff5722]/5 to-transparent blur-3xl pointer-events-none rounded-b-[100%]" />
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-px bg-gradient-to-r from-transparent via-[#ff5722] to-transparent shadow-[0_0_20px_#ff5722]" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-72 bg-gradient-to-b from-[#8b5cf6]/15 dark:from-[#8b5cf6]/20 via-[#8b5cf6]/5 to-transparent blur-3xl pointer-events-none rounded-b-[100%]" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-px bg-gradient-to-r from-transparent via-[#8b5cf6] to-transparent shadow-[0_0_20px_#8b5cf6]" />
 
       <div className="w-full max-w-md space-y-6 relative z-10">
         {/* Brand Header */}
         <div className="flex flex-col items-center text-center space-y-3">
           <Link href="/" className="group flex flex-col items-center">
-            <div className="h-12 w-12 rounded-2xl bg-gradient-to-tr from-[#ff5722] to-[#ff7a45] text-white flex items-center justify-center shadow-[0_0_25px_rgba(255,87,34,0.45)] group-hover:scale-105 transition-transform">
+            <div className="h-12 w-12 rounded-2xl bg-gradient-to-tr from-[#a855f7] via-[#8b5cf6] to-[#6d28d9] text-white flex items-center justify-center shadow-[0_0_25px_rgba(139,92,246,0.45)] group-hover:scale-105 transition-transform">
               <Eye className="w-6 h-6 stroke-[2.2]" />
             </div>
             <h1 className="text-2xl font-black tracking-tight text-foreground mt-3">
@@ -64,7 +64,7 @@ export default function LoginPage() {
           <div className="space-y-1.5 text-left border-b border-border/80 dark:border-white/[0.06] pb-4">
             <h2 className="text-base font-bold text-foreground flex items-center justify-between">
               <span>Sign In to Syndicate Desk</span>
-              <span className="text-[10px] font-mono text-[#ff5722] bg-[#ff5722]/10 px-2 py-0.5 rounded-full border border-[#ff5722]/20 font-semibold">
+              <span className="text-[10px] font-mono text-[#8b5cf6] bg-[#8b5cf6]/10 px-2 py-0.5 rounded-full border border-[#8b5cf6]/20 font-semibold">
                 Encrypted
               </span>
             </h2>
@@ -87,7 +87,7 @@ export default function LoginPage() {
                 placeholder="investor@eyevision.com"
                 required
                 autoComplete="email"
-                className="h-10 text-xs bg-secondary/60 dark:bg-white/[0.04] border-border dark:border-white/[0.1] text-foreground placeholder:text-muted-foreground rounded-xl focus:border-[#ff5722] focus:ring-1 focus:ring-[#ff5722]"
+                className="h-10 text-xs bg-secondary/60 dark:bg-white/[0.04] border-border dark:border-white/[0.1] text-foreground placeholder:text-muted-foreground rounded-xl focus:border-[#8b5cf6] focus:ring-1 focus:ring-[#8b5cf6]"
               />
             </div>
 
@@ -107,7 +107,7 @@ export default function LoginPage() {
                   placeholder="••••••••••••"
                   required
                   autoComplete="current-password"
-                  className="h-10 text-xs font-mono bg-secondary/60 dark:bg-white/[0.04] border-border dark:border-white/[0.1] text-foreground placeholder:text-muted-foreground rounded-xl pr-10 focus:border-[#ff5722] focus:ring-1 focus:ring-[#ff5722]"
+                  className="h-10 text-xs font-mono bg-secondary/60 dark:bg-white/[0.04] border-border dark:border-white/[0.1] text-foreground placeholder:text-muted-foreground rounded-xl pr-10 focus:border-[#8b5cf6] focus:ring-1 focus:ring-[#8b5cf6]"
                 />
                 <button
                   type="button"
@@ -133,7 +133,7 @@ export default function LoginPage() {
 
             <Button
               type="submit"
-              className="w-full h-11 rounded-full bg-[#ff5722] hover:bg-[#f4511e] text-white text-xs font-bold shadow-[0_0_20px_rgba(255,87,34,0.35)] transition-all hover:scale-[1.02] gap-2 mt-2"
+              className="w-full h-11 rounded-full bg-gradient-to-r from-[#a855f7] via-[#8b5cf6] to-[#6d28d9] hover:brightness-110 text-white text-xs font-bold shadow-[0_0_20px_rgba(139,92,246,0.35)] transition-all hover:scale-[1.02] gap-2 mt-2"
               disabled={isPending}
             >
               {isPending ? "Authenticating Desk..." : "Access Portfolio Ledger"}
@@ -145,7 +145,7 @@ export default function LoginPage() {
         {/* Security Footer */}
         <div className="text-center space-y-2">
           <p className="text-[11px] text-muted-foreground flex items-center justify-center gap-1.5 font-mono">
-            <Lock className="h-3 w-3 text-[#ff5722]" /> Encrypted Session • Mongoose & NextAuth
+            <Lock className="h-3 w-3 text-[#8b5cf6]" /> Encrypted Session • Mongoose & NextAuth
           </p>
           <div className="text-[11px] text-muted-foreground">
             <Link href="/" className="hover:text-foreground transition-colors underline decoration-border">

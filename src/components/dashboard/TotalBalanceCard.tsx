@@ -133,7 +133,7 @@ export function TotalBalanceCard({
           <div className="space-y-1 font-mono tabular-nums">
             <div className="flex items-center justify-between gap-4">
               <span className="flex items-center gap-1.5 text-muted-foreground text-[11px]">
-                <span className="w-2 h-2 rounded-full bg-orange-500" />
+                <span className="w-2 h-2 rounded-full bg-violet-500" />
                 Invested Capital:
               </span>
               <span className="font-semibold text-foreground">
@@ -167,7 +167,7 @@ export function TotalBalanceCard({
   return (
     <div className="bg-card dark:bg-[#101116] border border-border dark:border-white/[0.08] rounded-3xl p-4 sm:p-6 shadow-sm relative overflow-hidden flex flex-col justify-between transition-colors">
       {/* Top ambient warm glow */}
-      <div className="absolute top-0 left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-[#ff5722]/30 dark:via-[#ff5722]/60 to-transparent pointer-events-none" />
+      <div className="absolute top-0 left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-[#8b5cf6]/30 dark:via-[#8b5cf6]/60 to-transparent pointer-events-none" />
 
       {/* Top Header: Title, Metric, Growth Badge, and Time Filter Pills */}
       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 sm:gap-4 mb-3">
@@ -176,7 +176,7 @@ export function TotalBalanceCard({
             <span className="text-xs font-medium text-muted-foreground">
               Portfolio Valuation & Accrual
             </span>
-            <span className="text-[10px] font-semibold text-orange-600 dark:text-orange-400 bg-orange-500/10 border border-orange-500/20 px-2.5 py-0.5 rounded-full">
+            <span className="text-[10px] font-semibold text-violet-600 dark:text-violet-400 bg-violet-500/10 border border-violet-500/20 px-2.5 py-0.5 rounded-full">
               {activeFilter}
             </span>
           </div>
@@ -211,7 +211,7 @@ export function TotalBalanceCard({
               onClick={() => setActiveFilter(f)}
               className={`text-center px-2 sm:px-3.5 py-1 rounded-full text-[11px] sm:text-xs font-medium transition-all cursor-pointer whitespace-nowrap ${
                 activeFilter === f
-                  ? "bg-gradient-to-r from-[#ff6b35] to-[#ff5722] text-white shadow-xs font-semibold"
+                  ? "bg-gradient-to-r from-[#a855f7] to-[#8b5cf6] text-white shadow-xs font-semibold"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
@@ -227,8 +227,8 @@ export function TotalBalanceCard({
           <AreaChart data={filteredData} margin={{ top: 20, right: 16, left: -16, bottom: 0 }}>
             <defs>
               <linearGradient id="warmOrangeGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#f97316" stopOpacity={0.4} />
-                <stop offset="95%" stopColor="#ea580c" stopOpacity={0.0} />
+                <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.4} />
+                <stop offset="95%" stopColor="#7c3aed" stopOpacity={0.0} />
               </linearGradient>
               <linearGradient id="emeraldReturnGradient" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="#10b981" stopOpacity={0.35} />
@@ -261,23 +261,23 @@ export function TotalBalanceCard({
             />
             <Tooltip content={<CustomTooltip />} />
 
-            {/* Area 1: Invested Capital (Orange) */}
+            {/* Area 1: Invested Capital (Violet) */}
             <Area
               type="monotone"
               dataKey="invested"
               name="Invested Capital"
-              stroke="#f97316"
+              stroke="#8b5cf6"
               strokeWidth={2.5}
               fill="url(#warmOrangeGradient)"
               dot={
                 filteredData.length <= 3
-                  ? { r: 5, strokeWidth: 2, fill: "#f97316", stroke: "#ffffff" }
+                  ? { r: 5, strokeWidth: 2, fill: "#8b5cf6", stroke: "#ffffff" }
                   : false
               }
               activeDot={{
                 r: 5,
                 fill: "#ffffff",
-                stroke: "#f97316",
+                stroke: "#8b5cf6",
                 strokeWidth: 3,
               }}
             />
@@ -329,7 +329,7 @@ export function TotalBalanceCard({
 
           <div className="flex items-center gap-3 sm:gap-4 text-[11px] text-muted-foreground">
             <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-orange-500 shadow-xs" />
+              <span className="w-2.5 h-2.5 rounded-full bg-violet-500 shadow-xs" />
               <span className="font-medium text-foreground">Invested Capital</span>
             </div>
             <div className="flex items-center gap-1.5">

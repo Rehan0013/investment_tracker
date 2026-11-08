@@ -130,7 +130,7 @@ export function InvestmentEditSheet({
         <div className="p-4 sm:p-5 border-b border-border/80 shrink-0 bg-card z-10 pr-12">
           <SheetHeader className="p-0">
             <SheetTitle className="text-base font-bold text-foreground flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20 flex items-center justify-center">
+              <div className="w-7 h-7 rounded-lg bg-violet-500/10 text-violet-600 dark:text-violet-400 border border-violet-500/20 flex items-center justify-center">
                 <Edit className="w-3.5 h-3.5" />
               </div>
               <span>Edit Investment Position</span>
@@ -329,7 +329,7 @@ export function InvestmentEditSheet({
             {/* Section 3: Incentive Bonus Allocations */}
             <div className="space-y-3">
               <div className="flex items-center gap-1.5 text-xs font-semibold text-foreground pb-1 border-b border-border/50">
-                <Gift className="w-3.5 h-3.5 text-orange-500" />
+                <Gift className="w-3.5 h-3.5 text-violet-500" />
                 <span>Incentive Bonuses</span>
               </div>
 
@@ -473,7 +473,7 @@ export function InvestmentEditSheet({
             type="submit"
             form="edit-inv-form"
             size="sm"
-            className="flex-1 text-xs h-9 bg-gradient-to-r from-[#ff6b35] via-[#ff5722] to-[#e64a19] hover:brightness-110 text-white font-semibold shadow-xs cursor-pointer"
+            className="flex-1 text-xs h-9 bg-gradient-to-r from-[#a855f7] via-[#8b5cf6] to-[#6d28d9] hover:brightness-110 text-white font-semibold shadow-xs cursor-pointer"
             disabled={isPending}
           >
             {isPending ? "Updating Position..." : "Save Changes"}

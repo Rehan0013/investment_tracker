@@ -99,12 +99,12 @@ export default function Home() {
   const ownerBonus = calcAmount * 0.025;
 
   return (
-    <div className="min-h-screen flex flex-col bg-background text-foreground antialiased selection:bg-[#ff5722] selection:text-white overflow-x-hidden transition-colors">
+    <div className="min-h-screen flex flex-col bg-background text-foreground antialiased selection:bg-[#8b5cf6] selection:text-white overflow-x-hidden transition-colors">
       {/* Top Navigation Bar */}
       <header className="border-b border-border dark:border-white/[0.08] bg-background/90 dark:bg-[#08090c]/90 backdrop-blur-xl sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-[#ff5722] to-[#ff7a45] text-white flex items-center justify-center shadow-[0_0_20px_rgba(255,87,34,0.4)] group-hover:scale-105 transition-transform">
+            <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-[#a855f7] via-[#8b5cf6] to-[#6d28d9] text-white flex items-center justify-center shadow-[0_0_20px_rgba(139,92,246,0.4)] group-hover:scale-105 transition-transform">
               <Eye className="w-5 h-5 stroke-[2.2]" />
             </div>
             <div className="flex flex-col">
@@ -118,16 +118,16 @@ export default function Home() {
           </Link>
 
           <nav className="hidden md:flex items-center gap-8 text-xs font-medium text-muted-foreground dark:text-zinc-300">
-            <a href="#hero" className="text-foreground dark:text-white hover:text-[#ff5722] transition-colors">
+            <a href="#hero" className="text-foreground dark:text-white hover:text-[#8b5cf6] transition-colors">
               Home
             </a>
-            <a href="#simulator" className="hover:text-[#ff5722] transition-colors">
+            <a href="#simulator" className="hover:text-[#8b5cf6] transition-colors">
               Technology
             </a>
-            <a href="#features" className="hover:text-[#ff5722] transition-colors">
+            <a href="#features" className="hover:text-[#8b5cf6] transition-colors">
               Features
             </a>
-            <a href="#faq" className="hover:text-[#ff5722] transition-colors">
+            <a href="#faq" className="hover:text-[#8b5cf6] transition-colors">
               FAQ
             </a>
           </nav>
@@ -138,26 +138,17 @@ export default function Home() {
               <Link href="/dashboard">
                 <Button
                   size="sm"
-                  className="rounded-full bg-[#ff5722] hover:bg-[#f4511e] text-white px-5 text-xs font-semibold shadow-[0_0_20px_rgba(255,87,34,0.35)] transition-all hover:scale-105 cursor-pointer"
+                  className="rounded-full bg-gradient-to-r from-[#a855f7] via-[#8b5cf6] to-[#6d28d9] hover:brightness-110 text-white px-5 text-xs font-semibold shadow-[0_0_20px_rgba(139,92,246,0.35)] transition-all hover:scale-105 cursor-pointer"
                 >
                   Dashboard <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
                 </Button>
               </Link>
             ) : (
               <div className="flex items-center gap-2">
-                {/* <Link href="/login">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="text-xs font-medium text-muted-foreground hover:text-foreground rounded-full px-3.5"
-                  >
-                    Log In
-                  </Button>
-                </Link> */}
                 <Link href="/login">
                   <Button
                     size="sm"
-                    className="rounded-full bg-[#ff5722] hover:bg-[#f4511e] text-white px-4 sm:px-5 text-xs font-semibold shadow-[0_0_20px_rgba(255,87,34,0.35)] transition-all hover:scale-105 cursor-pointer"
+                    className="rounded-full bg-gradient-to-r from-[#a855f7] via-[#8b5cf6] to-[#6d28d9] hover:brightness-110 text-white px-4 sm:px-5 text-xs font-semibold shadow-[0_0_20px_rgba(139,92,246,0.35)] transition-all hover:scale-105 cursor-pointer"
                   >
                     Sign Up
                   </Button>
@@ -173,19 +164,19 @@ export default function Home() {
         {/* HERO SECTION WITH HORIZON GLOW ARC */}
         <section id="hero" className="relative pt-16 sm:pt-24 pb-20 overflow-hidden">
           {/* Subtle Ambient Background Gradient Grid */}
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(255,87,34,0.12),rgba(255,255,255,0))] dark:bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(255,87,34,0.18),rgba(0,0,0,0))] pointer-events-none" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(139,92,246,0.12),rgba(255,255,255,0))] dark:bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(139,92,246,0.18),rgba(0,0,0,0))] pointer-events-none" />
 
           <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center space-y-6 relative z-10">
             {/* Pill Eyebrow */}
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-secondary/80 dark:bg-white/[0.05] border border-border dark:border-white/[0.1] text-xs font-medium text-muted-foreground dark:text-zinc-300 backdrop-blur-md shadow-xs">
-              <span className="h-2 w-2 rounded-full bg-[#ff5722] shadow-[0_0_8px_#ff5722] animate-pulse" />
+              <span className="h-2 w-2 rounded-full bg-[#8b5cf6] shadow-[0_0_8px_#8b5cf6] animate-pulse" />
               <span>Manage Your Finances & Syndicate Capital</span>
             </div>
 
             {/* Cinematic Headline */}
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-foreground dark:text-white max-w-4xl mx-auto leading-[1.08]">
               Finance That Grows with{" "}
-              <span className="bg-gradient-to-r from-[#ff5722] via-[#ff7a45] to-amber-500 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-[#a855f7] via-[#8b5cf6] to-[#c084fc] bg-clip-text text-transparent">
                 Your Ambition
               </span>
             </h1>
@@ -201,7 +192,7 @@ export default function Home() {
               <Link href={isAuthenticated ? "/dashboard" : "/login"} className="w-full sm:w-auto">
                 <Button
                   size="lg"
-                  className="w-full sm:w-auto rounded-full bg-[#ff5722] hover:bg-[#f4511e] text-white font-semibold text-xs sm:text-sm h-12 px-7 shadow-[0_0_25px_rgba(255,87,34,0.4)] transition-all hover:scale-105"
+                  className="w-full sm:w-auto rounded-full bg-gradient-to-r from-[#a855f7] via-[#8b5cf6] to-[#6d28d9] hover:brightness-110 text-white font-semibold text-xs sm:text-sm h-12 px-7 shadow-[0_0_25px_rgba(139,92,246,0.4)] transition-all hover:scale-105"
                 >
                   {isAuthenticated ? `Enter Dashboard (${userName})` : "Get Started Free"}
                   <ArrowRight className="h-4 w-4 ml-2" />
@@ -230,18 +221,18 @@ export default function Home() {
 
           {/* RADIANT HORIZON ARC GLOW (Signature RichPath Visual) */}
           <div className="relative max-w-6xl mx-auto px-4 sm:px-6 mt-12 sm:mt-16">
-            <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-[85%] h-36 bg-gradient-to-b from-[#ff5722]/25 dark:from-[#ff5722]/30 via-[#ff5722]/10 to-transparent blur-3xl pointer-events-none rounded-t-[100%]" />
-            <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-[70%] h-px bg-gradient-to-r from-transparent via-[#ff5722] to-transparent shadow-[0_0_20px_#ff5722]" />
+            <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-[85%] h-36 bg-gradient-to-b from-[#8b5cf6]/25 dark:from-[#8b5cf6]/30 via-[#8b5cf6]/10 to-transparent blur-3xl pointer-events-none rounded-t-[100%]" />
+            <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-[70%] h-px bg-gradient-to-r from-transparent via-[#8b5cf6] to-transparent shadow-[0_0_20px_#8b5cf6]" />
 
             {/* EMBEDDED DASHBOARD SHOWCASE CARD */}
             <div className="relative rounded-2xl border border-border dark:border-white/[0.12] bg-card dark:bg-[#101116] p-4 sm:p-7 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.15)] dark:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.9)] overflow-hidden transition-colors">
               {/* Inner ambient glow */}
-              <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#ff5722]/5 rounded-full blur-3xl pointer-events-none" />
+              <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#8b5cf6]/5 rounded-full blur-3xl pointer-events-none" />
 
               {/* Showcase Top Window Bar */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 mb-6 border-b border-border/80 dark:border-white/[0.06] gap-4">
                 <div className="flex items-center gap-3">
-                  <div className="h-8 w-8 rounded-lg bg-[#ff5722]/15 border border-[#ff5722]/30 text-[#ff5722] flex items-center justify-center font-bold text-xs">
+                  <div className="h-8 w-8 rounded-lg bg-[#8b5cf6]/15 border border-[#8b5cf6]/30 text-[#8b5cf6] flex items-center justify-center font-bold text-xs">
                     EV
                   </div>
                   <div>
@@ -267,7 +258,7 @@ export default function Home() {
                   <div className="h-8 w-8 rounded-full bg-secondary dark:bg-white/[0.05] border border-border dark:border-white/[0.08] flex items-center justify-center text-muted-foreground dark:text-zinc-300">
                     <Bell className="w-3.5 h-3.5" />
                   </div>
-                  <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-[#ff5722] to-amber-500 text-white flex items-center justify-center font-bold text-xs">
+                  <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-[#a855f7] via-[#8b5cf6] to-[#6d28d9] text-white flex items-center justify-center font-bold text-xs">
                     {userName.charAt(0).toUpperCase()}
                   </div>
                 </div>
@@ -300,10 +291,10 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* Right Top Mini Cards: Total Earnings (Orange Card), Spending, Income */}
+                {/* Right Top Mini Cards: Total Earnings (Violet Card), Spending, Income */}
                 <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  {/* Signature Radiant Orange Gradient Card */}
-                  <div className="rounded-xl p-5 orange-gradient-card flex flex-col justify-between">
+                  {/* Signature Radiant Violet Gradient Card */}
+                  <div className="rounded-xl p-5 violet-gradient-card flex flex-col justify-between">
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-semibold text-white/90">Total Earnings</span>
                       <span className="text-[10px] font-mono font-bold bg-white/20 backdrop-blur-md px-2 py-0.5 rounded-full text-white">
@@ -338,7 +329,7 @@ export default function Home() {
                   <div className="rounded-xl p-5 bg-secondary/40 dark:bg-white/[0.02] border border-border dark:border-white/[0.08] flex flex-col justify-between">
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-medium text-muted-foreground dark:text-zinc-400">Total Bonus</span>
-                      <Coins className="w-3.5 h-3.5 text-[#ff5722]" />
+                      <Coins className="w-3.5 h-3.5 text-[#8b5cf6]" />
                     </div>
                     <div className="pt-3">
                       <div className="text-2xl font-bold tracking-tight text-foreground dark:text-white font-mono">
@@ -350,7 +341,7 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Profit & Loss Showcase Bar Chart with Floating Orange Tooltip */}
+              {/* Profit & Loss Showcase Bar Chart with Floating Violet Tooltip */}
               <div className="rounded-xl bg-secondary/40 dark:bg-white/[0.02] border border-border dark:border-white/[0.08] p-5">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 gap-2 border-b border-border/80 dark:border-white/[0.06]">
                   <div>
@@ -360,16 +351,16 @@ export default function Home() {
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="inline-flex items-center gap-1.5 text-[11px] font-mono text-[#ff5722] bg-[#ff5722]/10 px-2.5 py-1 rounded-full border border-[#ff5722]/20 font-semibold">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#ff5722]" />
+                    <span className="inline-flex items-center gap-1.5 text-[11px] font-mono text-violet-600 dark:text-violet-400 bg-violet-500/10 px-2.5 py-1 rounded-full border border-violet-500/20 font-semibold">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#8b5cf6]" />
                       Net Gain: +₹2,34,500
                     </span>
                   </div>
                 </div>
 
                 <div className="relative pt-8 pb-3">
-                  {/* Floating Coral Orange Pill Badge / Tooltip */}
-                  <div className="absolute top-0 right-1/4 sm:right-1/3 -translate-y-1 bg-[#ff5722] text-white text-[11px] font-mono font-bold px-3 py-1.5 rounded-xl shadow-[0_4px_20px_rgba(255,87,34,0.45)] flex flex-col z-20 pointer-events-none">
+                  {/* Floating Violet Pill Badge / Tooltip */}
+                  <div className="absolute top-0 right-1/4 sm:right-1/3 -translate-y-1 bg-gradient-to-r from-[#a855f7] to-[#8b5cf6] text-white text-[11px] font-mono font-bold px-3 py-1.5 rounded-xl shadow-[0_4px_20px_rgba(139,92,246,0.45)] flex flex-col z-20 pointer-events-none">
                     <span className="text-[9px] text-white/80 uppercase">June 20, 2026</span>
                     <span className="text-xs font-bold">+₹23,450.00</span>
                   </div>
@@ -393,8 +384,8 @@ export default function Home() {
                       <div key={idx} className="flex flex-col items-center h-full justify-end group">
                         <div
                           className={`w-full rounded-t-sm transition-all duration-300 ${item.p
-                            ? "bg-[#ff5722] shadow-[0_0_15px_rgba(255,87,34,0.5)]"
-                            : "bg-[#ff5722]/30 dark:bg-[#ff5722]/40 hover:bg-[#ff5722]/80"
+                            ? "bg-gradient-to-t from-[#8b5cf6] via-[#a855f7] to-[#c4b5fd] shadow-[0_0_15px_rgba(139,92,246,0.5)]"
+                            : "bg-[#8b5cf6]/30 dark:bg-[#8b5cf6]/40 hover:bg-[#8b5cf6]/80"
                             }`}
                           style={{ height: `${item.h}%` }}
                         />
@@ -452,7 +443,7 @@ export default function Home() {
 
               {/* Graphic Specimen: Payment Card & Gateways */}
               <div className="mt-8 pt-6 border-t border-border/80 dark:border-white/[0.06] flex items-center justify-center">
-                <div className="w-full max-w-xs p-5 rounded-xl bg-gradient-to-tr from-[#ff5722] to-[#ff7a45] text-white shadow-[0_15px_35px_rgba(255,87,34,0.3)] space-y-4">
+                <div className="w-full max-w-xs p-5 rounded-xl bg-gradient-to-tr from-[#a855f7] via-[#8b5cf6] to-[#6d28d9] text-white shadow-[0_15px_35px_rgba(139,92,246,0.3)] space-y-4">
                   <div className="flex justify-between items-center text-xs opacity-90">
                     <span className="font-mono">Settlement Pass</span>
                     <CreditCard className="w-5 h-5" />
@@ -485,7 +476,7 @@ export default function Home() {
                 <div className="relative w-60 h-60 flex items-center justify-center select-none">
                   {/* Sun / Core Ambient Glow */}
                   <motion.div
-                    className="absolute w-20 h-20 rounded-full bg-[#ff5722]/15 blur-xl pointer-events-none"
+                    className="absolute w-20 h-20 rounded-full bg-[#8b5cf6]/15 blur-xl pointer-events-none"
                     animate={shouldReduceMotion ? undefined : { scale: [1, 1.25, 1], opacity: [0.6, 0.9, 0.6] }}
                     transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
                   />
@@ -514,7 +505,7 @@ export default function Home() {
 
                     {/* Secondary Satellite Micro Orb on Outer Track at 6 o'clock */}
                     <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 pointer-events-auto">
-                      <div className="w-2.5 h-2.5 rounded-full bg-[#ff5722] shadow-[0_0_8px_#ff5722]" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-[#8b5cf6] shadow-[0_0_8px_#8b5cf6]" />
                     </div>
                   </motion.div>
 
@@ -542,7 +533,7 @@ export default function Home() {
                   </motion.div>
 
                   {/* Inner Orbit Track */}
-                  <div className="absolute inset-14 rounded-full border border-[#ff5722]/30 bg-[#ff5722]/5 pointer-events-none" />
+                  <div className="absolute inset-14 rounded-full border border-[#8b5cf6]/30 bg-[#8b5cf6]/5 pointer-events-none" />
 
                   {/* Inner Planet Orbit (Marcus Vance - MV) */}
                   <motion.div
@@ -555,7 +546,7 @@ export default function Home() {
                       <motion.div
                         animate={shouldReduceMotion ? undefined : { rotate: -360 }}
                         transition={{ duration: 11, repeat: Infinity, ease: "linear" }}
-                        className="h-7 w-7 rounded-full bg-gradient-to-tr from-[#ff6b35] to-[#ff5722] text-white border border-white/30 shadow-[0_0_14px_rgba(255,87,34,0.5)] flex items-center justify-center text-[9px] font-bold transition-transform group-hover/planet:scale-125 cursor-pointer"
+                        className="h-7 w-7 rounded-full bg-gradient-to-tr from-[#a855f7] to-[#8b5cf6] text-white border border-white/30 shadow-[0_0_14px_rgba(139,92,246,0.5)] flex items-center justify-center text-[9px] font-bold transition-transform group-hover/planet:scale-125 cursor-pointer"
                         title="Marcus Vance (100% Note)"
                       >
                         MV
@@ -565,7 +556,7 @@ export default function Home() {
 
                   {/* Center Sun / Eye-Vision Capital Core */}
                   <motion.div
-                    className="relative z-10 h-12 w-12 rounded-full bg-gradient-to-tr from-[#ff5722] via-[#ff6b35] to-amber-500 text-white flex items-center justify-center shadow-[0_0_24px_rgba(255,87,34,0.6)] font-bold text-base ring-2 ring-white/30 cursor-pointer"
+                    className="relative z-10 h-12 w-12 rounded-full bg-gradient-to-tr from-[#a855f7] via-[#8b5cf6] to-[#6d28d9] text-white flex items-center justify-center shadow-[0_0_24px_rgba(139,92,246,0.6)] font-bold text-base ring-2 ring-white/30 cursor-pointer"
                     animate={shouldReduceMotion ? undefined : { scale: [1, 1.06, 1] }}
                     transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
                     title="Maturity Settlement Sun Core"
@@ -598,7 +589,7 @@ export default function Home() {
                     className="p-3 rounded-xl bg-secondary/50 dark:bg-white/[0.02] border border-border/70 dark:border-white/[0.06] flex items-center justify-between text-xs"
                   >
                     <div className="flex items-center gap-2.5">
-                      <div className="h-7 w-7 rounded-full bg-[#ff5722]/10 text-[#ff5722] border border-[#ff5722]/20 flex items-center justify-center font-bold text-[10px]">
+                      <div className="h-7 w-7 rounded-full bg-violet-500/10 text-violet-600 dark:text-violet-400 border border-violet-500/20 flex items-center justify-center font-bold text-[10px]">
                         {inv.name.charAt(0)}
                       </div>
                       <div>
@@ -634,7 +625,7 @@ export default function Home() {
                     <span className="font-mono text-emerald-600 dark:text-emerald-400 font-bold">+50.0% Net Yield</span>
                   </div>
                   <div className="w-full bg-secondary dark:bg-white/[0.06] h-2.5 rounded-full overflow-hidden">
-                    <div className="bg-gradient-to-r from-[#ff5722] to-amber-500 h-full rounded-full w-[75%]" />
+                    <div className="bg-gradient-to-r from-violet-500 via-purple-500 to-indigo-500 h-full rounded-full w-[75%]" />
                   </div>
                   <div className="flex justify-between text-[10px] text-muted-foreground font-mono">
                     <span>Active: 9/12 Months</span>
@@ -650,7 +641,7 @@ export default function Home() {
         <section id="simulator" className="py-20 border-t border-border dark:border-white/[0.06] bg-muted/30 dark:bg-[#0c0d12]">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 space-y-8">
             <div className="text-center space-y-2">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ff5722]/10 border border-[#ff5722]/30 text-[#ff5722] text-xs font-semibold">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/30 text-violet-600 dark:text-violet-400 text-xs font-semibold">
                 <Sparkles className="h-3.5 w-3.5" />
                 Live Interactive Calculator
               </div>
@@ -673,7 +664,7 @@ export default function Home() {
                       key={preset.value}
                       onClick={() => setCalcAmount(preset.value)}
                       className={`px-3.5 py-1.5 rounded-full text-xs font-mono font-medium border transition-all cursor-pointer ${calcAmount === preset.value
-                        ? "bg-[#ff5722] text-white border-[#ff5722] shadow-[0_0_12px_rgba(255,87,34,0.4)] font-bold scale-105"
+                        ? "bg-[#8b5cf6] text-white border-[#8b5cf6] shadow-[0_0_12px_rgba(139,92,246,0.4)] font-bold scale-105"
                         : "bg-secondary dark:bg-white/[0.04] text-muted-foreground border-border dark:border-white/[0.08] hover:text-foreground hover:bg-muted"
                         }`}
                     >
@@ -699,7 +690,7 @@ export default function Home() {
                     step="25000"
                     value={calcAmount}
                     onChange={(e) => setCalcAmount(Number(e.target.value))}
-                    className="w-full h-2 bg-secondary dark:bg-white/[0.08] rounded-lg appearance-none cursor-pointer accent-[#ff5722]"
+                    className="w-full h-2 bg-secondary dark:bg-white/[0.08] rounded-lg appearance-none cursor-pointer accent-[#8b5cf6]"
                   />
                   <div className="flex justify-between text-[10px] text-muted-foreground font-mono">
                     <span>₹25k</span>
@@ -718,26 +709,26 @@ export default function Home() {
                     <button
                       onClick={() => setCalcRoi(50)}
                       className={`p-3.5 rounded-xl text-xs font-medium border transition-all cursor-pointer text-left ${calcRoi === 50
-                        ? "bg-[#ff5722]/15 text-foreground dark:text-white border-[#ff5722] shadow-[0_0_15px_rgba(255,87,34,0.15)] font-semibold"
+                        ? "bg-violet-500/15 text-foreground dark:text-white border-violet-500 shadow-[0_0_15px_rgba(139,92,246,0.15)] font-semibold"
                         : "bg-secondary/60 dark:bg-white/[0.03] text-muted-foreground border-border dark:border-white/[0.08] hover:text-foreground"
                         }`}
                     >
                       <div className="font-bold flex items-center justify-between text-foreground dark:text-white">
                         50% ROI Tier
-                        {calcRoi === 50 && <span className="text-[10px] text-[#ff5722]">✓</span>}
+                        {calcRoi === 50 && <span className="text-[10px] text-[#8b5cf6]">✓</span>}
                       </div>
                       <div className="text-[10px] text-muted-foreground font-mono mt-1">1.5x Return</div>
                     </button>
                     <button
                       onClick={() => setCalcRoi(100)}
                       className={`p-3.5 rounded-xl text-xs font-medium border transition-all cursor-pointer text-left ${calcRoi === 100
-                        ? "bg-[#ff5722]/15 text-foreground dark:text-white border-[#ff5722] shadow-[0_0_15px_rgba(255,87,34,0.15)] font-semibold"
+                        ? "bg-violet-500/15 text-foreground dark:text-white border-violet-500 shadow-[0_0_15px_rgba(139,92,246,0.15)] font-semibold"
                         : "bg-secondary/60 dark:bg-white/[0.03] text-muted-foreground border-border dark:border-white/[0.08] hover:text-foreground"
                         }`}
                     >
                       <div className="font-bold flex items-center justify-between text-foreground dark:text-white">
                         100% ROI Tier
-                        {calcRoi === 100 && <span className="text-[10px] text-[#ff5722]">✓</span>}
+                        {calcRoi === 100 && <span className="text-[10px] text-[#8b5cf6]">✓</span>}
                       </div>
                       <div className="text-[10px] text-muted-foreground font-mono mt-1">2.0x Double Return</div>
                     </button>
@@ -767,11 +758,11 @@ export default function Home() {
                   <span className="text-[10px] font-sans text-muted-foreground uppercase font-medium block">
                     Monthly Accrual
                   </span>
-                  <p className="text-base font-bold text-[#ff5722] mt-1">
+                  <p className="text-base font-bold text-[#8b5cf6] mt-1">
                     +₹{monthlyAccrual.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} / mo
                   </p>
                 </div>
-                <div className="p-3.5 rounded-xl orange-gradient-card">
+                <div className="p-3.5 rounded-xl violet-gradient-card">
                   <span className="text-[10px] font-sans text-white/90 uppercase font-medium block">
                     Final Maturity Payout
                   </span>
@@ -784,7 +775,7 @@ export default function Home() {
               {/* Bonus Breakdown Strip */}
               <div className="p-4 rounded-xl bg-secondary/40 dark:bg-white/[0.02] border border-border/80 dark:border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
                 <div className="flex items-center gap-2">
-                  <Coins className="w-4 h-4 text-[#ff5722]" />
+                  <Coins className="w-4 h-4 text-[#8b5cf6]" />
                   <span className="text-foreground font-medium">Automatic Bonus Allocation:</span>
                 </div>
                 <div className="flex items-center gap-4 font-mono text-[11px]">
@@ -793,7 +784,7 @@ export default function Home() {
                   </span>
                   <span className="text-muted-foreground">•</span>
                   <span className="text-foreground">
-                    Owner Bonus: <strong className="text-[#ff5722]">+₹{ownerBonus.toLocaleString("en-IN")}</strong>
+                    Owner Bonus: <strong className="text-[#8b5cf6]">+₹{ownerBonus.toLocaleString("en-IN")}</strong>
                   </span>
                 </div>
               </div>
@@ -852,7 +843,7 @@ export default function Home() {
                   key={idx}
                   className="rounded-2xl bg-card dark:bg-[#101116] border border-border dark:border-white/[0.08] p-6 space-y-3 hover:border-primary/40 dark:hover:border-white/[0.14] transition-all shadow-sm group"
                 >
-                  <div className="h-10 w-10 rounded-xl bg-[#ff5722]/10 border border-[#ff5722]/20 text-[#ff5722] flex items-center justify-center group-hover:scale-105 transition-transform">
+                  <div className="h-10 w-10 rounded-xl bg-[#8b5cf6]/10 border border-[#8b5cf6]/20 text-[#8b5cf6] flex items-center justify-center group-hover:scale-105 transition-transform">
                     <IconComp className="w-5 h-5 stroke-[2]" />
                   </div>
                   <h3 className="text-base font-bold text-foreground dark:text-white">{feature.title}</h3>
@@ -884,13 +875,13 @@ export default function Home() {
                 >
                   <button
                     onClick={() => setOpenFaq(isOpen ? null : idx)}
-                    className="w-full p-5 text-left flex items-center justify-between text-xs sm:text-sm font-semibold text-foreground dark:text-white hover:text-[#ff5722] transition-colors cursor-pointer"
+                    className="w-full p-5 text-left flex items-center justify-between text-xs sm:text-sm font-semibold text-foreground dark:text-white hover:text-[#8b5cf6] transition-colors cursor-pointer"
                   >
                     <span>
                       {idx + 1}. {item.q}
                     </span>
                     <ChevronDown
-                      className={`w-4 h-4 text-muted-foreground transition-transform ${isOpen ? "rotate-180 text-[#ff5722]" : ""
+                      className={`w-4 h-4 text-muted-foreground transition-transform ${isOpen ? "rotate-180 text-[#8b5cf6]" : ""
                         }`}
                     />
                   </button>
@@ -921,9 +912,9 @@ export default function Home() {
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="h-11 px-4 rounded-full bg-background dark:bg-white/[0.04] border border-border dark:border-white/[0.1] text-xs text-foreground placeholder:text-muted-foreground focus:outline-hidden focus:border-[#ff5722] w-full sm:w-64"
+                className="h-11 px-4 rounded-full bg-background dark:bg-white/[0.04] border border-border dark:border-white/[0.1] text-xs text-foreground placeholder:text-muted-foreground focus:outline-hidden focus:border-[#8b5cf6] w-full sm:w-64"
               />
-              <Button className="rounded-full bg-[#ff5722] hover:bg-[#f4511e] text-white text-xs font-bold h-11 px-6 shadow-[0_0_20px_rgba(255,87,34,0.35)] shrink-0 cursor-pointer">
+              <Button className="rounded-full bg-[#8b5cf6] hover:bg-[#7c3aed] text-white text-xs font-bold h-11 px-6 shadow-[0_0_20px_rgba(139,92,246,0.35)] shrink-0 cursor-pointer">
                 Subscribe
               </Button>
             </div>
@@ -936,7 +927,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-2 md:grid-cols-5 gap-8">
           <div className="col-span-2 space-y-3">
             <div className="flex items-center gap-2.5">
-              <div className="h-7 w-7 rounded-lg bg-[#ff5722] text-white flex items-center justify-center font-bold text-xs">
+              <div className="h-7 w-7 rounded-lg bg-gradient-to-tr from-[#a855f7] via-[#8b5cf6] to-[#6d28d9] text-white flex items-center justify-center font-bold text-xs">
                 EV
               </div>
               <span className="font-bold text-sm text-foreground dark:text-white">Eye-Vision</span>

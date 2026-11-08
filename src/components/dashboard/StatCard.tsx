@@ -8,8 +8,8 @@ interface StatCardProps {
   description?: ReactNode;
   className?: string;
   valueClassName?: string;
-  accent?: "orange" | "emerald" | "blue" | "purple" | "amber" | "neutral";
-  variant?: "default" | "gradient-orange";
+  accent?: "violet" | "purple" | "emerald" | "blue" | "amber" | "neutral" | "orange";
+  variant?: "default" | "gradient-violet" | "gradient-orange";
   badge?: string;
 }
 
@@ -24,11 +24,12 @@ export function StatCard({
   variant = "default",
   badge,
 }: StatCardProps) {
-  const isGradientOrange = variant === "gradient-orange";
+  const isGradientViolet = variant === "gradient-violet" || variant === "gradient-orange";
 
   const accentStyles = {
     neutral: "hover:border-foreground/30",
-    orange: "hover:border-orange-500/50",
+    violet: "hover:border-violet-500/50",
+    orange: "hover:border-violet-500/50",
     emerald: "hover:border-emerald-500/50",
     blue: "hover:border-blue-500/50",
     purple: "hover:border-purple-500/50",
@@ -37,18 +38,19 @@ export function StatCard({
 
   const iconBgStyles = {
     neutral: "bg-secondary text-muted-foreground border-border",
-    orange: "bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-500/20",
+    violet: "bg-violet-500/10 text-violet-600 dark:text-violet-400 border-violet-500/20",
+    orange: "bg-violet-500/10 text-violet-600 dark:text-violet-400 border-violet-500/20",
     emerald: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
     blue: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20",
     purple: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20",
     amber: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20",
   };
 
-  if (isGradientOrange) {
+  if (isGradientViolet) {
     return (
       <div
         className={cn(
-          "p-3.5 sm:p-5 rounded-2xl orange-gradient-card flex flex-col justify-between transition-all duration-300 group/stat hover:scale-[1.02]",
+          "p-3.5 sm:p-5 rounded-2xl violet-gradient-card flex flex-col justify-between transition-all duration-300 group/stat hover:scale-[1.02]",
           className
         )}
       >

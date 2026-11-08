@@ -71,15 +71,15 @@ export function SidebarRail({ className }: SidebarRailProps) {
       <div className="flex flex-col items-center gap-6 w-full">
         <Link
           href="/dashboard"
-          className="group relative flex items-center justify-center h-11 w-11 rounded-2xl bg-gradient-to-tr from-[#ff6b35] to-[#ff5722] text-white hover:scale-105 transition-all shadow-[0_0_24px_rgba(255,87,34,0.45)]"
+          className="group relative flex items-center justify-center h-11 w-11 rounded-2xl bg-gradient-to-tr from-[#a855f7] via-[#8b5cf6] to-[#7c3aed] text-white hover:scale-105 transition-all shadow-[0_0_24px_rgba(139,92,246,0.45)]"
           title="Eye-Vision Private Ledger"
         >
           <Eye className="w-5 h-5 stroke-[2.2] transition-transform group-hover:scale-110" />
         </Link>
 
-        {/* Navigation Icon Stack with Sliding Orange Circle */}
+        {/* Navigation Icon Stack with Sliding Indicator */}
         <nav className="relative flex flex-col items-center gap-2.5 w-full">
-          {/* Sliding Orange Circle Indicator: animates smoothly between items with spring physics */}
+          {/* Sliding Violet Indicator: animates smoothly between items with spring physics */}
           <motion.div
             className="absolute top-0 left-1/2 -translate-x-1/2 w-11 h-11 pointer-events-none z-10 flex items-center justify-center"
             initial={false}
@@ -95,7 +95,7 @@ export function SidebarRail({ className }: SidebarRailProps) {
               mass: 0.8,
             }}
           >
-            <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-orange-500 via-orange-600 to-amber-400 shadow-xl shadow-orange-500/40 ring-2 ring-card/80" />
+            <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-violet-500 via-purple-600 to-indigo-500 shadow-xl shadow-violet-500/40 ring-2 ring-card/80" />
           </motion.div>
 
           {/* Navigation Links */}

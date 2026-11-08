@@ -115,7 +115,7 @@ export function InvestmentDetail({ investment }: { investment: any }) {
       <Card className="p-4 sm:p-6 border-border shadow-sm bg-card text-card-foreground">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-border/70">
           <div className="flex items-center gap-3 sm:gap-3.5 min-w-0">
-            <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20 flex items-center justify-center font-bold text-base sm:text-lg shrink-0 shadow-xs">
+            <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-violet-500/10 text-violet-600 dark:text-violet-400 border border-violet-500/20 flex items-center justify-center font-bold text-base sm:text-lg shrink-0 shadow-xs">
               {initial}
             </div>
             <div className="min-w-0">
@@ -154,7 +154,7 @@ export function InvestmentDetail({ investment }: { investment: any }) {
                 onClick={() => setIsSettleModalOpen(true)}
                 disabled={isPending}
                 size="sm"
-                className="w-full sm:w-auto justify-center gap-2 text-xs font-semibold shadow-xs cursor-pointer bg-gradient-to-r from-orange-500 via-orange-600 to-amber-500 text-white hover:brightness-110"
+                className="w-full sm:w-auto justify-center gap-2 text-xs font-semibold shadow-xs cursor-pointer bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 text-white hover:brightness-110"
               >
                 <CheckCircle2 className="h-3.5 w-3.5 text-white stroke-[2.5]" />
                 <span>Mark as Settled</span>
@@ -216,11 +216,11 @@ export function InvestmentDetail({ investment }: { investment: any }) {
         {/* Incentive Bonus Breakdown Strip */}
         {(investorBonus > 0 || ownerBonus > 0) && (
           <div className="mt-4 pt-4 border-t border-border/60 grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div className="flex items-center justify-between p-3 rounded-xl bg-orange-500/5 border border-orange-500/20 text-xs font-mono">
-              <span className="flex items-center gap-1.5 text-orange-600 dark:text-orange-400 font-sans font-medium">
+            <div className="flex items-center justify-between p-3 rounded-xl bg-violet-500/5 border border-violet-500/20 text-xs font-mono">
+              <span className="flex items-center gap-1.5 text-violet-600 dark:text-violet-400 font-sans font-medium">
                 <Gift className="w-3.5 h-3.5" /> Investor Bonus (Included in Profit)
               </span>
-              <span className="font-bold text-orange-600 dark:text-orange-400 tabular-nums text-sm">
+              <span className="font-bold text-violet-600 dark:text-violet-400 tabular-nums text-sm">
                 +₹{investorBonus.toLocaleString("en-IN")}
               </span>
             </div>
@@ -353,7 +353,7 @@ export function InvestmentDetail({ investment }: { investment: any }) {
       <div className="grid gap-4 sm:grid-cols-3">
         <Card className="p-4 border-border bg-card text-card-foreground shadow-xs">
           <div className="flex items-center gap-2 text-muted-foreground mb-1.5">
-            <Phone className="h-3.5 w-3.5 text-orange-500" />
+            <Phone className="h-3.5 w-3.5 text-violet-500" />
             <span className="text-xs font-semibold uppercase tracking-wider">Contact Number</span>
           </div>
           <p className="font-mono text-sm font-bold text-foreground">
@@ -389,7 +389,7 @@ export function InvestmentDetail({ investment }: { investment: any }) {
       <Card className="p-5 border-border bg-card text-card-foreground space-y-3 shadow-xs">
         <div className="flex justify-between items-center text-xs">
           <div className="flex items-center gap-2">
-            <Sparkles className="h-3.5 w-3.5 text-orange-500" />
+            <Sparkles className="h-3.5 w-3.5 text-violet-500" />
             <span className="font-semibold text-foreground">Contract Lifecycle Progression</span>
           </div>
           <span className="font-mono text-muted-foreground">
@@ -403,7 +403,7 @@ export function InvestmentDetail({ investment }: { investment: any }) {
                 ? "bg-emerald-500"
                 : isMatured
                 ? "bg-amber-500"
-                : "bg-gradient-to-r from-orange-500 to-amber-500"
+                : "bg-gradient-to-r from-violet-500 via-purple-500 to-indigo-500"
             }`}
             style={{ width: `${Math.min(progress.percentageComplete, 100)}%` }}
           />
@@ -499,7 +499,7 @@ export function InvestmentDetail({ investment }: { investment: any }) {
                     <TableRow
                       key={idx}
                       className={`border-b border-border/60 hover:bg-muted/40 font-mono text-xs tabular-nums transition-colors ${
-                        isCurrentMonth ? "bg-orange-500/10 font-semibold" : ""
+                        isCurrentMonth ? "bg-violet-500/10 font-semibold" : ""
                       }`}
                     >
                       <TableCell className="py-2.5 pl-2 text-foreground font-sans flex items-center gap-2">

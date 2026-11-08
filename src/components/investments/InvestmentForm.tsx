@@ -203,7 +203,7 @@ export function InvestmentForm() {
             <div className="pt-3 border-t border-border/70 space-y-3">
               <div>
                 <span className="text-xs font-semibold text-foreground flex items-center gap-1.5">
-                  <Gift className="w-3.5 h-3.5 text-orange-500" />
+                  <Gift className="w-3.5 h-3.5 text-violet-500" />
                   <span>Bonus Allocations</span>
                 </span>
                 <p className="text-[11px] text-muted-foreground mt-0.5">
@@ -284,9 +284,9 @@ export function InvestmentForm() {
               </span>
             </div>
             {investorBonus > 0 && (
-              <div className="flex justify-between items-center py-2.5 bg-orange-500/5 -mx-3.5 px-3.5">
-                <span className="text-orange-600 dark:text-orange-400 font-sans font-medium">Investor Bonus</span>
-                <span className="font-semibold text-orange-600 dark:text-orange-400 tabular-nums">
+              <div className="flex justify-between items-center py-2.5 bg-violet-500/5 -mx-3.5 px-3.5">
+                <span className="text-violet-600 dark:text-violet-400 font-sans font-medium">Investor Bonus</span>
+                <span className="font-semibold text-violet-600 dark:text-violet-400 tabular-nums">
                   +₹{investorBonus.toLocaleString("en-IN")}
                 </span>
               </div>

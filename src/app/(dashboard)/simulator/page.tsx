@@ -13,7 +13,7 @@ export default function SimulatorPage() {
             <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
               ROI & Yield Simulator
             </h1>
-            <span className="px-2.5 py-0.5 rounded-full bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20 text-[10px] font-semibold">
+            <span className="px-2.5 py-0.5 rounded-full bg-violet-500/10 text-violet-600 dark:text-violet-400 border border-violet-500/20 text-[10px] font-semibold">
               Contract Modeler
             </span>
           </div>
@@ -30,7 +30,7 @@ export default function SimulatorPage() {
             </Button>
           </Link>
           <Link href="/investments/new">
-            <button className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-gradient-to-r from-orange-500 via-orange-600 to-amber-500 hover:brightness-110 text-white text-xs font-semibold shadow-lg shadow-orange-500/25 transition-all active:scale-95 cursor-pointer">
+            <button className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 hover:brightness-110 text-white text-xs font-semibold shadow-lg shadow-violet-500/25 transition-all active:scale-95 cursor-pointer">
               <span>Record Position</span>
             </button>
           </Link>

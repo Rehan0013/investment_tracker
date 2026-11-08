@@ -66,7 +66,7 @@ export function InvestmentsBarChart({
             <span className="text-xs font-medium text-muted-foreground">
               Profit & Loss Accrual
             </span>
-            <span className="text-[10px] font-semibold text-orange-600 dark:text-orange-400 bg-orange-500/10 border border-orange-500/20 px-2 py-0.5 rounded-full">
+            <span className="text-[10px] font-semibold text-violet-600 dark:text-violet-400 bg-violet-500/10 border border-violet-500/20 px-2 py-0.5 rounded-full">
               Monthly Yield
             </span>
           </div>
@@ -116,7 +116,7 @@ export function InvestmentsBarChart({
             <div key={bar.month} className="flex-1 flex flex-col items-center justify-end h-full group relative">
               {/* Value Floating Tooltip Card above Peak Bar */}
               {isPeak ? (
-                <div className="absolute -top-7 mb-1 px-2.5 py-0.5 rounded-full bg-gradient-to-r from-[#ff6b35] to-[#ff5722] text-white font-bold text-[10px] shadow-[0_0_15px_rgba(255,87,34,0.5)] z-10 whitespace-nowrap">
+                <div className="absolute -top-7 mb-1 px-2.5 py-0.5 rounded-full bg-gradient-to-r from-[#a855f7] to-[#8b5cf6] text-white font-bold text-[10px] shadow-[0_0_15px_rgba(139,92,246,0.5)] z-10 whitespace-nowrap">
                   ₹{bar.value >= 100000 ? `${(bar.value / 100000).toFixed(1)}L` : bar.value >= 1000 ? `${Math.round(bar.value / 1000)}k` : bar.value}
                 </div>
               ) : (
@@ -131,8 +131,8 @@ export function InvestmentsBarChart({
                   style={{ height: `${heightPercent}%` }}
                   className={`w-full rounded-t-lg transition-all duration-300 ${
                     isPeak
-                      ? "bg-gradient-to-t from-[#ff5722] via-[#ff6b35] to-[#ff8a50] shadow-[0_0_20px_rgba(255,87,34,0.45)] ring-1 ring-white/30"
-                      : "bg-[#ff5722]/50 hover:bg-[#ff5722]/80 border-t border-[#ff5722]"
+                      ? "bg-gradient-to-t from-[#8b5cf6] via-[#a855f7] to-[#c4b5fd] shadow-[0_0_20px_rgba(139,92,246,0.45)] ring-1 ring-white/30"
+                      : "bg-[#8b5cf6]/50 hover:bg-[#8b5cf6]/80 border-t border-[#8b5cf6]"
                   }`}
                 />
               </div>

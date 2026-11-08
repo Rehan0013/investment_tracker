@@ -137,7 +137,7 @@ export function ManageInvestmentsClient({ initialInvestments }: { initialInvestm
                     {(Boolean(inv.investorBonus) || Boolean(inv.ownerBonus)) && (
                       <div className="flex items-center gap-2 text-[10px] font-mono mt-0.5">
                         {Boolean(inv.investorBonus) && (
-                          <span className="text-orange-600 dark:text-orange-400 bg-orange-500/10 border border-orange-500/20 px-1.5 py-0.2 rounded">
+                          <span className="text-violet-600 dark:text-violet-400 bg-violet-500/10 border border-violet-500/20 px-1.5 py-0.2 rounded">
                             Investor Bonus: +₹{inv.investorBonus?.toLocaleString("en-IN")}
                           </span>
                         )}

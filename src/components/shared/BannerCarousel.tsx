@@ -37,8 +37,8 @@ function BannerCard({ banner, isLanding, priority, compact }: BannerCardProps) {
       className={cn(
         "group relative w-full h-full overflow-hidden rounded-xl sm:rounded-2xl border transition-all duration-300",
         isLanding
-          ? "border-border dark:border-white/[0.12] bg-card dark:bg-[#101116] shadow-sm hover:shadow-[0_12px_36px_rgba(255,87,34,0.18)] hover:border-[#ff5722]/50"
-          : "border-border/80 dark:border-white/[0.08] bg-card dark:bg-[#101116] shadow-xs hover:border-[#ff5722]/40"
+          ? "border-border dark:border-white/[0.12] bg-card dark:bg-[#101116] shadow-sm hover:shadow-[0_12px_36px_rgba(139,92,246,0.18)] hover:border-[#8b5cf6]/50"
+          : "border-border/80 dark:border-white/[0.08] bg-card dark:bg-[#101116] shadow-xs hover:border-[#8b5cf6]/40"
       )}
     >
       {/* 16:9 Banner Image */}
@@ -60,7 +60,7 @@ function BannerCard({ banner, isLanding, priority, compact }: BannerCardProps) {
 
       {/* Horizon glow effect for landing variant */}
       {isLanding && (
-        <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-3/4 h-16 bg-[#ff5722]/25 blur-xl pointer-events-none rounded-full opacity-60 group-hover:opacity-100 transition-opacity" />
+        <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-3/4 h-16 bg-[#8b5cf6]/25 blur-xl pointer-events-none rounded-full opacity-60 group-hover:opacity-100 transition-opacity" />
       )}
 
       {/* Content overlay: Floating badge, Title, Description */}
@@ -76,7 +76,7 @@ function BannerCard({ banner, isLanding, priority, compact }: BannerCardProps) {
           {/* Badge */}
           <div className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-0.5 rounded-full bg-black/40 backdrop-blur-md border border-white/25 text-[10px] sm:text-[11px] font-semibold text-white shadow-xs self-start">
             {isBonus ? (
-              <Gift className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[#ff5722] shrink-0" />
+              <Gift className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[#8b5cf6] shrink-0" />
             ) : (
               <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-amber-400 shrink-0" />
             )}
@@ -193,22 +193,23 @@ function Landing3DArcCarousel({
   };
 
   // Mathematical formula for the 3D Arc Curvature
-  // Reproduces the exact cylindrical perspective from the reference image
+  // Faithfully reproduces the BrandLyft concave amphitheater / smile curve from the reference design
   const getArcTransform = (k: number, spacing: number) => {
     const absK = Math.abs(k);
     const x = k * spacing;
 
-    // Concave cylinder 3D perspective rotation around Y
-    const rotateY = -k * 8.5;
+    // Concave 3D perspective rotation around Y (inward facing towards center)
+    const rotateY = -k * 4.5;
 
-    // Convex arch curvature along Y axis (center is apex, sides droop gracefully)
-    const translateY = Math.pow(absK, 1.75) * 8.5;
+    // Concave amphitheater smile curvature (center dips lowest, sides rise gracefully)
+    const translateY = -Math.pow(absK, 1.45) * 13;
 
-    // Tangent rotation along Z axis following the arch slope
-    const rotateZ = k * 2.4;
+    // Tangent rotation along Z axis following the amphitheater smile slope
+    // (left cards rotate clockwise so outer edge is up; right cards rotate counter-clockwise so outer edge is up)
+    const rotateZ = -k * 3.2;
 
     // Subtle scale depth
-    const scale = Math.max(0.78, 1 - absK * 0.045);
+    const scale = Math.max(0.82, 1 - absK * 0.045);
 
     // Layering: center card sits prominently on top
     const zIndex = 50 - absK * 10;
@@ -236,12 +237,12 @@ function Landing3DArcCarousel({
         className
       )}
     >
-      {/* Horizon Orange Ambient Glow Behind the 3D Stage */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[220px] bg-[#ff5722]/15 blur-[120px] pointer-events-none rounded-full" />
+      {/* Horizon Violet Ambient Glow Behind the 3D Stage */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[220px] bg-[#8b5cf6]/15 blur-[120px] pointer-events-none rounded-full" />
 
       {/* 3D Perspective Stage */}
       <div
-        className="relative w-full h-[220px] sm:h-[280px] md:h-[320px] lg:h-[350px] flex items-center justify-center"
+        className="relative w-full h-[240px] sm:h-[300px] md:h-[340px] lg:h-[370px] flex items-center justify-center pt-6 pb-2"
         style={{
           perspective: "1200px",
           transformStyle: "preserve-3d",
@@ -287,8 +288,8 @@ function Landing3DArcCarousel({
               className={cn(
                 "absolute aspect-[16/9] rounded-2xl sm:rounded-3xl overflow-hidden border transition-all duration-300",
                 isCenter
-                  ? "border-[#ff5722]/60 ring-2 ring-[#ff5722]/30 shadow-[0_20px_60px_-10px_rgba(255,87,34,0.35)] dark:shadow-[0_25px_70px_-15px_rgba(0,0,0,0.95)] cursor-default"
-                  : "border-border dark:border-white/[0.12] shadow-xl hover:border-[#ff5722]/40 cursor-pointer"
+                  ? "border-[#8b5cf6]/60 ring-2 ring-[#8b5cf6]/30 shadow-[0_20px_60px_-10px_rgba(139,92,246,0.35)] dark:shadow-[0_25px_70px_-15px_rgba(0,0,0,0.95)] cursor-default"
+                  : "border-border dark:border-white/[0.12] shadow-xl hover:border-[#8b5cf6]/40 cursor-pointer"
               )}
             >
               {/* 16:9 Banner Image */}
@@ -306,7 +307,7 @@ function Landing3DArcCarousel({
 
               {/* Center Glow Accent */}
               {isCenter && (
-                <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-3/4 h-14 bg-[#ff5722]/30 blur-xl pointer-events-none rounded-full" />
+                <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-3/4 h-14 bg-[#8b5cf6]/30 blur-xl pointer-events-none rounded-full" />
               )}
 
               {/* Content Overlay */}
@@ -320,7 +321,7 @@ function Landing3DArcCarousel({
                   {/* Badge */}
                   <div className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-0.5 rounded-full bg-black/50 backdrop-blur-md border border-white/25 text-[10px] sm:text-[11px] font-semibold text-white shadow-xs self-start mb-1 sm:mb-1.5">
                     {isBonus ? (
-                      <Gift className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[#ff5722] shrink-0" />
+                      <Gift className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[#8b5cf6] shrink-0" />
                     ) : (
                       <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-amber-400 shrink-0" />
                     )}
@@ -354,7 +355,7 @@ function Landing3DArcCarousel({
           <button
             onClick={() => setCurrentIndex((prev) => prev - 1)}
             aria-label="Previous Banner"
-            className="absolute left-3 sm:left-6 lg:left-12 top-1/2 -translate-y-1/2 z-40 h-9 w-9 sm:h-11 sm:w-11 rounded-full flex items-center justify-center transition-all cursor-pointer bg-black/60 hover:bg-[#ff5722] text-white border border-white/20 backdrop-blur-md shadow-lg hover:scale-110 active:scale-90"
+            className="absolute left-3 sm:left-6 lg:left-12 top-1/2 -translate-y-1/2 z-40 h-9 w-9 sm:h-11 sm:w-11 rounded-full flex items-center justify-center transition-all cursor-pointer bg-black/60 hover:bg-[#8b5cf6] text-white border border-white/20 backdrop-blur-md shadow-lg hover:scale-110 active:scale-90"
           >
             <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.2]" />
           </button>
@@ -363,7 +364,7 @@ function Landing3DArcCarousel({
           <button
             onClick={() => setCurrentIndex((prev) => prev + 1)}
             aria-label="Next Banner"
-            className="absolute right-3 sm:right-6 lg:right-12 top-1/2 -translate-y-1/2 z-40 h-9 w-9 sm:h-11 sm:w-11 rounded-full flex items-center justify-center transition-all cursor-pointer bg-black/60 hover:bg-[#ff5722] text-white border border-white/20 backdrop-blur-md shadow-lg hover:scale-110 active:scale-90"
+            className="absolute right-3 sm:right-6 lg:right-12 top-1/2 -translate-y-1/2 z-40 h-9 w-9 sm:h-11 sm:w-11 rounded-full flex items-center justify-center transition-all cursor-pointer bg-black/60 hover:bg-[#8b5cf6] text-white border border-white/20 backdrop-blur-md shadow-lg hover:scale-110 active:scale-90"
           >
             <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.2]" />
           </button>
@@ -383,7 +384,7 @@ function Landing3DArcCarousel({
                   className={cn(
                     "h-1.5 rounded-full transition-all duration-300 cursor-pointer",
                     isActive
-                      ? "w-7 bg-[#ff5722] shadow-[0_0_10px_#ff5722]"
+                      ? "w-7 bg-[#8b5cf6] shadow-[0_0_10px_#8b5cf6]"
                       : "w-2 bg-muted-foreground/30 hover:bg-muted-foreground/60"
                   )}
                 />
@@ -616,7 +617,7 @@ function DashboardCarousel({
             <button
               onClick={prevDesktopSlide}
               aria-label="Previous banners"
-              className="absolute left-2.5 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full flex items-center justify-center transition-all cursor-pointer opacity-75 group-hover:opacity-100 hover:scale-110 active:scale-95 shadow-md bg-background/85 hover:bg-[#ff5722] hover:text-white text-foreground border border-border dark:border-white/10 backdrop-blur-md"
+              className="absolute left-2.5 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full flex items-center justify-center transition-all cursor-pointer opacity-75 group-hover:opacity-100 hover:scale-110 active:scale-95 shadow-md bg-background/85 hover:bg-[#8b5cf6] hover:text-white text-foreground border border-border dark:border-white/10 backdrop-blur-md"
             >
               <ChevronLeft className="w-5 h-5 stroke-[2.2]" />
             </button>
@@ -624,7 +625,7 @@ function DashboardCarousel({
             <button
               onClick={nextDesktopSlide}
               aria-label="Next banners"
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full flex items-center justify-center transition-all cursor-pointer opacity-75 group-hover:opacity-100 hover:scale-110 active:scale-95 shadow-md bg-background/85 hover:bg-[#ff5722] hover:text-white text-foreground border border-border dark:border-white/10 backdrop-blur-md"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full flex items-center justify-center transition-all cursor-pointer opacity-75 group-hover:opacity-100 hover:scale-110 active:scale-95 shadow-md bg-background/85 hover:bg-[#8b5cf6] hover:text-white text-foreground border border-border dark:border-white/10 backdrop-blur-md"
             >
               <ChevronRight className="w-5 h-5 stroke-[2.2]" />
             </button>
@@ -639,7 +640,7 @@ function DashboardCarousel({
                   className={cn(
                     "h-1.5 rounded-full transition-all duration-300 cursor-pointer",
                     idx === desktopIndex
-                      ? "w-5 bg-[#ff5722]"
+                      ? "w-5 bg-[#8b5cf6]"
                       : "w-1.5 bg-muted-foreground/30 hover:bg-muted-foreground/60"
                   )}
                 />

@@ -90,7 +90,7 @@ export function InvestmentsClient({ initialInvestments }: { initialInvestments: 
           </div>
 
           <Link href="/investments/new" className="shrink-0">
-            <button className="inline-flex items-center gap-1.5 px-3.5 sm:px-4 py-2 rounded-full bg-gradient-to-r from-orange-500 via-orange-600 to-amber-500 hover:brightness-110 text-white text-xs font-semibold shadow-lg shadow-orange-500/25 transition-all active:scale-95 cursor-pointer">
+            <button className="inline-flex items-center gap-1.5 px-3.5 sm:px-4 py-2 rounded-full bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 hover:brightness-110 text-white text-xs font-semibold shadow-lg shadow-violet-500/25 transition-all active:scale-95 cursor-pointer">
               <Plus className="h-3.5 w-3.5 stroke-[2.5]" />
               <span>Record Position</span>
             </button>
@@ -155,7 +155,7 @@ export function InvestmentsClient({ initialInvestments }: { initialInvestments: 
       {filtered.length > 0 && (
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-4 py-3 rounded-2xl bg-secondary/70 border border-border text-xs text-muted-foreground">
           <div className="flex items-center gap-2">
-            <Sparkles className="h-3.5 w-3.5 text-orange-500" />
+            <Sparkles className="h-3.5 w-3.5 text-violet-500" />
             <span>
               Showing <strong className="text-foreground">{filtered.length}</strong> of {initialInvestments.length} contracts
             </span>
@@ -268,7 +268,7 @@ export function InvestmentsClient({ initialInvestments }: { initialInvestments: 
                       <TableCell className="py-3.5 text-right font-mono text-xs tabular-nums text-emerald-600 dark:text-emerald-400 font-semibold">
                         <div>+₹{netGain.toLocaleString("en-IN")} ({roiPercent}%)</div>
                         {Boolean(inv.investorBonus) && (
-                          <div className="text-[10px] text-orange-600 dark:text-orange-400 font-normal">
+                          <div className="text-[10px] text-violet-600 dark:text-violet-400 font-normal">
                             incl. ₹{inv.investorBonus.toLocaleString("en-IN")} bonus
                           </div>
                         )}

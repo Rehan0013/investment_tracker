@@ -48,7 +48,7 @@ export function RecentTransactionsCard({ investments }: RecentTransactionsCardPr
       amount: "+₹30,000",
       status: "Accruing",
       initials: "MV",
-      badgeColor: "bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20",
+      badgeColor: "bg-violet-500/10 text-violet-600 dark:text-violet-400 border border-violet-500/20",
     },
   ];
 
@@ -67,7 +67,7 @@ export function RecentTransactionsCard({ investments }: RecentTransactionsCardPr
 
         <Link
           href="/investments"
-          className="text-xs font-semibold text-[#ff5722] hover:text-[#f4511e] flex items-center gap-0.5 shrink-0"
+          className="text-xs font-semibold text-[#8b5cf6] hover:text-[#7c3aed] flex items-center gap-0.5 shrink-0"
         >
           <span>View All</span>
           <ArrowUpRight className="w-3.5 h-3.5 stroke-[2]" />
@@ -100,7 +100,7 @@ export function RecentTransactionsCard({ investments }: RecentTransactionsCardPr
                     <div
                       className={`w-8.5 h-8.5 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center font-bold text-xs shrink-0 shadow-xs ${
                         idx === 0
-                          ? "bg-gradient-to-tr from-[#ff6b35] to-[#ff5722] text-white shadow-[0_0_12px_rgba(255,87,34,0.35)]"
+                          ? "bg-gradient-to-tr from-[#a855f7] to-[#8b5cf6] text-white shadow-[0_0_12px_rgba(139,92,246,0.35)]"
                           : idx === 1
                           ? "bg-gradient-to-tr from-emerald-600 to-teal-400 text-white"
                           : "bg-secondary dark:bg-white/[0.06] text-foreground border border-border dark:border-white/10"

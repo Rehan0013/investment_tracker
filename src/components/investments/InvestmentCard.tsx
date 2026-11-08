@@ -41,7 +41,7 @@ export function InvestmentCard({ investment }: InvestmentCardProps) {
           {/* Header Row with Avatar & Status */}
           <div className="flex items-start justify-between gap-2.5 sm:gap-3 pb-3 border-b border-border/70">
             <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
-              <div className="h-8.5 w-8.5 sm:h-9 sm:w-9 rounded-xl bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20 flex items-center justify-center font-bold text-xs tracking-tight shrink-0 shadow-xs">
+              <div className="h-8.5 w-8.5 sm:h-9 sm:w-9 rounded-xl bg-violet-500/10 text-violet-600 dark:text-violet-400 border border-violet-500/20 flex items-center justify-center font-bold text-xs tracking-tight shrink-0 shadow-xs">
                 {initial}
               </div>
               <div className="min-w-0">
@@ -107,7 +107,7 @@ export function InvestmentCard({ investment }: InvestmentCardProps) {
           <div className="space-y-1.5">
             <div className="flex justify-between items-center text-[10px] text-muted-foreground font-mono">
               <span>{monthsElapsed} / 12 Months</span>
-              <span className="text-orange-600 dark:text-orange-400 font-semibold font-sans">
+              <span className="text-violet-600 dark:text-violet-400 font-semibold font-sans">
                 +{netProfit > 0 ? ((netProfit / investment.amount) * 100).toFixed(0) : "0"}% Yield
               </span>
             </div>
@@ -118,7 +118,7 @@ export function InvestmentCard({ investment }: InvestmentCardProps) {
                     ? "bg-emerald-500"
                     : isMatured
                     ? "bg-amber-500"
-                    : "bg-gradient-to-r from-orange-500 to-amber-500"
+                    : "bg-gradient-to-r from-violet-500 via-purple-500 to-indigo-500"
                 }`}
                 style={{ width: `${progressPercent}%` }}
               />
@@ -127,7 +127,7 @@ export function InvestmentCard({ investment }: InvestmentCardProps) {
             {Boolean(investment.investorBonus || investment.ownerBonus) && (
               <div className="flex items-center gap-2 pt-1 text-[10px] font-mono">
                 {Boolean(investment.investorBonus) && (
-                  <span className="text-orange-600 dark:text-orange-400 bg-orange-500/10 border border-orange-500/20 px-1.5 py-0.2 rounded">
+                  <span className="text-violet-600 dark:text-violet-400 bg-violet-500/10 border border-violet-500/20 px-1.5 py-0.2 rounded">
                     +₹{investment.investorBonus?.toLocaleString("en-IN")} Bonus
                   </span>
                 )}

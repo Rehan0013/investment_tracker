@@ -65,7 +65,7 @@ export function BottomNav() {
           }}
         >
           {/* Popped-up circle: elevated by -12px above the bar */}
-          <div className="w-11 h-11 -translate-y-3 rounded-full bg-gradient-to-tr from-orange-500 via-orange-600 to-amber-400 shadow-xl shadow-orange-500/40 ring-4 ring-card flex items-center justify-center" />
+          <div className="w-11 h-11 -translate-y-3 rounded-full bg-gradient-to-tr from-violet-500 via-purple-600 to-indigo-500 shadow-xl shadow-violet-500/40 ring-4 ring-card flex items-center justify-center" />
         </motion.div>
 
         {/* The 5 Navigation Items */}

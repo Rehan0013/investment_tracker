@@ -27,12 +27,12 @@ export function RoiSimulator() {
       {/* Simulator Control Card */}
       <div className="rounded-3xl border border-border bg-card p-4 sm:p-8 space-y-6 shadow-sm relative overflow-hidden transition-colors">
         {/* Ambient warm top glow in dark mode */}
-        <div className="absolute top-0 left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-orange-500/30 to-transparent pointer-events-none" />
+        <div className="absolute top-0 left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-violet-500/30 to-transparent pointer-events-none" />
 
         {/* Header inside card */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-border/80">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-orange-500/10 text-orange-600 dark:text-orange-400 text-[11px] font-semibold border border-orange-500/20 mb-1.5">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-violet-500/10 text-violet-600 dark:text-violet-400 text-[11px] font-semibold border border-violet-500/20 mb-1.5">
               <Sparkles className="h-3 w-3" />
               <span>Real-Time Yield Calculator</span>
             </div>
@@ -62,7 +62,7 @@ export function RoiSimulator() {
                 onClick={() => setCalcAmount(preset.value)}
                 className={`px-3.5 py-1.5 rounded-full text-xs font-mono font-medium border transition-all cursor-pointer active:scale-95 ${
                   calcAmount === preset.value
-                    ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white border-transparent shadow-sm font-semibold"
+                    ? "bg-gradient-to-r from-[#a855f7] via-[#8b5cf6] to-[#7c3aed] text-white border-transparent shadow-sm font-semibold"
                     : "bg-secondary text-muted-foreground border-border hover:text-foreground hover:bg-muted"
                 }`}
               >
@@ -90,7 +90,7 @@ export function RoiSimulator() {
               step="25000"
               value={calcAmount}
               onChange={(e) => setCalcAmount(Number(e.target.value))}
-              className="w-full h-2.5 bg-secondary rounded-lg appearance-none cursor-pointer accent-orange-500"
+              className="w-full h-2.5 bg-secondary rounded-lg appearance-none cursor-pointer accent-[#8b5cf6]"
             />
 
             <div className="flex justify-between text-[11px] text-muted-foreground font-mono">
@@ -112,14 +112,14 @@ export function RoiSimulator() {
                 onClick={() => setCalcRoi(50)}
                 className={`p-3.5 rounded-2xl text-xs font-medium border transition-all cursor-pointer text-left ${
                   calcRoi === 50
-                    ? "bg-gradient-to-br from-orange-500/15 to-amber-500/10 border-orange-500/50 text-foreground ring-1 ring-orange-500/20"
+                    ? "bg-gradient-to-br from-violet-500/15 to-purple-500/10 border-violet-500/50 text-foreground ring-1 ring-violet-500/20"
                     : "bg-secondary/60 text-muted-foreground border-border hover:text-foreground hover:bg-muted"
                 }`}
               >
                 <div className="font-bold flex items-center justify-between">
                   <span>50% ROI Tier</span>
                   {calcRoi === 50 && (
-                    <span className="w-4 h-4 rounded-full bg-orange-500 text-white flex items-center justify-center text-[10px]">
+                    <span className="w-4 h-4 rounded-full bg-[#8b5cf6] text-white flex items-center justify-center text-[10px]">
                       <Check className="w-3 h-3 stroke-[3]" />
                     </span>
                   )}
@@ -182,11 +182,11 @@ export function RoiSimulator() {
             </p>
           </div>
 
-          <div className="p-4 rounded-2xl bg-orange-500/10 border border-orange-500/20">
-            <span className="text-[10px] font-sans text-orange-600 dark:text-orange-400 uppercase font-semibold block">
+          <div className="p-4 rounded-2xl bg-violet-500/10 border border-violet-500/20">
+            <span className="text-[10px] font-sans text-violet-600 dark:text-violet-400 uppercase font-semibold block">
               Maturity Payout ({multiplier}x)
             </span>
-            <p className="text-base sm:text-lg font-bold text-orange-600 dark:text-orange-400 mt-1">
+            <p className="text-base sm:text-lg font-bold text-violet-600 dark:text-violet-400 mt-1">
               ₹{returnAmount.toLocaleString("en-IN")}
             </p>
           </div>
@@ -196,7 +196,7 @@ export function RoiSimulator() {
         <div className="space-y-3 pt-2">
           <div className="flex justify-between items-center text-xs">
             <span className="font-semibold text-foreground flex items-center gap-1.5">
-              <TrendingUp className="h-4 w-4 text-orange-500" />
+              <TrendingUp className="h-4 w-4 text-violet-500" />
               12-Month Capital Growth Projection
             </span>
             <span className="font-mono text-muted-foreground text-[11px]">
@@ -231,7 +231,7 @@ export function RoiSimulator() {
           </div>
 
           <Link href="/investments/new" className="w-full sm:w-auto">
-            <button className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full bg-gradient-to-r from-orange-500 via-orange-600 to-amber-500 hover:brightness-110 text-white text-xs font-semibold shadow-lg shadow-orange-500/25 transition-all active:scale-95 cursor-pointer">
+            <button className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 hover:brightness-110 text-white text-xs font-semibold shadow-lg shadow-violet-500/25 transition-all active:scale-95 cursor-pointer">
               <span>Record Position With These Terms</span>
               <ArrowRight className="h-3.5 w-3.5 stroke-[2.5]" />
             </button>
