@@ -193,20 +193,20 @@ function Landing3DArcCarousel({
   };
 
   // Mathematical formula for the 3D Arc Curvature
-  // Faithfully reproduces the BrandLyft concave amphitheater / smile curve from the reference design
+  // Downward convex arch curvature (center card is apex, outer cards bend downwards)
   const getArcTransform = (k: number, spacing: number) => {
     const absK = Math.abs(k);
     const x = k * spacing;
 
-    // Concave 3D perspective rotation around Y (inward facing towards center)
+    // Concave 3D perspective rotation around Y (cards angle inward towards center)
     const rotateY = -k * 4.5;
 
-    // Concave amphitheater smile curvature (center dips lowest, sides rise gracefully)
-    const translateY = -Math.pow(absK, 1.45) * 13;
+    // Downward arch curvature along Y axis (center is apex, sides bend downwards)
+    const translateY = Math.pow(absK, 1.45) * 14;
 
-    // Tangent rotation along Z axis following the amphitheater smile slope
-    // (left cards rotate clockwise so outer edge is up; right cards rotate counter-clockwise so outer edge is up)
-    const rotateZ = -k * 3.2;
+    // Tangent rotation along Z axis following the downward arch slope
+    // (left cards slope down to the left; right cards slope down to the right)
+    const rotateZ = k * 3.0;
 
     // Subtle scale depth
     const scale = Math.max(0.82, 1 - absK * 0.045);
@@ -242,7 +242,7 @@ function Landing3DArcCarousel({
 
       {/* 3D Perspective Stage */}
       <div
-        className="relative w-full h-[240px] sm:h-[300px] md:h-[340px] lg:h-[370px] flex items-center justify-center pt-6 pb-2"
+        className="relative w-full h-[240px] sm:h-[300px] md:h-[340px] lg:h-[370px] flex items-center justify-center pt-2 pb-6"
         style={{
           perspective: "1200px",
           transformStyle: "preserve-3d",
