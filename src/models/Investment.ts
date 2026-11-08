@@ -12,8 +12,22 @@ const InvestmentSchema = new mongoose.Schema(
     returnAmount: { type: Number, required: true },
     isPaid: { type: Boolean, default: false },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    // Bonuses
+    investorBonus: { type: Number, default: 0 },
+    ownerBonus: { type: Number, default: 0 },
+    // Settlement Payout Banking Details
+    accountHolderName: { type: String, default: "" },
+    accountNo: { type: String, default: "" },
+    ifscCode: { type: String, default: "" },
+    bankName: { type: String, default: "" },
+    settledAt: { type: Date },
   },
-  { timestamps: true }
+  { timestamps: true, strict: false }
 );
+
+// If the model was previously compiled without the new settlement fields, delete it so it recompiles with the latest schema
+if (mongoose.models && mongoose.models.Investment) {
+  delete (mongoose.models as any).Investment;
+}
 
 export default mongoose.models.Investment || mongoose.model("Investment", InvestmentSchema);

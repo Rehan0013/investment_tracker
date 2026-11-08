@@ -1,37 +1,40 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
-
-const inter = Inter({
-  variable: "--font-sans",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-mono",
-  subsets: ["latin"],
-  display: "swap",
-});
+import { SessionProvider } from "@/components/session-provider";
 
 export const metadata: Metadata = {
-  title: "InvestTracker",
-  description: "Track your investments and returns",
+  title: "Eye-Vision — Private Investment & Return Ledger",
+  description: "Accurate portfolio tracking, return calculations, and investor ledger management.",
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "any" },
+    ],
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "InvestTracker",
+    title: "Eye-Vision",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0B1120",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  viewportFit: "cover",
+  interactiveWidget: "resizes-content",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0b0e" },
+  ],
 };
-
-import { SessionProvider } from "@/components/session-provider";
 
 export default function RootLayout({
   children,
@@ -42,9 +45,9 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      className="h-full antialiased scroll-smooth scroll-pt-20"
     >
-      <body className="min-h-full flex flex-col font-sans bg-background text-foreground selection:bg-primary/20">
+      <body className="min-h-full flex flex-col font-sans bg-background text-foreground antialiased selection:bg-neutral-900 selection:text-white dark:selection:bg-neutral-100 dark:selection:text-black">
         <SessionProvider>
           <ThemeProvider
             attribute="class"
@@ -52,23 +55,8 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <div className="fixed inset-0 overflow-hidden pointer-events-none z-0 bg-gradient-to-br from-indigo-50 via-blue-50 to-purple-50 dark:from-[#090d16] dark:via-[#0c1322] dark:to-[#090d16] md:animate-gradient-pulse">
-              <div 
-                className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-primary/20 dark:bg-primary/40 blur-[100px] mix-blend-screen hidden md:block will-change-transform" 
-                style={{ animation: 'orb-pulse 15s ease-in-out infinite' }} 
-              />
-              <div 
-                className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-chart-2/20 dark:bg-chart-2/30 blur-[120px] mix-blend-screen hidden md:block will-change-transform" 
-                style={{ animation: 'orb-pulse 18s ease-in-out infinite reverse' }} 
-              />
-              <div 
-                className="absolute top-[20%] left-[40%] w-[40%] h-[40%] rounded-full bg-chart-5/20 dark:bg-chart-5/30 blur-[100px] mix-blend-screen hidden md:block will-change-transform" 
-                style={{ animation: 'orb-pulse 20s ease-in-out infinite' }} 
-              />
-              <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:radial-gradient(ellipse_at_center,white,transparent)] opacity-[0.05] dark:opacity-[0.15]" />
-            </div>
             {children}
-            <Toaster />
+            <Toaster position="top-right" richColors />
           </ThemeProvider>
         </SessionProvider>
       </body>

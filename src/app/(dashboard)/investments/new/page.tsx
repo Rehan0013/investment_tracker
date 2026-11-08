@@ -5,14 +5,23 @@ import { Button } from "@/components/ui/button";
 
 export default function NewInvestmentPage() {
   return (
-    <div className="container p-4 pt-6 md:pt-8 space-y-6 pb-20 sm:pb-8">
-      <div className="flex items-center gap-2 z-10 relative">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6">
+      <div className="flex items-center gap-2">
         <Link href="/investments">
-          <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground">
-            <ChevronLeft className="h-5 w-5" />
+          <Button variant="ghost" size="sm" className="h-8 gap-1 pl-1 text-muted-foreground hover:text-foreground">
+            <ChevronLeft className="h-4 w-4" />
+            <span className="text-xs font-medium">Portfolio Ledger</span>
           </Button>
         </Link>
-        <h1 className="text-2xl font-bold tracking-tight">New Investment</h1>
+      </div>
+
+      <div className="border-b border-border/60 pb-3">
+        <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
+          Record Investment Contract
+        </h1>
+        <p className="text-xs text-muted-foreground mt-0.5">
+          Register new private investor position, calculate returns, and generate contract schedule.
+        </p>
       </div>
 
       <InvestmentForm />

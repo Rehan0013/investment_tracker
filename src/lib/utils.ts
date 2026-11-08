@@ -15,9 +15,9 @@ export type MonthlySnapshot = {
 };
 
 // Returns array of 12 month snapshots
-export function getMonthlyBreakdown(principal: number, investingDate: Date, roi: number = 50): MonthlySnapshot[] {
+export function getMonthlyBreakdown(principal: number, investingDate: Date, roi: number = 50, investorBonus: number = 0): MonthlySnapshot[] {
   const profitRate = roi / 100;
-  const totalProfit = principal * profitRate; // Dynamic profit based on ROI
+  const totalProfit = principal * profitRate + (investorBonus || 0); // Contractual ROI profit + Investor bonus
   const seed = principal + investingDate.getTime();
   let currentSeed = seed;
   
@@ -54,7 +54,7 @@ export function getMonthlyBreakdown(principal: number, investingDate: Date, roi:
   
   // Ensure the last month exactly hits expected total due to floating point inaccuracies
   if (snapshots.length === 12) {
-      snapshots[11].closingBalance = parseFloat((principal * (1 + profitRate)).toFixed(2));
+      snapshots[11].closingBalance = parseFloat((principal + totalProfit).toFixed(2));
       snapshots[11].interest = parseFloat((snapshots[11].closingBalance - snapshots[11].openingBalance).toFixed(2));
   }
   
@@ -62,7 +62,7 @@ export function getMonthlyBreakdown(principal: number, investingDate: Date, roi:
 }
 
 // Returns profit earned up to current month (for a live investment)
-export function getCurrentProgress(principal: number, investingDate: Date, roi: number = 50) {
+export function getCurrentProgress(principal: number, investingDate: Date, roi: number = 50, investorBonus: number = 0) {
   const today = new Date();
   const monthsElapsed = Math.max(0, differenceInMonths(today, investingDate));
   const clampedMonths = Math.min(monthsElapsed, 12);
@@ -76,7 +76,7 @@ export function getCurrentProgress(principal: number, investingDate: Date, roi: 
     };
   }
 
-  const snapshots = getMonthlyBreakdown(principal, investingDate, roi);
+  const snapshots = getMonthlyBreakdown(principal, investingDate, roi, investorBonus);
   const currentSnapshot = snapshots[clampedMonths - 1];
   const currentValue = currentSnapshot.closingBalance;
   

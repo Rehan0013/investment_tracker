@@ -2,7 +2,7 @@
 
 import dbConnect from "@/lib/db";
 import Investment from "@/models/Investment";
-import { CreateInvestmentInput, UpdateInvestmentInput } from "@/types";
+import { CreateInvestmentInput, UpdateInvestmentInput, SettleInvestmentInput, SettleInvestmentSchema } from "@/types";
 import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 
@@ -13,18 +13,22 @@ export async function createInvestment(data: CreateInvestmentInput) {
 
     await dbConnect();
 
-    // Compute returnDate and returnAmount
+    // Compute returnDate and returnAmount (including investor bonus added to profit)
     let returnDate = data.returnDate ? new Date(data.returnDate) : new Date(data.investingDate);
     if (!data.returnDate) {
       returnDate.setFullYear(returnDate.getFullYear() + 1);
     }
     const roi = data.roi !== undefined ? data.roi : 50;
-    const multiplier = roi === 100 ? 2.0 : 1.5;
-    const returnAmount = data.amount * multiplier;
+    const baseProfit = data.amount * (roi / 100);
+    const investorBonus = Number(data.investorBonus) || 0;
+    const ownerBonus = Number(data.ownerBonus) || 0;
+    const returnAmount = data.amount + baseProfit + investorBonus;
 
     const investment = await Investment.create({
       ...data,
       roi,
+      investorBonus,
+      ownerBonus,
       returnDate,
       returnAmount,
       userId: session.user.id,
@@ -80,16 +84,24 @@ export async function updateInvestment(id: string, data: UpdateInvestmentInput) 
     const currentInvestment = await Investment.findOne({ _id: id, userId: session.user.id });
     if (!currentInvestment) throw new Error("Investment not found");
 
-    let { amount, investingDate, roi, returnDate: customReturnDate } = data;
+    let { amount, investingDate, roi, returnDate: customReturnDate, investorBonus, ownerBonus } = data;
     let returnDate, returnAmount;
 
-    if (amount !== undefined || investingDate !== undefined || roi !== undefined || customReturnDate !== undefined) {
+    if (
+      amount !== undefined ||
+      investingDate !== undefined ||
+      roi !== undefined ||
+      customReturnDate !== undefined ||
+      investorBonus !== undefined ||
+      ownerBonus !== undefined
+    ) {
       const finalAmount = amount !== undefined ? amount : currentInvestment.amount;
       const finalInvestingDate = investingDate !== undefined ? new Date(investingDate) : currentInvestment.investingDate;
       const finalRoi = roi !== undefined ? roi : (currentInvestment.roi !== undefined ? currentInvestment.roi : 50);
+      const finalInvestorBonus = investorBonus !== undefined ? Number(investorBonus) : (currentInvestment.investorBonus || 0);
 
-      const multiplier = finalRoi === 100 ? 2.0 : 1.5;
-      returnAmount = finalAmount * multiplier;
+      const baseProfit = finalAmount * (finalRoi / 100);
+      returnAmount = finalAmount + baseProfit + finalInvestorBonus;
       
       if (customReturnDate !== undefined) {
         returnDate = new Date(customReturnDate);
@@ -101,21 +113,102 @@ export async function updateInvestment(id: string, data: UpdateInvestmentInput) 
       }
     }
 
-    const updated = await Investment.findByIdAndUpdate(
-      id,
+    const updated = await Investment.findOneAndUpdate(
+      { _id: id, userId: session.user.id },
       {
-        ...data,
-        ...(roi !== undefined && { roi }),
-        ...(returnDate && { returnDate }),
-        ...(returnAmount && { returnAmount }),
+        $set: {
+          ...data,
+          ...(investorBonus !== undefined && { investorBonus: Number(investorBonus) }),
+          ...(ownerBonus !== undefined && { ownerBonus: Number(ownerBonus) }),
+          ...(data.accountHolderName !== undefined && { accountHolderName: data.accountHolderName.trim() }),
+          ...(data.accountNo !== undefined && { accountNo: data.accountNo.trim() }),
+          ...(data.ifscCode !== undefined && { ifscCode: data.ifscCode.trim().toUpperCase() }),
+          ...(data.bankName !== undefined && { bankName: data.bankName.trim() }),
+          ...(roi !== undefined && { roi }),
+          ...(returnDate && { returnDate }),
+          ...(returnAmount !== undefined && { returnAmount }),
+        },
       },
       { new: true }
     ).lean();
 
     revalidatePath("/investments");
     revalidatePath(`/investments/${id}`);
+    revalidatePath("/settings/manage");
+    revalidatePath("/dashboard");
     
     return { success: true, investment: JSON.parse(JSON.stringify(updated)) };
+  } catch (error: any) {
+    return { success: false, error: error.message };
+  }
+}
+
+export async function settleInvestment(id: string, data: SettleInvestmentInput) {
+  try {
+    const session = await auth();
+    if (!session?.user?.id) throw new Error("Unauthorized");
+
+    await dbConnect();
+
+    const currentInvestment = await Investment.findOne({ _id: id, userId: session.user.id }).lean();
+    if (!currentInvestment) throw new Error("Investment contract not found");
+
+    // Allow settlement on or after the return date
+    const todayEndOfDay = new Date();
+    todayEndOfDay.setHours(23, 59, 59, 999);
+    if (todayEndOfDay < new Date(currentInvestment.returnDate)) {
+      throw new Error("This investment contract has not matured yet and cannot be marked as settled.");
+    }
+
+    const validated = SettleInvestmentSchema.parse(data);
+
+    const updated = await Investment.findOneAndUpdate(
+      { _id: id, userId: session.user.id },
+      {
+        $set: {
+          isPaid: true,
+          accountHolderName: validated.accountHolderName.trim(),
+          accountNo: validated.accountNo.trim(),
+          ifscCode: validated.ifscCode.trim().toUpperCase(),
+          bankName: validated.bankName.trim(),
+          settledAt: new Date(),
+        },
+      },
+      { new: true, runValidators: false }
+    ).lean();
+
+    revalidatePath("/investments");
+    revalidatePath(`/investments/${id}`);
+    revalidatePath("/settings/manage");
+    revalidatePath("/dashboard");
+
+    return {
+      success: true,
+      investment: JSON.parse(JSON.stringify(updated)),
+    };
+  } catch (error: any) {
+    return { success: false, error: error.message };
+  }
+}
+
+export async function reopenInvestment(id: string) {
+  try {
+    const session = await auth();
+    if (!session?.user?.id) throw new Error("Unauthorized");
+
+    await dbConnect();
+
+    const currentInvestment = await Investment.findOne({ _id: id, userId: session.user.id });
+    if (!currentInvestment) throw new Error("Investment contract not found");
+
+    currentInvestment.isPaid = false;
+    await currentInvestment.save();
+
+    revalidatePath("/investments");
+    revalidatePath(`/investments/${id}`);
+    revalidatePath("/dashboard");
+
+    return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };
   }
@@ -131,11 +224,23 @@ export async function togglePaymentStatus(id: string) {
     const currentInvestment = await Investment.findOne({ _id: id, userId: session.user.id });
     if (!currentInvestment) throw new Error("Investment not found");
 
+    // If attempting to mark as paid without maturing, block it
+    if (!currentInvestment.isPaid) {
+      const now = new Date();
+      if (now < new Date(currentInvestment.returnDate)) {
+        throw new Error("This investment has not matured yet and cannot be marked as settled.");
+      }
+    }
+
     currentInvestment.isPaid = !currentInvestment.isPaid;
+    if (currentInvestment.isPaid && !currentInvestment.settledAt) {
+      currentInvestment.settledAt = new Date();
+    }
     await currentInvestment.save();
 
     revalidatePath("/investments");
     revalidatePath(`/investments/${id}`);
+    revalidatePath("/dashboard");
 
     return { success: true, isPaid: currentInvestment.isPaid };
   } catch (error: any) {
@@ -175,6 +280,8 @@ export async function getDashboardStats() {
 
     let totalAmountInvested = 0;
     let totalReturnAmount = 0;
+    let totalInvestorBonus = 0;
+    let totalOwnerBonus = 0;
     let paidCount = 0;
     let pendingCount = 0;
 
@@ -190,6 +297,8 @@ export async function getDashboardStats() {
     investments.forEach((inv) => {
       totalAmountInvested += inv.amount;
       totalReturnAmount += inv.returnAmount;
+      totalInvestorBonus += (inv.investorBonus || 0);
+      totalOwnerBonus += (inv.ownerBonus || 0);
       if (inv.isPaid) paidCount++;
       else pendingCount++;
 
@@ -220,6 +329,8 @@ export async function getDashboardStats() {
         totalAmountInvested,
         totalReturnAmount,
         totalProfitExpected: totalReturnAmount - totalAmountInvested,
+        totalInvestorBonus,
+        totalOwnerBonus,
         paidCount,
         pendingCount,
         monthlyInvestmentData,

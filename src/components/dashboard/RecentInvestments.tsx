@@ -1,122 +1,191 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { format } from "date-fns";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { ArrowUpRight } from "lucide-react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
-export function RecentInvestments({ investments }: { investments: any[] }) {
+interface InvestmentItem {
+  _id: string;
+  investorName: string;
+  amount: number;
+  returnAmount: number;
+  mobileNo: string;
+  aadharNo?: string;
+  investingDate: string | Date;
+  returnDate: string | Date;
+  isPaid: boolean;
+  roi?: number;
+}
+
+export function RecentInvestments({ investments }: { investments: InvestmentItem[] }) {
   const router = useRouter();
 
   if (!investments || investments.length === 0) {
     return (
-      <Card className="border-border bg-card">
-        <CardHeader>
-          <CardTitle>Recent Investments</CardTitle>
+      <Card className="p-5">
+        <CardHeader className="p-0 pb-3">
+          <CardTitle className="text-sm font-semibold">Recent Ledger Entries</CardTitle>
+          <CardDescription className="text-xs text-muted-foreground">
+            Latest investment positions recorded in this portfolio
+          </CardDescription>
         </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground text-sm text-center py-4">No investments found.</p>
+        <CardContent className="p-0 py-8 text-center text-xs text-muted-foreground">
+          No investment records found. Add your first investment entry.
         </CardContent>
       </Card>
     );
   }
 
   return (
-    <Card className="border-border bg-card shadow-sm">
-      <CardHeader>
-        <CardTitle className="text-foreground text-sm font-semibold tracking-wide uppercase">Recent Investments</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="hidden md:block overflow-x-auto">
-          <Table>
-            <TableHeader className="bg-transparent border-b border-border/60">
-              <TableRow className="border-none hover:bg-transparent">
-                <TableHead className="text-muted-foreground font-semibold text-xs tracking-wider uppercase">Investor Name</TableHead>
-                <TableHead className="text-muted-foreground font-semibold text-xs tracking-wider uppercase">Contact / ID</TableHead>
-                <TableHead className="text-muted-foreground font-semibold text-xs tracking-wider uppercase text-right">Invested</TableHead>
-                <TableHead className="text-muted-foreground font-semibold text-xs tracking-wider uppercase text-right">Expected</TableHead>
-                <TableHead className="text-muted-foreground font-semibold text-xs tracking-wider uppercase text-right">Net Profit</TableHead>
-                <TableHead className="text-muted-foreground font-semibold text-xs tracking-wider uppercase text-right">ROI</TableHead>
-                <TableHead className="text-muted-foreground font-semibold text-xs tracking-wider uppercase text-right">Status</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {investments.map((inv) => {
-                const netProfit = inv.returnAmount - inv.amount;
-                const roi = ((netProfit / inv.amount) * 100).toFixed(1);
-                return (
-                  <TableRow key={inv._id} className="border-b border-border/40 hover:bg-muted/30 transition-colors group cursor-pointer" onClick={() => router.push(`/investments/${inv._id}`)}>
-                    <TableCell className="font-medium py-3.5">
-                      <span className="text-foreground font-semibold tracking-tight">{inv.investorName}</span>
-                    </TableCell>
-                    <TableCell className="text-muted-foreground font-mono text-xs">
-                      <div>{inv.mobileNo}</div>
-                      <div className="text-[10px] text-muted-foreground/70">{inv.aadharNo ? inv.aadharNo.replace(/(\d{4})\d{4}(\d{4})/, '$1 ●●●● $2') : 'N/A'}</div>
-                    </TableCell>
-                    <TableCell className="text-right text-muted-foreground font-mono text-xs">₹{inv.amount.toLocaleString('en-IN')}</TableCell>
-                    <TableCell className="text-right text-foreground font-mono text-xs font-semibold">₹{inv.returnAmount.toLocaleString('en-IN')}</TableCell>
-                    <TableCell className="text-right text-success font-mono text-xs font-semibold">+₹{netProfit.toLocaleString('en-IN')}</TableCell>
-                    <TableCell className="text-right font-mono text-xs">
-                      <span className="text-success bg-success/10 px-1.5 py-0.5 rounded font-bold">+{roi}%</span>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <Badge className={inv.isPaid ? "bg-success/10 text-success hover:bg-success/20 border border-success/20 rounded px-2 py-0.5 font-mono text-[10px] font-bold" : "bg-warning/10 text-warning hover:bg-warning/20 border border-warning/20 rounded px-2 py-0.5 font-mono text-[10px] font-bold"}>
-                        {inv.isPaid ? "PAID" : "ACTIVE"}
-                      </Badge>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </div>
+    <Card className="p-5 flex flex-col justify-between">
+      <div>
+        <CardHeader className="p-0 pb-4 flex flex-row items-center justify-between">
+          <div>
+            <CardTitle className="text-sm font-semibold text-foreground">
+              Recent Ledger Entries
+            </CardTitle>
+            <CardDescription className="text-xs text-muted-foreground mt-0.5">
+              Latest portfolio commitments and settlement status
+            </CardDescription>
+          </div>
+          <Link
+            href="/investments"
+            className="text-xs font-medium text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
+          >
+            Full Portfolio <ArrowUpRight className="h-3.5 w-3.5" />
+          </Link>
+        </CardHeader>
 
-        {/* Mobile View */}
-        <div className="md:hidden flex flex-col gap-3">
-          {investments.map((inv) => {
-            const netProfit = inv.returnAmount - inv.amount;
-            const roi = ((netProfit / inv.amount) * 100).toFixed(1);
-            return (
-              <div 
-                key={inv._id} 
-                className="bg-card border border-border/60 rounded-xl p-4 flex flex-col gap-3 active:scale-[0.98] transition-transform cursor-pointer shadow-sm"
-                onClick={() => router.push(`/investments/${inv._id}`)}
-              >
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h4 className="text-foreground font-semibold tracking-tight">{inv.investorName}</h4>
-                    <p className="text-muted-foreground font-mono text-[11px] mt-0.5">{inv.mobileNo}</p>
-                  </div>
-                  <Badge className={inv.isPaid ? "bg-success/10 text-success border border-success/20 rounded px-2 py-0.5 font-mono text-[10px] font-bold" : "bg-warning/10 text-warning border border-warning/20 rounded px-2 py-0.5 font-mono text-[10px] font-bold"}>
-                    {inv.isPaid ? "PAID" : "ACTIVE"}
-                  </Badge>
-                </div>
-                
-                <div className="grid grid-cols-2 gap-2 mt-1">
-                  <div className="bg-muted/30 p-2.5 rounded-lg border border-border/40">
-                    <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider mb-1">Invested</p>
-                    <p className="font-mono text-sm font-medium">₹{inv.amount.toLocaleString('en-IN')}</p>
-                  </div>
-                  <div className="bg-muted/30 p-2.5 rounded-lg border border-border/40">
-                    <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider mb-1">Expected</p>
-                    <p className="font-mono text-sm font-semibold text-foreground">₹{inv.returnAmount.toLocaleString('en-IN')}</p>
-                  </div>
-                </div>
+        <CardContent className="p-0">
+          {/* Desktop Table */}
+          <div className="hidden md:block overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow className="border-b border-border hover:bg-transparent">
+                  <TableHead className="text-xs font-medium text-muted-foreground py-2 pl-0">
+                    Investor
+                  </TableHead>
+                  <TableHead className="text-xs font-medium text-muted-foreground py-2 text-right">
+                    Principal
+                  </TableHead>
+                  <TableHead className="text-xs font-medium text-muted-foreground py-2 text-right">
+                    Maturity Payout
+                  </TableHead>
+                  <TableHead className="text-xs font-medium text-muted-foreground py-2 text-right">
+                    Net Return
+                  </TableHead>
+                  <TableHead className="text-xs font-medium text-muted-foreground py-2 text-center">
+                    Maturity Date
+                  </TableHead>
+                  <TableHead className="text-xs font-medium text-muted-foreground py-2 pr-0 text-right">
+                    Status
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {investments.map((inv) => {
+                  const profit = inv.returnAmount - inv.amount;
+                  const roiPercent = inv.amount > 0 ? ((profit / inv.amount) * 100).toFixed(0) : "0";
 
-                <div className="flex items-center justify-between mt-1 pt-3 border-t border-border/40">
-                  <span className="text-[11px] text-muted-foreground font-medium uppercase tracking-wider">Profit</span>
-                  <div className="flex items-center gap-2">
-                    <span className="text-success font-mono text-sm font-bold">+₹{netProfit.toLocaleString('en-IN')}</span>
-                    <span className="text-success bg-success/10 px-1.5 py-0.5 rounded font-bold font-mono text-xs">+{roi}%</span>
+                  return (
+                    <TableRow
+                      key={inv._id}
+                      className="border-b border-border/60 hover:bg-muted/40 cursor-pointer transition-colors"
+                      onClick={() => router.push(`/investments/${inv._id}`)}
+                    >
+                      <TableCell className="py-3 pl-0">
+                        <div className="font-medium text-xs text-foreground">
+                          {inv.investorName}
+                        </div>
+                        <div className="text-[11px] text-muted-foreground font-mono">
+                          {inv.mobileNo}
+                        </div>
+                      </TableCell>
+                      <TableCell className="py-3 text-right font-mono text-xs tabular-nums text-foreground">
+                        ₹{inv.amount.toLocaleString("en-IN")}
+                      </TableCell>
+                      <TableCell className="py-3 text-right font-mono text-xs tabular-nums font-semibold text-foreground">
+                        ₹{inv.returnAmount.toLocaleString("en-IN")}
+                      </TableCell>
+                      <TableCell className="py-3 text-right font-mono text-xs tabular-nums text-emerald-600 dark:text-emerald-400">
+                        +₹{profit.toLocaleString("en-IN")}
+                        <span className="text-[10px] text-muted-foreground ml-1">({roiPercent}%)</span>
+                      </TableCell>
+                      <TableCell className="py-3 text-center font-mono text-xs text-muted-foreground">
+                        {format(new Date(inv.returnDate), "dd MMM yyyy")}
+                      </TableCell>
+                      <TableCell className="py-3 pr-0 text-right">
+                        {inv.isPaid ? (
+                          <Badge variant="success" className="text-[10px] font-medium">
+                            Settled
+                          </Badge>
+                        ) : (
+                          <Badge variant="warning" className="text-[10px] font-medium">
+                            Active
+                          </Badge>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </div>
+
+          {/* Mobile Card List */}
+          <div className="md:hidden divide-y divide-border/60">
+            {investments.map((inv) => {
+              const profit = inv.returnAmount - inv.amount;
+              const roiPercent = inv.amount > 0 ? ((profit / inv.amount) * 100).toFixed(0) : "0";
+
+              return (
+                <div
+                  key={inv._id}
+                  className="py-3 flex items-center justify-between gap-3 active:bg-muted/40 cursor-pointer"
+                  onClick={() => router.push(`/investments/${inv._id}`)}
+                >
+                  <div className="space-y-0.5">
+                    <p className="text-xs font-medium text-foreground">{inv.investorName}</p>
+                    <p className="text-[11px] text-muted-foreground font-mono">
+                      Maturity: {format(new Date(inv.returnDate), "dd MMM yyyy")}
+                    </p>
+                  </div>
+                  <div className="text-right space-y-1">
+                    <p className="text-xs font-semibold font-mono tabular-nums text-foreground">
+                      ₹{inv.returnAmount.toLocaleString("en-IN")}
+                    </p>
+                    <div className="flex items-center justify-end gap-1.5">
+                      <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">
+                        +{roiPercent}%
+                      </span>
+                      {inv.isPaid ? (
+                        <Badge variant="success" className="text-[9px] px-1.5 py-0">
+                          Settled
+                        </Badge>
+                      ) : (
+                        <Badge variant="warning" className="text-[9px] px-1.5 py-0">
+                          Active
+                        </Badge>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
-      </CardContent>
+              );
+            })}
+          </div>
+        </CardContent>
+      </div>
     </Card>
   );
 }

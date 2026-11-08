@@ -1,38 +1,53 @@
 import { auth } from "@/lib/auth";
-import { Eye } from "lucide-react";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { LogoutButton } from "./LogoutButton";
+import { NavLinks } from "./NavLinks";
+import { Eye } from "lucide-react";
 
 export async function Navbar() {
   const session = await auth();
+  const userName = session?.user?.name || session?.user?.email?.split("@")[0] || "Investor";
+  const userInitial = userName.charAt(0).toUpperCase();
 
   return (
-    <div className="w-full flex justify-center pt-4 px-4 pb-2 z-50 sticky top-0">
-      <nav className="w-full max-w-5xl rounded-full border border-border bg-card/50 backdrop-blur-xl shadow-sm">
-        <div className="relative flex h-14 items-center justify-between px-4 md:px-6">
-          <Link href="/dashboard" className="flex items-center gap-3 group z-10">
-            <div className="relative w-7 h-7 bg-foreground text-background rounded-full flex items-center justify-center opacity-90 group-hover:opacity-100 transition-opacity">
-              <Eye className="w-4 h-4" />
+    <header className="sticky top-0 z-40 w-full border-b border-border bg-background/95 backdrop-blur-xs">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-13 flex items-center justify-between gap-4">
+        {/* Brand Mark */}
+        <div className="flex items-center gap-6">
+          <Link href="/dashboard" className="flex items-center gap-2.5 group">
+            <div className="h-7 w-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
+              <Eye className="w-4 h-4 stroke-[2.2]" />
             </div>
-            <span className="font-semibold tracking-[0.2em] text-sm text-foreground">EYEVISION</span>
+            <div className="flex flex-col">
+              <span className="font-semibold text-sm tracking-tight text-foreground leading-none">
+                Eye-Vision
+              </span>
+              <span className="text-[10px] text-muted-foreground font-mono leading-none mt-0.5">
+                Private Ledger
+              </span>
+            </div>
           </Link>
 
-          <div className="absolute inset-0 hidden md:flex items-center justify-center pointer-events-none">
-            <div className="flex items-center gap-8 text-xs font-semibold tracking-widest uppercase pointer-events-auto">
-              <Link href="/dashboard" className="text-muted-foreground hover:text-foreground transition-colors">Dashboard</Link>
-              <Link href="/investments" className="text-muted-foreground hover:text-foreground transition-colors">Investments</Link>
-              <Link href="/investments/new" className="text-muted-foreground hover:text-foreground transition-colors">Add</Link>
-              <Link href="/settings" className="text-muted-foreground hover:text-foreground transition-colors">Settings</Link>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 sm:gap-4 z-10">
-            <ThemeToggle />
-            <LogoutButton />
+          {/* Desktop Nav Links */}
+          <div className="hidden md:flex items-center">
+            <NavLinks />
           </div>
         </div>
-      </nav>
-    </div>
+
+        {/* Right Section: User & Controls */}
+        <div className="flex items-center gap-2 sm:gap-3">
+          <div className="hidden sm:flex items-center gap-2 pl-2 pr-3 py-1 rounded-md bg-secondary/60 border border-border/60 text-xs">
+            <div className="h-5 w-5 rounded-full bg-foreground text-background text-[10px] font-bold flex items-center justify-center">
+              {userInitial}
+            </div>
+            <span className="font-medium text-foreground">{userName}</span>
+          </div>
+
+          <ThemeToggle />
+          <LogoutButton />
+        </div>
+      </div>
+    </header>
   );
 }

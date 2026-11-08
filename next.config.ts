@@ -1,14 +1,28 @@
 import type { NextConfig } from "next";
 import withPWA from "next-pwa";
+import path from "path";
 
 const config: NextConfig = {
   serverExternalPackages: ["mongoose"],
-  turbopack: {},
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "ik.imagekit.io",
+      },
+    ],
+  },
+  turbopack: {
+    root: path.resolve(__dirname),
+  },
 };
 
-export default withPWA({
-  dest: "public",
-  register: true,
-  skipWaiting: true,
-  disable: process.env.NODE_ENV === "development",
-})(config);
+const nextConfig = process.env.NODE_ENV === "production"
+  ? withPWA({
+      dest: "public",
+      register: true,
+      skipWaiting: true,
+    })(config)
+  : config;
+
+export default nextConfig;

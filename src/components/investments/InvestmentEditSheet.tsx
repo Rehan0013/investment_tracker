@@ -13,21 +13,40 @@ import { toast } from "sonner";
 import { Edit } from "lucide-react";
 import { format } from "date-fns";
 
-export function InvestmentEditSheet({ investment, onSuccess }: { investment: any; onSuccess?: () => void }) {
+export function InvestmentEditSheet({
+  investment,
+  onSuccess,
+}: {
+  investment: any;
+  onSuccess?: () => void;
+}) {
   const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
 
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<UpdateInvestmentInput>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<UpdateInvestmentInput>({
     resolver: zodResolver(UpdateInvestmentSchema),
     defaultValues: {
       investorName: investment.investorName,
       amount: investment.amount,
       roi: investment.roi !== undefined ? investment.roi : 50,
+      investorBonus: investment.investorBonus || 0,
+      ownerBonus: investment.ownerBonus || 0,
       mobileNo: investment.mobileNo,
       aadharNo: investment.aadharNo,
       investingDate: format(new Date(investment.investingDate), "yyyy-MM-dd") as unknown as Date,
-      returnDate: investment.returnDate ? format(new Date(investment.returnDate), "yyyy-MM-dd") as unknown as Date : undefined,
-    }
+      returnDate: investment.returnDate
+        ? (format(new Date(investment.returnDate), "yyyy-MM-dd") as unknown as Date)
+        : undefined,
+      accountHolderName: investment.accountHolderName || "",
+      bankName: investment.bankName || "",
+      accountNo: investment.accountNo || "",
+      ifscCode: investment.ifscCode || "",
+    },
   });
 
   useEffect(() => {
@@ -35,10 +54,18 @@ export function InvestmentEditSheet({ investment, onSuccess }: { investment: any
       investorName: investment.investorName,
       amount: investment.amount,
       roi: investment.roi !== undefined ? investment.roi : 50,
+      investorBonus: investment.investorBonus || 0,
+      ownerBonus: investment.ownerBonus || 0,
       mobileNo: investment.mobileNo,
       aadharNo: investment.aadharNo,
       investingDate: format(new Date(investment.investingDate), "yyyy-MM-dd") as unknown as Date,
-      returnDate: investment.returnDate ? format(new Date(investment.returnDate), "yyyy-MM-dd") as unknown as Date : undefined,
+      returnDate: investment.returnDate
+        ? (format(new Date(investment.returnDate), "yyyy-MM-dd") as unknown as Date)
+        : undefined,
+      accountHolderName: investment.accountHolderName || "",
+      bankName: investment.bankName || "",
+      accountNo: investment.accountNo || "",
+      ifscCode: investment.ifscCode || "",
     });
   }, [investment, reset]);
 
@@ -46,7 +73,7 @@ export function InvestmentEditSheet({ investment, onSuccess }: { investment: any
     startTransition(async () => {
       const res = await updateInvestment(investment._id, data);
       if (res.success) {
-        toast.success("Investment updated successfully");
+        toast.success("Investment record updated successfully");
         setOpen(false);
         if (onSuccess) onSuccess();
       } else {
@@ -58,100 +85,205 @@ export function InvestmentEditSheet({ investment, onSuccess }: { investment: any
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger>
-        <div className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-3 gap-2 border-border text-foreground">
-          <Edit className="w-4 h-4" /> Edit
-        </div>
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-md border border-border bg-card text-foreground hover:bg-muted transition-colors cursor-pointer">
+          <Edit className="w-3.5 h-3.5" /> Edit
+        </span>
       </SheetTrigger>
-      <SheetContent side="bottom" className="h-[85vh] sm:h-full sm:w-[400px] overflow-y-auto bg-surface border-border">
+      <SheetContent side="bottom" className="h-[85dvh] sm:h-full sm:w-[420px] overflow-y-auto bg-card border-border p-4 sm:p-6 pb-[calc(2rem+env(safe-area-inset-bottom))]">
         <SheetHeader className="mb-4">
-          <SheetTitle className="text-foreground">Edit Investment</SheetTitle>
-          <SheetDescription>Update the details of this investment.</SheetDescription>
+          <SheetTitle className="text-sm font-semibold text-foreground">Edit Investment Position</SheetTitle>
+          <SheetDescription className="text-xs text-muted-foreground">
+            Modify investor information, principal amount, or contractual dates.
+          </SheetDescription>
         </SheetHeader>
 
         <form id="edit-inv-form" onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="edit-investorName">Investor Name</Label>
-            <Input id="edit-investorName" {...register("investorName")} className="bg-input focus-visible:ring-primary" />
-            {errors.investorName && <p className="text-xs text-danger">{errors.investorName.message}</p>}
+          <div className="space-y-1.5">
+            <Label htmlFor="edit-investorName" className="text-xs font-medium text-foreground">
+              Investor Full Name
+            </Label>
+            <Input id="edit-investorName" {...register("investorName")} />
+            {errors.investorName && <p className="text-xs text-destructive">{errors.investorName.message}</p>}
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="edit-amount">Amount (₹)</Label>
+          <div className="space-y-1.5">
+            <Label htmlFor="edit-amount" className="text-xs font-medium text-foreground">
+              Principal Amount (₹)
+            </Label>
             <Input
               id="edit-amount"
               type="number"
               {...register("amount", { valueAsNumber: true })}
-              className="bg-input focus-visible:ring-primary"
             />
-            {errors.amount && <p className="text-xs text-danger">{errors.amount.message}</p>}
+            {errors.amount && <p className="text-xs text-destructive">{errors.amount.message}</p>}
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="edit-roi">Expected ROI</Label>
+          <div className="space-y-1.5">
+            <Label htmlFor="edit-roi" className="text-xs font-medium text-foreground">
+              Expected ROI Tier
+            </Label>
             <select
               id="edit-roi"
               {...register("roi", { valueAsNumber: true })}
-              className="h-10 w-full rounded-lg border border-input bg-input px-3 py-1 text-base transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary md:text-sm"
+              className="h-9 w-full rounded-md border border-input bg-card px-3 py-1.5 text-xs text-foreground transition-colors outline-none focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring cursor-pointer"
             >
-              <option value={50} className="bg-background text-foreground font-medium">50% ROI</option>
-              <option value={100} className="bg-background text-foreground font-medium">100% ROI</option>
+              <option value={50}>50% Contractual ROI (1.5x)</option>
+              <option value={100}>100% Contractual ROI (2.0x)</option>
             </select>
-            {errors.roi && <p className="text-xs text-danger">{errors.roi.message}</p>}
+            {errors.roi && <p className="text-xs text-destructive">{errors.roi.message}</p>}
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="edit-mobileNo">Mobile Number</Label>
+          <div className="space-y-1.5">
+            <Label htmlFor="edit-mobileNo" className="text-xs font-medium text-foreground">
+              Mobile Number
+            </Label>
             <Input
               id="edit-mobileNo"
               type="tel"
               inputMode="numeric"
+              maxLength={10}
               {...register("mobileNo")}
-              className="bg-input focus-visible:ring-primary"
             />
-            {errors.mobileNo && <p className="text-xs text-danger">{errors.mobileNo.message}</p>}
+            {errors.mobileNo && <p className="text-xs text-destructive">{errors.mobileNo.message}</p>}
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="edit-aadharNo">Aadhar Number</Label>
+          <div className="space-y-1.5">
+            <Label htmlFor="edit-aadharNo" className="text-xs font-medium text-foreground">
+              Aadhaar Number
+            </Label>
             <Input
               id="edit-aadharNo"
-              type="number"
+              type="text"
+              maxLength={12}
               {...register("aadharNo")}
-              className="bg-input focus-visible:ring-primary"
             />
-            {errors.aadharNo && <p className="text-xs text-danger">{errors.aadharNo.message}</p>}
+            {errors.aadharNo && <p className="text-xs text-destructive">{errors.aadharNo.message}</p>}
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="edit-investingDate">Investing Date</Label>
+          <div className="space-y-1.5">
+            <Label htmlFor="edit-investingDate" className="text-xs font-medium text-foreground">
+              Investing Date
+            </Label>
             <Input
               id="edit-investingDate"
               type="date"
-              max={new Date().toISOString().split('T')[0]}
+              max={new Date().toISOString().split("T")[0]}
               {...register("investingDate", { valueAsDate: true })}
-              className="bg-input focus-visible:ring-primary w-full"
             />
-            {errors.investingDate && <p className="text-xs text-danger">{errors.investingDate.message}</p>}
+            {errors.investingDate && <p className="text-xs text-destructive">{errors.investingDate.message}</p>}
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="edit-returnDate">Return Date (Optional)</Label>
+          <div className="space-y-1.5">
+            <Label htmlFor="edit-returnDate" className="text-xs font-medium text-foreground">
+              Return Date (Optional)
+            </Label>
             <Input
               id="edit-returnDate"
               type="date"
-              min={investment.investingDate ? new Date(investment.investingDate).toISOString().split('T')[0] : undefined}
+              min={investment.investingDate ? new Date(investment.investingDate).toISOString().split("T")[0] : undefined}
               {...register("returnDate", { valueAsDate: true })}
-              className="bg-input focus-visible:ring-primary w-full"
             />
-            {errors.returnDate && <p className="text-xs text-danger">{errors.returnDate.message}</p>}
+            {errors.returnDate && <p className="text-xs text-destructive">{errors.returnDate.message}</p>}
           </div>
 
-          <div className="pt-4 flex gap-2">
-            <Button type="button" variant="outline" onClick={() => setOpen(false)} className="flex-1 border-border text-foreground" disabled={isPending}>
+          {/* Bonus Allocations */}
+          <div className="pt-3 border-t border-border/70 space-y-3">
+            <span className="text-xs font-semibold text-foreground block">
+              Incentive Bonuses
+            </span>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label htmlFor="edit-investorBonus" className="text-xs font-medium text-foreground">
+                  Investor Bonus (₹)
+                </Label>
+                <Input
+                  id="edit-investorBonus"
+                  type="number"
+                  min="0"
+                  {...register("investorBonus", { valueAsNumber: true })}
+                />
+                <span className="text-[10px] text-muted-foreground block">
+                  Added to investor profit
+                </span>
+                {errors.investorBonus && (
+                  <p className="text-xs text-destructive">{errors.investorBonus.message}</p>
+                )}
+              </div>
+
+              <div className="space-y-1.5">
+                <Label htmlFor="edit-ownerBonus" className="text-xs font-medium text-foreground">
+                  Owner Bonus (₹)
+                </Label>
+                <Input
+                  id="edit-ownerBonus"
+                  type="number"
+                  min="0"
+                  {...register("ownerBonus", { valueAsNumber: true })}
+                />
+                <span className="text-[10px] text-muted-foreground block">
+                  Owner's commission
+                </span>
+                {errors.ownerBonus && (
+                  <p className="text-xs text-destructive">{errors.ownerBonus.message}</p>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-3 border-t border-border/70 space-y-3">
+            <span className="text-xs font-semibold text-foreground block">
+              Investor Banking & Payout Details
+            </span>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="edit-accountHolderName" className="text-xs font-medium text-foreground">
+                Account Holder Name
+              </Label>
+              <Input id="edit-accountHolderName" placeholder="Full name as in bank account" {...register("accountHolderName")} />
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="edit-bankName" className="text-xs font-medium text-foreground">
+                Bank Name
+              </Label>
+              <Input id="edit-bankName" placeholder="e.g. State Bank of India, HDFC Bank" {...register("bankName")} />
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label htmlFor="edit-accountNo" className="text-xs font-medium text-foreground">
+                  Account Number
+                </Label>
+                <Input id="edit-accountNo" placeholder="Bank account no." {...register("accountNo")} />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="edit-ifscCode" className="text-xs font-medium text-foreground">
+                  IFSC Code
+                </Label>
+                <Input id="edit-ifscCode" placeholder="e.g. SBIN0001234" className="uppercase font-mono" {...register("ifscCode")} />
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-3 flex gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setOpen(false)}
+              className="flex-1 text-xs"
+              disabled={isPending}
+            >
               Cancel
             </Button>
-            <Button type="submit" className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90" disabled={isPending}>
-              {isPending ? "Saving..." : "Save Changes"}
+            <Button
+              type="submit"
+              size="sm"
+              className="flex-1 text-xs"
+              disabled={isPending}
+            >
+              {isPending ? "Updating..." : "Save Changes"}
             </Button>
           </div>
         </form>
