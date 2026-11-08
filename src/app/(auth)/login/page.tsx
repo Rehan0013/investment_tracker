@@ -5,9 +5,10 @@ import { loginAction } from "@/actions/auth.actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { toast } from "sonner";
 import { ArrowRight, Lock, Eye } from "lucide-react";
+import Link from "next/link";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export default function LoginPage() {
   const [isPending, startTransition] = useTransition();
@@ -31,89 +32,111 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4 bg-background">
-      <div className="w-full max-w-sm space-y-4">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-background text-foreground selection:bg-[#ff5722] selection:text-white relative overflow-hidden">
+      {/* Top right theme toggle */}
+      <div className="absolute top-4 right-4 z-20">
+        <ThemeToggle />
+      </div>
+
+      {/* Ambient Horizon Glow Arc in Background */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-72 bg-gradient-to-b from-[#ff5722]/15 dark:from-[#ff5722]/20 via-[#ff5722]/5 to-transparent blur-3xl pointer-events-none rounded-b-[100%]" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-px bg-gradient-to-r from-transparent via-[#ff5722] to-transparent shadow-[0_0_20px_#ff5722]" />
+
+      <div className="w-full max-w-md space-y-6 relative z-10">
         {/* Brand Header */}
-        <div className="flex flex-col items-center text-center space-y-2">
-          <div className="h-11 w-11 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shadow-xs">
-            <Eye className="w-5 h-5 stroke-[2.2]" />
-          </div>
-          <div>
-            <h1 className="text-xl font-bold tracking-tight text-foreground">
-              InvestTracker
+        <div className="flex flex-col items-center text-center space-y-3">
+          <Link href="/" className="group flex flex-col items-center">
+            <div className="h-12 w-12 rounded-2xl bg-gradient-to-tr from-[#ff5722] to-[#ff7a45] text-white flex items-center justify-center shadow-[0_0_25px_rgba(255,87,34,0.45)] group-hover:scale-105 transition-transform">
+              <Eye className="w-6 h-6 stroke-[2.2]" />
+            </div>
+            <h1 className="text-2xl font-black tracking-tight text-foreground mt-3">
+              Eye-Vision
             </h1>
-            <p className="text-xs text-muted-foreground">
-              Institutional Private Portfolio & Return Ledger
+            <p className="text-xs text-muted-foreground font-mono tracking-wider uppercase mt-0.5">
+              Syndicate Portfolio & Ledger
             </p>
-          </div>
+          </Link>
         </div>
 
         {/* Login Card */}
-        <Card className="p-6 border-border shadow-xs">
-          <CardHeader className="p-0 pb-4 text-left">
-            <CardTitle className="text-sm font-semibold text-foreground">
-              Sign In to Portfolio
-            </CardTitle>
-            <CardDescription className="text-xs text-muted-foreground mt-0.5">
-              Enter your credentials to access your account.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="p-0">
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-1.5">
-                <Label htmlFor="email" className="text-xs font-medium text-foreground">
-                  Email Address
+        <div className="rounded-2xl border border-border dark:border-white/[0.1] bg-card dark:bg-[#101116] p-7 shadow-xl space-y-6 transition-colors">
+          <div className="space-y-1.5 text-left border-b border-border/80 dark:border-white/[0.06] pb-4">
+            <h2 className="text-base font-bold text-foreground flex items-center justify-between">
+              <span>Sign In to Syndicate Desk</span>
+              <span className="text-[10px] font-mono text-[#ff5722] bg-[#ff5722]/10 px-2 py-0.5 rounded-full border border-[#ff5722]/20 font-semibold">
+                Encrypted
+              </span>
+            </h2>
+            <p className="text-xs text-muted-foreground">
+              Enter your credentials to access your private investment ledger.
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-xs font-semibold text-foreground">
+                Email Address
+              </Label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="investor@eyevision.com"
+                required
+                autoComplete="email"
+                className="h-10 text-xs bg-secondary/60 dark:bg-white/[0.04] border-border dark:border-white/[0.1] text-foreground placeholder:text-muted-foreground rounded-xl focus:border-[#ff5722] focus:ring-1 focus:ring-[#ff5722]"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="password" className="text-xs font-semibold text-foreground">
+                  Password
                 </Label>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="name@investment.com"
-                  required
-                  autoComplete="email"
-                  className="h-9 text-xs"
-                />
               </div>
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••••••"
+                required
+                autoComplete="current-password"
+                className="h-10 text-xs font-mono bg-secondary/60 dark:bg-white/[0.04] border-border dark:border-white/[0.1] text-foreground placeholder:text-muted-foreground rounded-xl focus:border-[#ff5722] focus:ring-1 focus:ring-[#ff5722]"
+              />
+            </div>
 
-              <div className="space-y-1.5">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="password" className="text-xs font-medium text-foreground">
-                    Password
-                  </Label>
-                </div>
-                <Input
-                  id="password"
-                  name="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••••••"
-                  required
-                  autoComplete="current-password"
-                  className="h-9 text-xs font-mono"
-                />
+            {error && (
+              <div className="p-3 rounded-xl bg-destructive/10 border border-destructive/20 text-xs text-destructive font-medium">
+                {error}
               </div>
+            )}
 
-              {error && (
-                <div className="p-2.5 rounded-md bg-destructive/10 border border-destructive/20 text-xs text-destructive font-medium">
-                  {error}
-                </div>
-              )}
-
-              <Button type="submit" className="w-full h-9 gap-2 text-xs font-medium" disabled={isPending}>
-                {isPending ? "Authenticating..." : "Access Ledger"}
-                <ArrowRight className="h-3.5 w-3.5" />
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
+            <Button
+              type="submit"
+              className="w-full h-11 rounded-full bg-[#ff5722] hover:bg-[#f4511e] text-white text-xs font-bold shadow-[0_0_20px_rgba(255,87,34,0.35)] transition-all hover:scale-[1.02] gap-2 mt-2"
+              disabled={isPending}
+            >
+              {isPending ? "Authenticating Desk..." : "Access Portfolio Ledger"}
+              <ArrowRight className="h-4 w-4" />
+            </Button>
+          </form>
+        </div>
 
         {/* Security Footer */}
-        <p className="text-center text-[11px] text-muted-foreground flex items-center justify-center gap-1.5 font-mono">
-          <Lock className="h-3 w-3" /> Encrypted Session • Mongoose & NextAuth
-        </p>
+        <div className="text-center space-y-2">
+          <p className="text-[11px] text-muted-foreground flex items-center justify-center gap-1.5 font-mono">
+            <Lock className="h-3 w-3 text-[#ff5722]" /> Encrypted Session • Mongoose & NextAuth
+          </p>
+          <div className="text-[11px] text-muted-foreground">
+            <Link href="/" className="hover:text-foreground transition-colors underline decoration-border">
+              Return to Homepage
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );

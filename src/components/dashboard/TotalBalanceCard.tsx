@@ -165,9 +165,9 @@ export function TotalBalanceCard({
   };
 
   return (
-    <div className="bg-card border border-border rounded-3xl p-4 sm:p-6 shadow-sm relative overflow-hidden flex flex-col justify-between transition-colors">
-      {/* Top ambient warm glow for dark mode */}
-      <div className="absolute top-0 left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-orange-500/30 to-transparent pointer-events-none" />
+    <div className="bg-card dark:bg-[#101116] border border-border dark:border-white/[0.08] rounded-3xl p-4 sm:p-6 shadow-sm relative overflow-hidden flex flex-col justify-between transition-colors">
+      {/* Top ambient warm glow */}
+      <div className="absolute top-0 left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-[#ff5722]/30 dark:via-[#ff5722]/60 to-transparent pointer-events-none" />
 
       {/* Top Header: Title, Metric, Growth Badge, and Time Filter Pills */}
       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 sm:gap-4 mb-3">
@@ -176,7 +176,7 @@ export function TotalBalanceCard({
             <span className="text-xs font-medium text-muted-foreground">
               Portfolio Valuation & Accrual
             </span>
-            <span className="text-[10px] font-semibold text-orange-600 dark:text-orange-400 bg-orange-500/10 border border-orange-500/20 px-2 py-0.2 rounded-full">
+            <span className="text-[10px] font-semibold text-orange-600 dark:text-orange-400 bg-orange-500/10 border border-orange-500/20 px-2.5 py-0.5 rounded-full">
               {activeFilter}
             </span>
           </div>
@@ -204,14 +204,14 @@ export function TotalBalanceCard({
         </div>
 
         {/* Dynamic Filter Pills */}
-        <div className="w-full sm:w-auto grid grid-cols-4 sm:flex gap-1 bg-secondary p-1 rounded-full border border-border">
+        <div className="w-full sm:w-auto grid grid-cols-4 sm:flex gap-1 bg-secondary dark:bg-white/[0.04] p-1 rounded-full border border-border dark:border-white/10">
           {filters.map((f) => (
             <button
               key={f}
               onClick={() => setActiveFilter(f)}
-              className={`text-center px-1.5 sm:px-3 py-1 rounded-full text-[11px] sm:text-xs font-medium transition-all cursor-pointer whitespace-nowrap ${
+              className={`text-center px-2 sm:px-3.5 py-1 rounded-full text-[11px] sm:text-xs font-medium transition-all cursor-pointer whitespace-nowrap ${
                 activeFilter === f
-                  ? "bg-card text-foreground shadow-xs font-semibold"
+                  ? "bg-gradient-to-r from-[#ff6b35] to-[#ff5722] text-white shadow-xs font-semibold"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >

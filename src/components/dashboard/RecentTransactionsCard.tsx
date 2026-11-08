@@ -53,7 +53,7 @@ export function RecentTransactionsCard({ investments }: RecentTransactionsCardPr
   ];
 
   return (
-    <div className="bg-card border border-border rounded-3xl p-4 sm:p-6 shadow-sm relative overflow-hidden flex flex-col justify-between transition-colors">
+    <div className="bg-card dark:bg-[#101116] border border-border dark:border-white/[0.08] rounded-3xl p-4 sm:p-6 shadow-sm relative overflow-hidden flex flex-col justify-between transition-colors">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div>
@@ -67,7 +67,7 @@ export function RecentTransactionsCard({ investments }: RecentTransactionsCardPr
 
         <Link
           href="/investments"
-          className="text-xs font-semibold text-primary hover:underline flex items-center gap-0.5 shrink-0"
+          className="text-xs font-semibold text-[#ff5722] hover:text-[#f4511e] flex items-center gap-0.5 shrink-0"
         >
           <span>View All</span>
           <ArrowUpRight className="w-3.5 h-3.5 stroke-[2]" />
@@ -93,17 +93,17 @@ export function RecentTransactionsCard({ investments }: RecentTransactionsCardPr
                 <Link
                   key={inv._id}
                   href={`/investments/${inv._id}`}
-                  className="flex items-center justify-between p-2.5 sm:p-3 rounded-2xl bg-secondary/70 hover:bg-muted border border-border/60 hover:border-border transition-all group"
+                  className="flex items-center justify-between p-2.5 sm:p-3 rounded-2xl bg-secondary/40 dark:bg-white/[0.03] hover:bg-secondary/80 dark:hover:bg-white/[0.06] border border-border/70 dark:border-white/[0.06] hover:border-primary/40 dark:hover:border-white/15 transition-all group"
                 >
                   <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
                     {/* Rounded Avatar Chip */}
                     <div
                       className={`w-8.5 h-8.5 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center font-bold text-xs shrink-0 shadow-xs ${
                         idx === 0
-                          ? "bg-gradient-to-tr from-emerald-600 to-teal-400 text-white"
+                          ? "bg-gradient-to-tr from-[#ff6b35] to-[#ff5722] text-white shadow-[0_0_12px_rgba(255,87,34,0.35)]"
                           : idx === 1
-                          ? "bg-gradient-to-tr from-orange-500 to-amber-400 text-white"
-                          : "bg-secondary text-foreground border border-border"
+                          ? "bg-gradient-to-tr from-emerald-600 to-teal-400 text-white"
+                          : "bg-secondary dark:bg-white/[0.06] text-foreground border border-border dark:border-white/10"
                       }`}
                     >
                       {initials}

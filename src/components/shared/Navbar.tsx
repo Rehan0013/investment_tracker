@@ -21,7 +21,7 @@ export async function Navbar() {
             </div>
             <div className="flex flex-col">
               <span className="font-semibold text-sm tracking-tight text-foreground leading-none">
-                InvestTracker
+                Eye-Vision
               </span>
               <span className="text-[10px] text-muted-foreground font-mono leading-none mt-0.5">
                 Private Ledger

@@ -63,7 +63,7 @@ export function SidebarRail({ className }: SidebarRailProps) {
   return (
     <aside
       className={cn(
-        "hidden md:flex flex-col items-center justify-between py-6 px-3 w-[76px] h-screen sticky top-0 bg-card border-r border-border z-50 select-none transition-colors",
+        "hidden md:flex flex-col items-center justify-between py-6 px-3 w-[76px] h-screen sticky top-0 bg-card dark:bg-[#0c0d12] border-r border-border dark:border-white/[0.08] z-50 select-none transition-colors",
         className
       )}
     >
@@ -71,8 +71,8 @@ export function SidebarRail({ className }: SidebarRailProps) {
       <div className="flex flex-col items-center gap-6 w-full">
         <Link
           href="/dashboard"
-          className="group relative flex items-center justify-center h-11 w-11 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 hover:scale-105 transition-all shadow-[0_0_20px_rgba(16,185,129,0.15)]"
-          title="InvestTracker Private Ledger"
+          className="group relative flex items-center justify-center h-11 w-11 rounded-2xl bg-gradient-to-tr from-[#ff6b35] to-[#ff5722] text-white hover:scale-105 transition-all shadow-[0_0_24px_rgba(255,87,34,0.45)]"
+          title="Eye-Vision Private Ledger"
         >
           <Eye className="w-5 h-5 stroke-[2.2] transition-transform group-hover:scale-110" />
         </Link>

@@ -79,13 +79,13 @@ export function TopHeader({ userName = "Adnan Khan", userEmail = "adnan@investme
   const userHandle = `@${userEmail.split("@")[0] || "investor"}`;
 
   return (
-    <header className="w-full flex items-center justify-between gap-2.5 sm:gap-4 py-2.5 sm:py-3.5 px-3 sm:px-6 lg:px-8 border-b border-border bg-card/85 backdrop-blur-md sticky top-0 z-40 select-none transition-colors">
+    <header className="w-full flex items-center justify-between gap-2.5 sm:gap-4 py-2.5 sm:py-3.5 px-3 sm:px-6 lg:px-8 border-b border-border dark:border-white/[0.08] bg-card/90 dark:bg-[#0c0d12]/90 backdrop-blur-xl sticky top-0 z-40 select-none transition-colors">
       {/* Left: Search Bar Pill */}
       <form
         onSubmit={handleSearchSubmit}
-        className={`relative flex items-center w-full max-w-md h-9 sm:h-10 px-3 sm:px-3.5 rounded-full bg-secondary/80 border transition-all duration-200 ${isSearchFocused
-          ? "border-primary/60 ring-2 ring-primary/10 shadow-sm"
-          : "border-border hover:border-border/80"
+        className={`relative flex items-center w-full max-w-md h-9 sm:h-10 px-3.5 sm:px-4 rounded-full bg-secondary/60 dark:bg-white/[0.04] border transition-all duration-200 ${isSearchFocused
+          ? "border-primary ring-2 ring-primary/15 shadow-sm"
+          : "border-border dark:border-white/10 hover:border-primary/40 dark:hover:border-white/20"
           }`}
       >
         <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-muted-foreground mr-1.5 sm:mr-2 shrink-0 stroke-[1.8]" />
@@ -105,7 +105,7 @@ export function TopHeader({ userName = "Adnan Khan", userEmail = "adnan@investme
         {/* Refresh Button */}
         <button
           onClick={handleRefresh}
-          className="flex items-center justify-center h-8.5 w-8.5 sm:h-9 sm:w-9 rounded-full bg-secondary border border-border text-muted-foreground hover:text-foreground hover:bg-muted transition-all active:scale-95 cursor-pointer"
+          className="flex items-center justify-center h-8.5 w-8.5 sm:h-9 sm:w-9 rounded-full bg-secondary dark:bg-white/[0.04] border border-border dark:border-white/10 text-muted-foreground hover:text-foreground hover:bg-secondary/80 dark:hover:bg-white/[0.08] transition-all active:scale-95 cursor-pointer"
           title="Refresh Data"
         >
           <RotateCw
@@ -116,13 +116,13 @@ export function TopHeader({ userName = "Adnan Khan", userEmail = "adnan@investme
         {/* Theme Toggle (Moon / Sun) */}
         <button
           onClick={handleToggleTheme}
-          className="flex items-center justify-center h-8.5 w-8.5 sm:h-9 sm:w-9 rounded-full bg-secondary border border-border text-muted-foreground hover:text-foreground hover:bg-muted transition-all active:scale-95 cursor-pointer"
+          className="flex items-center justify-center h-8.5 w-8.5 sm:h-9 sm:w-9 rounded-full bg-secondary dark:bg-white/[0.04] border border-border dark:border-white/10 text-muted-foreground hover:text-foreground hover:bg-secondary/80 dark:hover:bg-white/[0.08] transition-all active:scale-95 cursor-pointer"
           title="Toggle Light/Dark Theme"
         >
           {!isDark ? (
-            <Sun className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-zinc-700 stroke-[1.8]" />
+            <Sun className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500 stroke-[1.8]" />
           ) : (
-            <Moon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400 stroke-[1.8]" />
+            <Moon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-orange-400 stroke-[1.8]" />
           )}
         </button>
 
@@ -130,7 +130,7 @@ export function TopHeader({ userName = "Adnan Khan", userEmail = "adnan@investme
         <div className="relative" ref={dropdownRef}>
           <button
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="flex items-center gap-1.5 sm:gap-2.5 pl-1 sm:pl-1.5 pr-2 sm:pr-3 py-1 rounded-full bg-secondary border border-border hover:bg-muted transition-all group cursor-pointer"
+            className="flex items-center gap-1.5 sm:gap-2.5 pl-1 sm:pl-1.5 pr-2 sm:pr-3 py-1 rounded-full bg-secondary dark:bg-white/[0.04] border border-border dark:border-white/10 hover:border-primary/40 dark:hover:border-white/20 transition-all group cursor-pointer"
             aria-expanded={isDropdownOpen}
             aria-haspopup="true"
           >

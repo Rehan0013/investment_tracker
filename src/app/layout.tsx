@@ -5,7 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { SessionProvider } from "@/components/session-provider";
 
 export const metadata: Metadata = {
-  title: "InvestTracker — Private Investment & Return Ledger",
+  title: "Eye-Vision — Private Investment & Return Ledger",
   description: "Accurate portfolio tracking, return calculations, and investor ledger management.",
   icons: {
     icon: [
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "InvestTracker",
+    title: "Eye-Vision",
   },
 };
 
@@ -45,7 +45,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className="h-full antialiased"
+      className="h-full antialiased scroll-smooth scroll-pt-20"
     >
       <body className="min-h-full flex flex-col font-sans bg-background text-foreground antialiased selection:bg-neutral-900 selection:text-white dark:selection:bg-neutral-100 dark:selection:text-black">
         <SessionProvider>

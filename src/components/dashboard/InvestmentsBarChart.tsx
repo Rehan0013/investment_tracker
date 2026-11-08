@@ -58,14 +58,19 @@ export function InvestmentsBarChart({
   const formattedMetric = `₹${totalExpected.toLocaleString("en-IN")}`;
 
   return (
-    <div className="bg-card border border-border rounded-3xl p-4 sm:p-6 shadow-sm relative overflow-hidden flex flex-col justify-between transition-colors">
+    <div className="bg-card dark:bg-[#101116] border border-border dark:border-white/[0.08] rounded-3xl p-4 sm:p-6 shadow-sm relative overflow-hidden flex flex-col justify-between transition-colors">
       {/* Top Header: Title, Metric, Growth Badge, and Working Controls */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
         <div>
-          <span className="text-xs font-medium text-muted-foreground">
-            Monthly Return Accrual
-          </span>
-          <div className="flex items-center gap-2 mt-0.5">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-medium text-muted-foreground">
+              Profit & Loss Accrual
+            </span>
+            <span className="text-[10px] font-semibold text-orange-600 dark:text-orange-400 bg-orange-500/10 border border-orange-500/20 px-2 py-0.5 rounded-full">
+              Monthly Yield
+            </span>
+          </div>
+          <div className="flex items-center gap-2 mt-1">
             <h4 className="text-lg sm:text-xl font-bold tracking-tight text-foreground tabular-nums">
               {formattedMetric}
             </h4>
@@ -79,10 +84,10 @@ export function InvestmentsBarChart({
         <div className="flex items-center gap-2 self-start sm:self-auto w-full sm:w-auto">
           <button
             onClick={() => setSortMode(sortMode === "chrono" ? "value" : "chrono")}
-            className={`flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border transition-all cursor-pointer active:scale-95 ${
+            className={`flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-all cursor-pointer active:scale-95 ${
               sortMode === "value"
                 ? "bg-primary text-white border-primary shadow-xs font-semibold"
-                : "bg-secondary text-muted-foreground hover:text-foreground border-border"
+                : "bg-secondary dark:bg-white/[0.04] text-muted-foreground hover:text-foreground border-border dark:border-white/10"
             }`}
             title="Toggle: Chronological vs Highest Value"
           >
@@ -92,7 +97,7 @@ export function InvestmentsBarChart({
 
           <button
             onClick={() => setRangeMode(rangeMode === "6m" ? "3m" : "6m")}
-            className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1 px-3 py-1 rounded-full bg-secondary text-muted-foreground hover:text-foreground text-xs font-medium border border-border transition-all cursor-pointer active:scale-95"
+            className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1 px-3 py-1.5 rounded-full bg-secondary dark:bg-white/[0.04] text-muted-foreground hover:text-foreground text-xs font-medium border border-border dark:border-white/10 transition-all cursor-pointer active:scale-95"
             title="Toggle range: 6 Months vs 3 Months"
           >
             <Calendar className="w-3 h-3 stroke-[2]" />
@@ -102,38 +107,38 @@ export function InvestmentsBarChart({
       </div>
 
       {/* Bar Chart Columns */}
-      <div className="h-[160px] w-full flex items-end justify-between gap-1 sm:gap-2 pt-6 px-0.5 sm:px-1">
+      <div className="h-[170px] w-full flex items-end justify-between gap-1.5 sm:gap-3 pt-8 px-1">
         {displayedBars.map((bar) => {
-          const heightPercent = Math.max(Math.round((bar.value / maxValue) * 100), 12);
+          const heightPercent = Math.max(Math.round((bar.value / maxValue) * 100), 14);
           const isPeak = bar.isPeak;
 
           return (
-            <div key={bar.month} className="flex-1 flex flex-col items-center justify-end h-full group">
-              {/* Value Label above Bar */}
+            <div key={bar.month} className="flex-1 flex flex-col items-center justify-end h-full group relative">
+              {/* Value Floating Tooltip Card above Peak Bar */}
               {isPeak ? (
-                <div className="mb-1.5 px-2 py-0.5 rounded-full bg-emerald-500 text-white font-bold text-[10px] shadow-[0_0_12px_rgba(16,185,129,0.5)] animate-bounce-subtle">
+                <div className="absolute -top-7 mb-1 px-2.5 py-0.5 rounded-full bg-gradient-to-r from-[#ff6b35] to-[#ff5722] text-white font-bold text-[10px] shadow-[0_0_15px_rgba(255,87,34,0.5)] z-10 whitespace-nowrap">
                   ₹{bar.value >= 100000 ? `${(bar.value / 100000).toFixed(1)}L` : bar.value >= 1000 ? `${Math.round(bar.value / 1000)}k` : bar.value}
                 </div>
               ) : (
-                <span className="text-[10px] text-muted-foreground font-mono mb-1 group-hover:text-foreground transition-colors">
+                <span className="text-[10px] text-muted-foreground/80 font-mono mb-1.5 group-hover:text-foreground transition-colors">
                   ₹{bar.value >= 100000 ? `${(bar.value / 100000).toFixed(1)}L` : bar.value >= 1000 ? `${Math.round(bar.value / 1000)}k` : bar.value}
                 </span>
               )}
 
               {/* The Vertical Bar */}
-              <div className="w-full max-w-[42px] relative flex items-end h-[100px]">
+              <div className="w-full max-w-[44px] relative flex items-end h-[100px]">
                 <div
                   style={{ height: `${heightPercent}%` }}
                   className={`w-full rounded-t-lg transition-all duration-300 ${
                     isPeak
-                      ? "bg-gradient-to-t from-emerald-600 via-emerald-500 to-teal-400 shadow-[0_0_15px_rgba(16,185,129,0.4)]"
-                      : "bg-orange-500/20 hover:bg-orange-500/35 border-t border-orange-500/40"
+                      ? "bg-gradient-to-t from-[#ff5722] via-[#ff6b35] to-[#ff8a50] shadow-[0_0_20px_rgba(255,87,34,0.45)] ring-1 ring-white/30"
+                      : "bg-[#ff5722]/50 hover:bg-[#ff5722]/80 border-t border-[#ff5722]"
                   }`}
                 />
               </div>
 
               {/* Month Label below Bar */}
-              <span className="text-[11px] text-muted-foreground font-medium mt-2">
+              <span className={`text-[11px] font-medium mt-2 transition-colors ${isPeak ? "text-primary font-bold" : "text-muted-foreground"}`}>
                 {bar.month}
               </span>
             </div>
