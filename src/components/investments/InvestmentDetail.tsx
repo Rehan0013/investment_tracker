@@ -173,10 +173,10 @@ export function InvestmentDetail({ investment }: { investment: any }) {
                 </Button>
               </div>
             )}
-            <InvestmentEditSheet
+            {/* <InvestmentEditSheet
               investment={investmentData}
               onSuccess={() => router.refresh()}
-            />
+            /> */}
           </div>
         </div>
 
@@ -398,13 +398,12 @@ export function InvestmentDetail({ investment }: { investment: any }) {
         </div>
         <div className="w-full bg-secondary h-2.5 rounded-full overflow-hidden p-0.5">
           <div
-            className={`h-full rounded-full transition-all duration-500 ${
-              isPaid
+            className={`h-full rounded-full transition-all duration-500 ${isPaid
                 ? "bg-emerald-500"
                 : isMatured
-                ? "bg-amber-500"
-                : "bg-gradient-to-r from-violet-500 via-purple-500 to-indigo-500"
-            }`}
+                  ? "bg-amber-500"
+                  : "bg-gradient-to-r from-violet-500 via-purple-500 to-indigo-500"
+              }`}
             style={{ width: `${Math.min(progress.percentageComplete, 100)}%` }}
           />
         </div>
@@ -445,21 +444,19 @@ export function InvestmentDetail({ investment }: { investment: any }) {
             <div className="w-full sm:w-auto grid grid-cols-2 sm:flex items-center bg-secondary p-1 rounded-full border border-border text-xs">
               <button
                 onClick={() => setTableMode("accrued")}
-                className={`text-center px-2 sm:px-3 py-1 rounded-full font-medium transition-all cursor-pointer whitespace-nowrap text-[11px] sm:text-xs ${
-                  tableMode === "accrued"
+                className={`text-center px-2 sm:px-3 py-1 rounded-full font-medium transition-all cursor-pointer whitespace-nowrap text-[11px] sm:text-xs ${tableMode === "accrued"
                     ? "bg-card text-foreground shadow-xs font-semibold"
                     : "text-muted-foreground hover:text-foreground"
-                }`}
+                  }`}
               >
                 Accrued ({crossedMonths.length} Mo)
               </button>
               <button
                 onClick={() => setTableMode("all")}
-                className={`text-center px-2 sm:px-3 py-1 rounded-full font-medium transition-all cursor-pointer whitespace-nowrap text-[11px] sm:text-xs ${
-                  tableMode === "all"
+                className={`text-center px-2 sm:px-3 py-1 rounded-full font-medium transition-all cursor-pointer whitespace-nowrap text-[11px] sm:text-xs ${tableMode === "all"
                     ? "bg-card text-foreground shadow-xs font-semibold"
                     : "text-muted-foreground hover:text-foreground"
-                }`}
+                  }`}
               >
                 Full (12 Mo)
               </button>
@@ -498,9 +495,8 @@ export function InvestmentDetail({ investment }: { investment: any }) {
                   return (
                     <TableRow
                       key={idx}
-                      className={`border-b border-border/60 hover:bg-muted/40 font-mono text-xs tabular-nums transition-colors ${
-                        isCurrentMonth ? "bg-violet-500/10 font-semibold" : ""
-                      }`}
+                      className={`border-b border-border/60 hover:bg-muted/40 font-mono text-xs tabular-nums transition-colors ${isCurrentMonth ? "bg-violet-500/10 font-semibold" : ""
+                        }`}
                     >
                       <TableCell className="py-2.5 pl-2 text-foreground font-sans flex items-center gap-2">
                         <span>{format(itemDate, "MMMM yyyy")} (Month {item.month})</span>
