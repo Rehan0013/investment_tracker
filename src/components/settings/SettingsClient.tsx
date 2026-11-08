@@ -7,15 +7,17 @@ import Link from "next/link";
 import { Sun, Moon, Laptop, LogOut, ChevronRight, Database, User, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { BannerManager } from "./BannerManager";
 
 interface SettingsClientProps {
   user: {
     name?: string | null;
     email?: string | null;
   };
+  banners?: any[];
 }
 
-export function SettingsClient({ user }: SettingsClientProps) {
+export function SettingsClient({ user, banners = [] }: SettingsClientProps) {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -139,6 +141,9 @@ export function SettingsClient({ user }: SettingsClientProps) {
           </div>
         </Card>
       </Link>
+
+      {/* Festival & Bonus Carousel Banners Management */}
+      <BannerManager initialBanners={banners} />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -33,6 +33,8 @@ import { useSession } from "next-auth/react";
 import { Badge } from "@/components/ui/badge";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { motion, useReducedMotion } from "framer-motion";
+import { BannerCarousel, BannerItem } from "@/components/shared/BannerCarousel";
+import { getActiveBanners } from "@/actions/banner.actions";
 
 const PRESET_AMOUNTS = [
   { label: "₹50K", value: 50000 },
@@ -77,6 +79,15 @@ export default function Home() {
   const [calcRoi, setCalcRoi] = useState(50);
   const [activeMonthHover, setActiveMonthHover] = useState<number | null>(null);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [banners, setBanners] = useState<BannerItem[]>([]);
+
+  useEffect(() => {
+    getActiveBanners().then((res) => {
+      if (res?.success && res.banners) {
+        setBanners(res.banners);
+      }
+    });
+  }, []);
 
   const multiplier = calcRoi === 100 ? 2.0 : 1.5;
   const maturityPayout = calcAmount * multiplier;
@@ -208,6 +219,14 @@ export default function Home() {
               </a>
             </div>
           </div>
+
+
+          {/* Stylish Festival & Bonus Announcement 3D Arc Carousel (Visible only if banners exist) */}
+          {banners.length > 0 && (
+            <section className="py-8 sm:py-14 w-full overflow-hidden relative">
+              <BannerCarousel banners={banners} variant="landing" />
+            </section>
+          )}
 
           {/* RADIANT HORIZON ARC GLOW (Signature RichPath Visual) */}
           <div className="relative max-w-6xl mx-auto px-4 sm:px-6 mt-12 sm:mt-16">

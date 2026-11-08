@@ -1,21 +1,25 @@
 import { getDashboardStats, getInvestments } from "@/actions/investment.actions";
+import { getActiveBanners } from "@/actions/banner.actions";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { TotalBalanceCard } from "@/components/dashboard/TotalBalanceCard";
 import { InvestmentsBarChart } from "@/components/dashboard/InvestmentsBarChart";
 import { RecentTransactionsCard } from "@/components/dashboard/RecentTransactionsCard";
+import { BannerCarousel } from "@/components/shared/BannerCarousel";
 import { auth } from "@/lib/auth";
 import Link from "next/link";
 import { Users, Wallet, TrendingUp, Sparkles, CheckCircle2, Clock, Plus, ArrowUpRight, Gift } from "lucide-react";
 
 export default async function DashboardPage() {
-  const [statsRes, investmentsRes, session] = await Promise.all([
+  const [statsRes, investmentsRes, bannersRes, session] = await Promise.all([
     getDashboardStats(),
     getInvestments(),
+    getActiveBanners(),
     auth(),
   ]);
 
   const stats = statsRes.success ? statsRes.stats : null;
   const investments = investmentsRes.success ? investmentsRes.investments : [];
+  const banners = bannersRes.banners || [];
   const userName = session?.user?.name || session?.user?.email?.split("@")[0] || "Investor";
 
   // Compute metrics from real database or provide safe defaults
@@ -93,6 +97,9 @@ export default async function DashboardPage() {
           </Link>
         </div>
       </div>
+
+      {/* Festival Greetings & Bonus Announcements Carousel (Clean Dashboard Variant - Visible only if banners exist) */}
+      <BannerCarousel banners={banners} variant="dashboard" />
 
       {/* Quick Details KPI Strip: 4 High-End Cards including Signature Orange Gradient Card */}
       <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-4">

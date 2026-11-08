@@ -4,6 +4,14 @@ import path from "path";
 
 const config: NextConfig = {
   serverExternalPackages: ["mongoose"],
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "ik.imagekit.io",
+      },
+    ],
+  },
   turbopack: {
     root: path.resolve(__dirname),
   },
