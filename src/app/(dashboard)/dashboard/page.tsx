@@ -5,7 +5,7 @@ import { InvestmentsBarChart } from "@/components/dashboard/InvestmentsBarChart"
 import { RecentTransactionsCard } from "@/components/dashboard/RecentTransactionsCard";
 import { auth } from "@/lib/auth";
 import Link from "next/link";
-import { Users, Wallet, TrendingUp, Sparkles, CheckCircle2, Clock, Plus, ArrowUpRight } from "lucide-react";
+import { Users, Wallet, TrendingUp, Sparkles, CheckCircle2, Clock, Plus, ArrowUpRight, Gift } from "lucide-react";
 
 export default async function DashboardPage() {
   const [statsRes, investmentsRes, session] = await Promise.all([
@@ -22,6 +22,8 @@ export default async function DashboardPage() {
   const totalAmountInvested = stats?.totalAmountInvested ?? 250000;
   const totalReturnAmount = stats?.totalReturnAmount ?? 400000;
   const totalProfitExpected = stats?.totalProfitExpected ?? (totalReturnAmount - totalAmountInvested);
+  const totalInvestorBonus = stats?.totalInvestorBonus ?? investments.reduce((acc: number, curr: any) => acc + (curr.investorBonus || 0), 0);
+  const totalOwnerBonus = stats?.totalOwnerBonus ?? investments.reduce((acc: number, curr: any) => acc + (curr.ownerBonus || 0), 0);
   const totalInvestments = stats?.totalInvestments ?? investments.length;
   const paidCount = stats?.paidCount ?? 0;
   const pendingCount = stats?.pendingCount ?? totalInvestments;
@@ -135,6 +137,51 @@ export default async function DashboardPage() {
           }
           accent={pendingCount > 0 ? "amber" : "emerald"}
         />
+      </div>
+
+      {/* Bonus Distribution Bar */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-purple-500/5 border border-purple-500/20 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20 flex items-center justify-center shrink-0">
+              <Gift className="w-4 h-4 stroke-[2]" />
+            </div>
+            <div>
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-purple-600 dark:text-purple-400 block">
+                Account Owner Total Bonus
+              </span>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Your earned syndicate bonuses across all recorded positions
+              </p>
+            </div>
+          </div>
+          <div className="text-right font-mono">
+            <span className="text-lg sm:text-xl font-bold text-foreground tabular-nums">
+              ₹{totalOwnerBonus.toLocaleString("en-IN")}
+            </span>
+          </div>
+        </div>
+
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-orange-500/5 border border-orange-500/20 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20 flex items-center justify-center shrink-0">
+              <Sparkles className="w-4 h-4 stroke-[2]" />
+            </div>
+            <div>
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-orange-600 dark:text-orange-400 block">
+                Investor Bonus Pool
+              </span>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Added directly into investor profits & maturity returns
+              </p>
+            </div>
+          </div>
+          <div className="text-right font-mono">
+            <span className="text-lg sm:text-xl font-bold text-orange-600 dark:text-orange-400 tabular-nums">
+              +₹{totalInvestorBonus.toLocaleString("en-IN")}
+            </span>
+          </div>
+        </div>
       </div>
 
       {/* Primary Valuation & Accrual Mountain Chart (Both Invested + Return Curves with working filter) */}

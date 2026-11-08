@@ -12,7 +12,7 @@ import { useTransition } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { format } from "date-fns";
-import { ArrowRight, Calculator } from "lucide-react";
+import { ArrowRight, Calculator, Gift } from "lucide-react";
 
 export function InvestmentForm() {
   const router = useRouter();
@@ -28,19 +28,23 @@ export function InvestmentForm() {
     defaultValues: {
       investingDate: new Date(),
       roi: 50,
+      investorBonus: 0,
+      ownerBonus: 0,
     },
   });
 
   const amount = watch("amount") || 0;
   const roi = watch("roi") || 50;
+  const investorBonus = Number(watch("investorBonus")) || 0;
+  const ownerBonus = Number(watch("ownerBonus")) || 0;
   const investingDateStr = watch("investingDate");
   const investingDate = investingDateStr ? new Date(investingDateStr) : new Date();
   const customReturnDate = watch("returnDate");
 
-  const multiplier = roi === 100 ? 2.0 : 1.5;
-  const returnAmount = amount * multiplier;
-  const profit = amount * (roi / 100);
-  const monthlyAccrual = amount > 0 ? profit / 12 : 0;
+  const baseProfit = amount * (roi / 100);
+  const totalInvestorProfit = baseProfit + investorBonus;
+  const returnAmount = amount + totalInvestorProfit;
+  const monthlyAccrual = amount > 0 ? totalInvestorProfit / 12 : 0;
 
   let returnDate =
     customReturnDate && !isNaN(new Date(customReturnDate).getTime())
@@ -194,6 +198,59 @@ export function InvestmentForm() {
                 )}
               </div>
             </div>
+
+            {/* Incentive Bonus Allocations */}
+            <div className="pt-3 border-t border-border/70 space-y-3">
+              <div>
+                <span className="text-xs font-semibold text-foreground flex items-center gap-1.5">
+                  <Gift className="w-3.5 h-3.5 text-orange-500" />
+                  <span>Bonus Allocations</span>
+                </span>
+                <p className="text-[11px] text-muted-foreground mt-0.5">
+                  Investor bonus is added directly to their profit & payout.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <Label htmlFor="investorBonus" className="text-xs font-medium text-foreground">
+                    Investor Bonus (₹)
+                  </Label>
+                  <Input
+                    id="investorBonus"
+                    type="number"
+                    min="0"
+                    placeholder="0"
+                    {...register("investorBonus", { valueAsNumber: true })}
+                  />
+                  <span className="text-[10px] text-muted-foreground block">
+                    Added into investor total profit
+                  </span>
+                  {errors.investorBonus && (
+                    <p className="text-xs text-destructive">{errors.investorBonus.message}</p>
+                  )}
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label htmlFor="ownerBonus" className="text-xs font-medium text-foreground">
+                    Account Owner Bonus (₹)
+                  </Label>
+                  <Input
+                    id="ownerBonus"
+                    type="number"
+                    min="0"
+                    placeholder="0"
+                    {...register("ownerBonus", { valueAsNumber: true })}
+                  />
+                  <span className="text-[10px] text-muted-foreground block">
+                    Your syndicate commission/bonus
+                  </span>
+                  {errors.ownerBonus && (
+                    <p className="text-xs text-destructive">{errors.ownerBonus.message}</p>
+                  )}
+                </div>
+              </div>
+            </div>
           </form>
         </CardContent>
       </Card>
@@ -221,11 +278,33 @@ export function InvestmentForm() {
               </span>
             </div>
             <div className="flex justify-between items-center py-2.5">
-              <span className="text-muted-foreground font-sans">Contractual Profit (+{roi}%)</span>
+              <span className="text-muted-foreground font-sans">Base ROI Yield (+{roi}%)</span>
               <span className="font-semibold text-emerald-600 dark:text-emerald-400 tabular-nums">
-                +₹{profit.toLocaleString("en-IN")}
+                +₹{baseProfit.toLocaleString("en-IN")}
               </span>
             </div>
+            {investorBonus > 0 && (
+              <div className="flex justify-between items-center py-2.5 bg-orange-500/5 -mx-3.5 px-3.5">
+                <span className="text-orange-600 dark:text-orange-400 font-sans font-medium">Investor Bonus</span>
+                <span className="font-semibold text-orange-600 dark:text-orange-400 tabular-nums">
+                  +₹{investorBonus.toLocaleString("en-IN")}
+                </span>
+              </div>
+            )}
+            <div className="flex justify-between items-center py-2.5">
+              <span className="text-foreground font-sans font-medium">Total Investor Profit</span>
+              <span className="font-bold text-emerald-600 dark:text-emerald-400 tabular-nums">
+                +₹{totalInvestorProfit.toLocaleString("en-IN")}
+              </span>
+            </div>
+            {ownerBonus > 0 && (
+              <div className="flex justify-between items-center py-2.5 bg-purple-500/5 -mx-3.5 px-3.5">
+                <span className="text-purple-600 dark:text-purple-400 font-sans font-medium">Account Owner Bonus</span>
+                <span className="font-semibold text-purple-600 dark:text-purple-400 tabular-nums">
+                  +₹{ownerBonus.toLocaleString("en-IN")}
+                </span>
+              </div>
+            )}
             <div className="flex justify-between items-center py-2.5">
               <span className="text-muted-foreground font-sans">Monthly Accrual Base</span>
               <span className="font-medium text-muted-foreground tabular-nums">
@@ -234,7 +313,7 @@ export function InvestmentForm() {
             </div>
             <div className="flex justify-between items-center pt-2.5 text-sm">
               <span className="font-medium font-sans text-foreground">Total Maturity Payout</span>
-              <span className="font-bold text-foreground tabular-nums">
+              <span className="font-bold text-foreground tabular-nums text-base">
                 ₹{returnAmount.toLocaleString("en-IN")}
               </span>
             </div>

@@ -18,6 +18,8 @@ interface InvestmentCardProps {
     accountNo?: string;
     ifscCode?: string;
     bankName?: string;
+    investorBonus?: number;
+    ownerBonus?: number;
   };
 }
 
@@ -105,7 +107,9 @@ export function InvestmentCard({ investment }: InvestmentCardProps) {
           <div className="space-y-1.5">
             <div className="flex justify-between items-center text-[10px] text-muted-foreground font-mono">
               <span>{monthsElapsed} / 12 Months</span>
-              <span className="text-orange-600 dark:text-orange-400 font-semibold font-sans">+{roi}% ROI</span>
+              <span className="text-orange-600 dark:text-orange-400 font-semibold font-sans">
+                +{netProfit > 0 ? ((netProfit / investment.amount) * 100).toFixed(0) : "0"}% Yield
+              </span>
             </div>
             <div className="w-full h-1.5 bg-secondary rounded-full overflow-hidden">
               <div
@@ -119,6 +123,21 @@ export function InvestmentCard({ investment }: InvestmentCardProps) {
                 style={{ width: `${progressPercent}%` }}
               />
             </div>
+
+            {Boolean(investment.investorBonus || investment.ownerBonus) && (
+              <div className="flex items-center gap-2 pt-1 text-[10px] font-mono">
+                {Boolean(investment.investorBonus) && (
+                  <span className="text-orange-600 dark:text-orange-400 bg-orange-500/10 border border-orange-500/20 px-1.5 py-0.2 rounded">
+                    +₹{investment.investorBonus?.toLocaleString("en-IN")} Bonus
+                  </span>
+                )}
+                {Boolean(investment.ownerBonus) && (
+                  <span className="text-purple-600 dark:text-purple-400 bg-purple-500/10 border border-purple-500/20 px-1.5 py-0.2 rounded">
+                    Owner: +₹{investment.ownerBonus?.toLocaleString("en-IN")}
+                  </span>
+                )}
+              </div>
+            )}
           </div>
         </div>
 

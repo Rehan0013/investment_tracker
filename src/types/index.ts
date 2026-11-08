@@ -6,8 +6,10 @@ export const CreateInvestmentSchema = z.object({
   roi: z.union([z.literal(50), z.literal(100)]),
   mobileNo: z.string().regex(/^[6-9]\d{9}$/, "Invalid Indian mobile number"),
   aadharNo: z.string().regex(/^\d{12}$/, "Aadhar must be 12 digits"),
-  investingDate: z.date().max(new Date(), "Date cannot be in future"),
+  investingDate: z.date(),
   returnDate: z.date().optional(),
+  investorBonus: z.number().min(0, "Bonus cannot be negative").optional(),
+  ownerBonus: z.number().min(0, "Bonus cannot be negative").optional(),
 });
 
 export const SettleInvestmentSchema = z.object({
@@ -23,6 +25,8 @@ export const SettleInvestmentSchema = z.object({
 });
 
 export const UpdateInvestmentSchema = CreateInvestmentSchema.partial().extend({
+  investorBonus: z.number().min(0).optional(),
+  ownerBonus: z.number().min(0).optional(),
   accountHolderName: z.string().optional(),
   accountNo: z.string().optional(),
   ifscCode: z.string().optional(),

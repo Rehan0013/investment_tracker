@@ -13,18 +13,22 @@ export async function createInvestment(data: CreateInvestmentInput) {
 
     await dbConnect();
 
-    // Compute returnDate and returnAmount
+    // Compute returnDate and returnAmount (including investor bonus added to profit)
     let returnDate = data.returnDate ? new Date(data.returnDate) : new Date(data.investingDate);
     if (!data.returnDate) {
       returnDate.setFullYear(returnDate.getFullYear() + 1);
     }
     const roi = data.roi !== undefined ? data.roi : 50;
-    const multiplier = roi === 100 ? 2.0 : 1.5;
-    const returnAmount = data.amount * multiplier;
+    const baseProfit = data.amount * (roi / 100);
+    const investorBonus = Number(data.investorBonus) || 0;
+    const ownerBonus = Number(data.ownerBonus) || 0;
+    const returnAmount = data.amount + baseProfit + investorBonus;
 
     const investment = await Investment.create({
       ...data,
       roi,
+      investorBonus,
+      ownerBonus,
       returnDate,
       returnAmount,
       userId: session.user.id,
@@ -80,16 +84,24 @@ export async function updateInvestment(id: string, data: UpdateInvestmentInput) 
     const currentInvestment = await Investment.findOne({ _id: id, userId: session.user.id });
     if (!currentInvestment) throw new Error("Investment not found");
 
-    let { amount, investingDate, roi, returnDate: customReturnDate } = data;
+    let { amount, investingDate, roi, returnDate: customReturnDate, investorBonus, ownerBonus } = data;
     let returnDate, returnAmount;
 
-    if (amount !== undefined || investingDate !== undefined || roi !== undefined || customReturnDate !== undefined) {
+    if (
+      amount !== undefined ||
+      investingDate !== undefined ||
+      roi !== undefined ||
+      customReturnDate !== undefined ||
+      investorBonus !== undefined ||
+      ownerBonus !== undefined
+    ) {
       const finalAmount = amount !== undefined ? amount : currentInvestment.amount;
       const finalInvestingDate = investingDate !== undefined ? new Date(investingDate) : currentInvestment.investingDate;
       const finalRoi = roi !== undefined ? roi : (currentInvestment.roi !== undefined ? currentInvestment.roi : 50);
+      const finalInvestorBonus = investorBonus !== undefined ? Number(investorBonus) : (currentInvestment.investorBonus || 0);
 
-      const multiplier = finalRoi === 100 ? 2.0 : 1.5;
-      returnAmount = finalAmount * multiplier;
+      const baseProfit = finalAmount * (finalRoi / 100);
+      returnAmount = finalAmount + baseProfit + finalInvestorBonus;
       
       if (customReturnDate !== undefined) {
         returnDate = new Date(customReturnDate);
@@ -106,13 +118,15 @@ export async function updateInvestment(id: string, data: UpdateInvestmentInput) 
       {
         $set: {
           ...data,
+          ...(investorBonus !== undefined && { investorBonus: Number(investorBonus) }),
+          ...(ownerBonus !== undefined && { ownerBonus: Number(ownerBonus) }),
           ...(data.accountHolderName !== undefined && { accountHolderName: data.accountHolderName.trim() }),
           ...(data.accountNo !== undefined && { accountNo: data.accountNo.trim() }),
           ...(data.ifscCode !== undefined && { ifscCode: data.ifscCode.trim().toUpperCase() }),
           ...(data.bankName !== undefined && { bankName: data.bankName.trim() }),
           ...(roi !== undefined && { roi }),
           ...(returnDate && { returnDate }),
-          ...(returnAmount && { returnAmount }),
+          ...(returnAmount !== undefined && { returnAmount }),
         },
       },
       { new: true }
@@ -266,6 +280,8 @@ export async function getDashboardStats() {
 
     let totalAmountInvested = 0;
     let totalReturnAmount = 0;
+    let totalInvestorBonus = 0;
+    let totalOwnerBonus = 0;
     let paidCount = 0;
     let pendingCount = 0;
 
@@ -281,6 +297,8 @@ export async function getDashboardStats() {
     investments.forEach((inv) => {
       totalAmountInvested += inv.amount;
       totalReturnAmount += inv.returnAmount;
+      totalInvestorBonus += (inv.investorBonus || 0);
+      totalOwnerBonus += (inv.ownerBonus || 0);
       if (inv.isPaid) paidCount++;
       else pendingCount++;
 
@@ -311,6 +329,8 @@ export async function getDashboardStats() {
         totalAmountInvested,
         totalReturnAmount,
         totalProfitExpected: totalReturnAmount - totalAmountInvested,
+        totalInvestorBonus,
+        totalOwnerBonus,
         paidCount,
         pendingCount,
         monthlyInvestmentData,

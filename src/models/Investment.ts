@@ -12,6 +12,9 @@ const InvestmentSchema = new mongoose.Schema(
     returnAmount: { type: Number, required: true },
     isPaid: { type: Boolean, default: false },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    // Bonuses
+    investorBonus: { type: Number, default: 0 },
+    ownerBonus: { type: Number, default: 0 },
     // Settlement Payout Banking Details
     accountHolderName: { type: String, default: "" },
     accountNo: { type: String, default: "" },

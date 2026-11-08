@@ -28,6 +28,7 @@ import {
   Building2,
   Copy,
   Check,
+  Gift,
 } from "lucide-react";
 
 export function InvestmentDetail({ investment }: { investment: any }) {
@@ -43,10 +44,23 @@ export function InvestmentDetail({ investment }: { investment: any }) {
     investmentData.accountNo || investmentData.bankName || investmentData.ifscCode
   );
   const roi = investmentData.roi !== undefined ? investmentData.roi : 50;
-  const monthlyData = getMonthlyBreakdown(investmentData.amount, new Date(investmentData.investingDate), roi);
-  const progress = getCurrentProgress(investmentData.amount, new Date(investmentData.investingDate), roi);
+  const investorBonus = Number(investmentData.investorBonus) || 0;
+  const ownerBonus = Number(investmentData.ownerBonus) || 0;
+  const baseProfit = investmentData.amount * (roi / 100);
+  const netProfit = investmentData.returnAmount - investmentData.amount; // Base profit + Investor Bonus
+  const monthlyData = getMonthlyBreakdown(
+    investmentData.amount,
+    new Date(investmentData.investingDate),
+    roi,
+    investorBonus
+  );
+  const progress = getCurrentProgress(
+    investmentData.amount,
+    new Date(investmentData.investingDate),
+    roi,
+    investorBonus
+  );
   const isMatured = new Date() >= new Date(investmentData.returnDate);
-  const netProfit = investmentData.returnAmount - investmentData.amount;
   const initial = investmentData.investorName?.charAt(0)?.toUpperCase() || "I";
   const now = new Date();
 
@@ -176,18 +190,46 @@ export function InvestmentDetail({ investment }: { investment: any }) {
             </p>
           </div>
           <div className="p-3 sm:p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
-            <span className="text-[10px] sm:text-[11px] text-emerald-600 dark:text-emerald-400 uppercase font-semibold">Contract Gain</span>
+            <span className="text-[10px] sm:text-[11px] text-emerald-600 dark:text-emerald-400 uppercase font-semibold">Total Investor Profit</span>
             <p className="font-mono text-sm sm:text-lg font-bold text-emerald-600 dark:text-emerald-400 tabular-nums mt-0.5 truncate">
-              +₹{netProfit.toLocaleString("en-IN")} (+{roi}%)
+              +₹{netProfit.toLocaleString("en-IN")}
             </p>
+            {investorBonus > 0 && (
+              <span className="text-[10px] font-mono text-emerald-600/80 block truncate">
+                (ROI: ₹{baseProfit.toLocaleString("en-IN")} + Bonus: ₹{investorBonus.toLocaleString("en-IN")})
+              </span>
+            )}
           </div>
           <div className="p-3 sm:p-3.5 rounded-xl bg-secondary/50 border border-border/60">
             <span className="text-[10px] sm:text-[11px] text-muted-foreground uppercase font-semibold">Contract Term</span>
             <p className="font-mono text-sm sm:text-lg font-bold text-foreground tabular-nums mt-0.5 truncate">
-              12 Months
+              12 Months ({roi}% Base)
             </p>
           </div>
         </div>
+
+        {/* Incentive Bonus Breakdown Strip */}
+        {(investorBonus > 0 || ownerBonus > 0) && (
+          <div className="mt-4 pt-4 border-t border-border/60 grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="flex items-center justify-between p-3 rounded-xl bg-orange-500/5 border border-orange-500/20 text-xs font-mono">
+              <span className="flex items-center gap-1.5 text-orange-600 dark:text-orange-400 font-sans font-medium">
+                <Gift className="w-3.5 h-3.5" /> Investor Bonus (Included in Profit)
+              </span>
+              <span className="font-bold text-orange-600 dark:text-orange-400 tabular-nums text-sm">
+                +₹{investorBonus.toLocaleString("en-IN")}
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between p-3 rounded-xl bg-purple-500/5 border border-purple-500/20 text-xs font-mono">
+              <span className="flex items-center gap-1.5 text-purple-600 dark:text-purple-400 font-sans font-medium">
+                <Gift className="w-3.5 h-3.5" /> Account Owner Syndicate Bonus
+              </span>
+              <span className="font-bold text-purple-600 dark:text-purple-400 tabular-nums text-sm">
+                +₹{ownerBonus.toLocaleString("en-IN")}
+              </span>
+            </div>
+          </div>
+        )}
       </Card>
 
       {/* Settlement & Payout Banking Record Card - shows when settled OR whenever bank details are on record */}

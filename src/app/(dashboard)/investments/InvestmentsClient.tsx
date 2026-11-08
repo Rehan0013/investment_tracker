@@ -266,7 +266,12 @@ export function InvestmentsClient({ initialInvestments }: { initialInvestments: 
                         ₹{inv.returnAmount.toLocaleString("en-IN")}
                       </TableCell>
                       <TableCell className="py-3.5 text-right font-mono text-xs tabular-nums text-emerald-600 dark:text-emerald-400 font-semibold">
-                        +₹{netGain.toLocaleString("en-IN")} ({roiPercent}%)
+                        <div>+₹{netGain.toLocaleString("en-IN")} ({roiPercent}%)</div>
+                        {Boolean(inv.investorBonus) && (
+                          <div className="text-[10px] text-orange-600 dark:text-orange-400 font-normal">
+                            incl. ₹{inv.investorBonus.toLocaleString("en-IN")} bonus
+                          </div>
+                        )}
                       </TableCell>
                       <TableCell className="py-3.5 text-center text-xs font-mono text-muted-foreground">
                         {format(new Date(inv.returnDate), "dd MMM yyyy")}

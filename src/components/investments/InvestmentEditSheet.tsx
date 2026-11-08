@@ -34,6 +34,8 @@ export function InvestmentEditSheet({
       investorName: investment.investorName,
       amount: investment.amount,
       roi: investment.roi !== undefined ? investment.roi : 50,
+      investorBonus: investment.investorBonus || 0,
+      ownerBonus: investment.ownerBonus || 0,
       mobileNo: investment.mobileNo,
       aadharNo: investment.aadharNo,
       investingDate: format(new Date(investment.investingDate), "yyyy-MM-dd") as unknown as Date,
@@ -52,6 +54,8 @@ export function InvestmentEditSheet({
       investorName: investment.investorName,
       amount: investment.amount,
       roi: investment.roi !== undefined ? investment.roi : 50,
+      investorBonus: investment.investorBonus || 0,
+      ownerBonus: investment.ownerBonus || 0,
       mobileNo: investment.mobileNo,
       aadharNo: investment.aadharNo,
       investingDate: format(new Date(investment.investingDate), "yyyy-MM-dd") as unknown as Date,
@@ -180,6 +184,51 @@ export function InvestmentEditSheet({
               {...register("returnDate", { valueAsDate: true })}
             />
             {errors.returnDate && <p className="text-xs text-destructive">{errors.returnDate.message}</p>}
+          </div>
+
+          {/* Bonus Allocations */}
+          <div className="pt-3 border-t border-border/70 space-y-3">
+            <span className="text-xs font-semibold text-foreground block">
+              Incentive Bonuses
+            </span>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label htmlFor="edit-investorBonus" className="text-xs font-medium text-foreground">
+                  Investor Bonus (₹)
+                </Label>
+                <Input
+                  id="edit-investorBonus"
+                  type="number"
+                  min="0"
+                  {...register("investorBonus", { valueAsNumber: true })}
+                />
+                <span className="text-[10px] text-muted-foreground block">
+                  Added to investor profit
+                </span>
+                {errors.investorBonus && (
+                  <p className="text-xs text-destructive">{errors.investorBonus.message}</p>
+                )}
+              </div>
+
+              <div className="space-y-1.5">
+                <Label htmlFor="edit-ownerBonus" className="text-xs font-medium text-foreground">
+                  Owner Bonus (₹)
+                </Label>
+                <Input
+                  id="edit-ownerBonus"
+                  type="number"
+                  min="0"
+                  {...register("ownerBonus", { valueAsNumber: true })}
+                />
+                <span className="text-[10px] text-muted-foreground block">
+                  Owner's commission
+                </span>
+                {errors.ownerBonus && (
+                  <p className="text-xs text-destructive">{errors.ownerBonus.message}</p>
+                )}
+              </div>
+            </div>
           </div>
 
           <div className="pt-3 border-t border-border/70 space-y-3">

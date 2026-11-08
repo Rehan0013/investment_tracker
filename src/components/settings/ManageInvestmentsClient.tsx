@@ -134,6 +134,21 @@ export function ManageInvestmentsClient({ initialInvestments }: { initialInvestm
                       <span>Date: {format(new Date(inv.investingDate), "dd MMM yyyy")}</span>
                     </div>
 
+                    {(Boolean(inv.investorBonus) || Boolean(inv.ownerBonus)) && (
+                      <div className="flex items-center gap-2 text-[10px] font-mono mt-0.5">
+                        {Boolean(inv.investorBonus) && (
+                          <span className="text-orange-600 dark:text-orange-400 bg-orange-500/10 border border-orange-500/20 px-1.5 py-0.2 rounded">
+                            Investor Bonus: +₹{inv.investorBonus?.toLocaleString("en-IN")}
+                          </span>
+                        )}
+                        {Boolean(inv.ownerBonus) && (
+                          <span className="text-purple-600 dark:text-purple-400 bg-purple-500/10 border border-purple-500/20 px-1.5 py-0.2 rounded">
+                            Owner Bonus: +₹{inv.ownerBonus?.toLocaleString("en-IN")}
+                          </span>
+                        )}
+                      </div>
+                    )}
+
                     {(inv.accountNo || inv.bankName) && (
                       <div className="flex items-center gap-1.5 text-[11px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 w-fit mt-1">
                         <Landmark className="w-3 h-3 shrink-0" />
