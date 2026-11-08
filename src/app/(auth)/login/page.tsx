@@ -27,6 +27,10 @@ export default function LoginPage() {
         toast.error(res.error);
       } else if (res?.success) {
         toast.success("Authentication successful");
+        try {
+          sessionStorage.setItem("eyevision_trigger_bootup", "true");
+          sessionStorage.removeItem("eyevision_boot_consumed");
+        } catch (e) {}
         window.location.href = "/dashboard";
       }
     });

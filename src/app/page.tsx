@@ -36,6 +36,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { motion, useReducedMotion } from "framer-motion";
 import { BannerCarousel, BannerItem } from "@/components/shared/BannerCarousel";
 import { getActiveBanners } from "@/actions/banner.actions";
+import { HomeBootupWrapper } from "@/components/landing/HomeBootupWrapper";
 
 const PRESET_AMOUNTS = [
   { label: "₹50K", value: 50000 },
@@ -101,7 +102,9 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground antialiased selection:bg-[#8b5cf6] selection:text-white overflow-x-hidden transition-colors">
-      {/* Top Navigation Bar */}
+      <HomeBootupWrapper />
+      <div id="landing-main-content" className="flex-1 flex flex-col">
+        {/* Top Navigation Bar */}
       <header className="border-b border-border dark:border-white/[0.08] bg-background/90 dark:bg-[#08090c]/90 backdrop-blur-xl sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3 group">
@@ -123,7 +126,7 @@ export default function Home() {
               Home
             </a>
             <a href="#simulator" className="hover:text-[#8b5cf6] transition-colors">
-              Technology
+              Simulator
             </a>
             <a href="#features" className="hover:text-[#8b5cf6] transition-colors">
               Features
@@ -136,7 +139,15 @@ export default function Home() {
           <div className="flex items-center gap-2 sm:gap-3">
             <ThemeToggle />
             {isAuthenticated ? (
-              <Link href="/dashboard">
+              <Link
+                href="/dashboard"
+                onClick={() => {
+                  try {
+                    sessionStorage.setItem("eyevision_trigger_bootup", "true");
+                    sessionStorage.removeItem("eyevision_boot_consumed");
+                  } catch (e) { }
+                }}
+              >
                 <Button
                   size="sm"
                   className="rounded-full bg-gradient-to-r from-[#a855f7] via-[#8b5cf6] to-[#6d28d9] hover:brightness-110 text-white px-5 text-xs font-semibold shadow-[0_0_20px_rgba(139,92,246,0.35)] transition-all hover:scale-105 cursor-pointer"
@@ -190,7 +201,18 @@ export default function Home() {
 
             {/* Dual CTAs */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-2">
-              <Link href={isAuthenticated ? "/dashboard" : "/login"} className="w-full sm:w-auto">
+              <Link
+                href={isAuthenticated ? "/dashboard" : "/login"}
+                onClick={() => {
+                  if (isAuthenticated) {
+                    try {
+                      sessionStorage.setItem("eyevision_trigger_bootup", "true");
+                      sessionStorage.removeItem("eyevision_boot_consumed");
+                    } catch (e) { }
+                  }
+                }}
+                className="w-full sm:w-auto"
+              >
                 <Button
                   size="lg"
                   className="w-full sm:w-auto rounded-full bg-gradient-to-r from-[#a855f7] via-[#8b5cf6] to-[#6d28d9] hover:brightness-110 text-white font-semibold text-xs sm:text-sm h-12 px-7 shadow-[0_0_25px_rgba(139,92,246,0.4)] transition-all hover:scale-105"
@@ -981,7 +1003,20 @@ export default function Home() {
             <h4 className="font-semibold text-foreground dark:text-white text-xs mb-3">Platform</h4>
             <ul className="space-y-2 text-muted-foreground">
               <li><Link href="/login" className="hover:text-foreground">Sign In</Link></li>
-              <li><Link href="/dashboard" className="hover:text-foreground">Dashboard</Link></li>
+              <li>
+                <Link
+                  href="/dashboard"
+                  onClick={() => {
+                    try {
+                      sessionStorage.setItem("eyevision_trigger_bootup", "true");
+                      sessionStorage.removeItem("eyevision_boot_consumed");
+                    } catch (e) { }
+                  }}
+                  className="hover:text-foreground"
+                >
+                  Dashboard
+                </Link>
+              </li>
               <li><span className="text-[11px] font-mono text-muted-foreground">v2.4.0</span></li>
             </ul>
           </div>
@@ -996,6 +1031,7 @@ export default function Home() {
           </div>
         </div>
       </footer>
+      </div>
     </div>
   );
 }

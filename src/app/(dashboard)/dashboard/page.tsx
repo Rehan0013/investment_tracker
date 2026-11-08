@@ -6,6 +6,7 @@ import { InvestmentsBarChart } from "@/components/dashboard/InvestmentsBarChart"
 import { RecentTransactionsCard } from "@/components/dashboard/RecentTransactionsCard";
 import { BannerCarousel } from "@/components/shared/BannerCarousel";
 import { DashboardGreeting } from "@/components/dashboard/DashboardGreeting";
+import { DashboardBootupWrapper } from "@/components/dashboard/DashboardBootupWrapper";
 import { auth } from "@/lib/auth";
 import Link from "next/link";
 import { Users, Wallet, TrendingUp, Sparkles, CheckCircle2, Clock, Plus, ArrowUpRight, Gift, Eye } from "lucide-react";
@@ -63,6 +64,9 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-4 sm:space-y-6">
+      {/* Seamless Post-Login or Initial Load Bootup Animation Overlay */}
+      <DashboardBootupWrapper />
+
       {/* Top Header Strip with Brand Logo, Name & Live Ledger Status */}
       <div className="flex flex-col gap-3.5 pb-2.5 border-b border-border/80">
         <div className="flex items-center justify-between gap-3">

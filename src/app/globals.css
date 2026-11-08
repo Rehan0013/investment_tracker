@@ -249,3 +249,29 @@ html.dark body {
 .dark ::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.15);
 }
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(200%);
+  }
+}
+
+/* Prevent dashboard/landing flash during bootup transition */
+html.eyevision-booting,
+html.eyevision-booting body {
+  background-color: #07080b !important;
+  overflow: hidden !important;
+}
+html.eyevision-booting #dashboard-main-content,
+html.eyevision-booting #landing-main-content,
+html.eyevision-booting header,
+html.eyevision-booting aside,
+html.eyevision-booting nav,
+html.eyevision-booting footer {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}

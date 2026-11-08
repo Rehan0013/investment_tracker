@@ -47,6 +47,24 @@ export default function RootLayout({
       suppressHydrationWarning
       className="h-full antialiased scroll-smooth scroll-pt-20"
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                var p = window.location.pathname;
+                var isHome = (p === '/' || p === '');
+                if (isHome) {
+                  sessionStorage.setItem('eyevision_home_trigger', 'true');
+                  document.documentElement.classList.add('eyevision-booting');
+                } else if (sessionStorage.getItem('eyevision_trigger_bootup') === 'true' && !sessionStorage.getItem('eyevision_boot_consumed')) {
+                  document.documentElement.classList.add('eyevision-booting');
+                }
+              } catch(e) {}
+            `,
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col font-sans bg-background text-foreground antialiased selection:bg-neutral-900 selection:text-white dark:selection:bg-neutral-100 dark:selection:text-black">
         <SessionProvider>
           <ThemeProvider

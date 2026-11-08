@@ -148,8 +148,6 @@ function Landing3DArcCarousel({
     return () => window.removeEventListener("resize", updateWidth);
   }, []);
 
-  const cardSpacing = cardWidth + 18;
-
   // Auto-advance every 4.5 seconds (pauses on hover)
   useEffect(() => {
     if (total <= 1 || isPaused) return;
@@ -192,30 +190,49 @@ function Landing3DArcCarousel({
     setMouseStartX(null);
   };
 
-  // Mathematical formula for the 3D Arc Curvature
-  // Downward convex arch curvature (center card is apex, outer cards bend downwards)
-  const getArcTransform = (k: number, spacing: number) => {
+  // Calculate exact slot X-coordinates with uniform constant gaps
+  const getSlotX = (k: number, baseWidth: number) => {
+    if (k === 0) return 0;
+    const sign = k > 0 ? 1 : -1;
     const absK = Math.abs(k);
-    const x = k * spacing;
+    let totalX = 0;
+    let prevWidth = baseWidth;
+    const gap = baseWidth < 300 ? 14 : 20;
+    for (let i = 1; i <= absK; i++) {
+      const currWidth = baseWidth * (1 + Math.pow(i, 1.15) * 0.075);
+      totalX += prevWidth / 2 + gap + currWidth / 2;
+      prevWidth = currWidth;
+    }
+    return sign * totalX;
+  };
+
+  // Mathematical formula for the BrandLyft 3D Cylindrical Arc Curvature
+  // - Horizontally level midline: zero artificial bowl/dome shifting
+  // - True 3D cylinder depth: outer cards curve closer to the viewer (scale expands gracefully)
+  // - Top baseline dips down in the center (smile curvature) to frame the hero title/subtitle
+  // - Bottom baseline arches down towards the edges to frame the CTA button
+  // - Inward rotation around Y (rotateY) creates authentic physical depth
+  const getArcTransform = (k: number, baseWidth: number) => {
+    const absK = Math.abs(k);
+    const x = getSlotX(k, baseWidth);
 
     // Concave 3D perspective rotation around Y (cards angle inward towards center)
-    const rotateY = -k * 4.5;
+    const rotateY = -k * 7.5;
 
-    // Downward arch curvature along Y axis (center is apex, sides bend downwards)
-    const translateY = Math.pow(absK, 1.45) * 14;
+    // Level midline (no artificial bowl or dome distortion)
+    const translateY = 0;
 
-    // Tangent rotation along Z axis following the downward arch slope
-    // (left cards slope down to the left; right cards slope down to the right)
-    const rotateZ = k * 3.0;
+    // True perspective slope is generated automatically by rotateY, keep rotateZ level
+    const rotateZ = 0;
 
-    // Subtle scale depth
-    const scale = Math.max(0.82, 1 - absK * 0.045);
+    // Outer cards curve forward towards viewer in 3D perspective (scale 1.0 -> 1.27)
+    const scale = 1 + Math.pow(absK, 1.15) * 0.075;
 
-    // Layering: center card sits prominently on top
+    // Center card sits prominently on top
     const zIndex = 50 - absK * 10;
 
     // Soft opacity falloff for outer cards bleeding off edges
-    const opacity = absK > 3 ? 0 : absK === 3 ? 0.45 : absK === 2 ? 0.88 : 1;
+    const opacity = absK > 3 ? 0 : absK === 3 ? 0.35 : absK === 2 ? 0.85 : 1;
 
     return { x, translateY, rotateY, rotateZ, scale, zIndex, opacity };
   };
@@ -242,7 +259,7 @@ function Landing3DArcCarousel({
 
       {/* 3D Perspective Stage */}
       <div
-        className="relative w-full h-[240px] sm:h-[300px] md:h-[340px] lg:h-[370px] flex items-center justify-center pt-2 pb-6"
+        className="relative w-full h-[260px] sm:h-[320px] md:h-[360px] lg:h-[390px] flex items-center justify-center pt-2 pb-4"
         style={{
           perspective: "1200px",
           transformStyle: "preserve-3d",
@@ -253,7 +270,7 @@ function Landing3DArcCarousel({
           const bannerIndex = ((virtualIndex % total) + total) % total;
           const banner = banners[bannerIndex];
           const isCenter = k === 0;
-          const t = getArcTransform(k, cardSpacing);
+          const t = getArcTransform(k, cardWidth);
           const isBonus =
             banner.title?.toLowerCase().includes("bonus") ||
             banner.description?.toLowerCase().includes("bonus");
