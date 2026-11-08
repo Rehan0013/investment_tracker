@@ -134,7 +134,7 @@ export default function Home() {
               </Link>
             ) : (
               <div className="flex items-center gap-2">
-                <Link href="/login">
+                {/* <Link href="/login">
                   <Button
                     variant="ghost"
                     size="sm"
@@ -142,7 +142,7 @@ export default function Home() {
                   >
                     Log In
                   </Button>
-                </Link>
+                </Link> */}
                 <Link href="/login">
                   <Button
                     size="sm"
@@ -374,8 +374,8 @@ export default function Home() {
                       <div key={idx} className="flex flex-col items-center h-full justify-end group">
                         <div
                           className={`w-full rounded-t-sm transition-all duration-300 ${item.p
-                              ? "bg-[#ff5722] shadow-[0_0_15px_rgba(255,87,34,0.5)]"
-                              : "bg-[#ff5722]/30 dark:bg-[#ff5722]/40 hover:bg-[#ff5722]/80"
+                            ? "bg-[#ff5722] shadow-[0_0_15px_rgba(255,87,34,0.5)]"
+                            : "bg-[#ff5722]/30 dark:bg-[#ff5722]/40 hover:bg-[#ff5722]/80"
                             }`}
                           style={{ height: `${item.h}%` }}
                         />
@@ -654,8 +654,8 @@ export default function Home() {
                       key={preset.value}
                       onClick={() => setCalcAmount(preset.value)}
                       className={`px-3.5 py-1.5 rounded-full text-xs font-mono font-medium border transition-all cursor-pointer ${calcAmount === preset.value
-                          ? "bg-[#ff5722] text-white border-[#ff5722] shadow-[0_0_12px_rgba(255,87,34,0.4)] font-bold scale-105"
-                          : "bg-secondary dark:bg-white/[0.04] text-muted-foreground border-border dark:border-white/[0.08] hover:text-foreground hover:bg-muted"
+                        ? "bg-[#ff5722] text-white border-[#ff5722] shadow-[0_0_12px_rgba(255,87,34,0.4)] font-bold scale-105"
+                        : "bg-secondary dark:bg-white/[0.04] text-muted-foreground border-border dark:border-white/[0.08] hover:text-foreground hover:bg-muted"
                         }`}
                     >
                       {preset.label}
@@ -699,8 +699,8 @@ export default function Home() {
                     <button
                       onClick={() => setCalcRoi(50)}
                       className={`p-3.5 rounded-xl text-xs font-medium border transition-all cursor-pointer text-left ${calcRoi === 50
-                          ? "bg-[#ff5722]/15 text-foreground dark:text-white border-[#ff5722] shadow-[0_0_15px_rgba(255,87,34,0.15)] font-semibold"
-                          : "bg-secondary/60 dark:bg-white/[0.03] text-muted-foreground border-border dark:border-white/[0.08] hover:text-foreground"
+                        ? "bg-[#ff5722]/15 text-foreground dark:text-white border-[#ff5722] shadow-[0_0_15px_rgba(255,87,34,0.15)] font-semibold"
+                        : "bg-secondary/60 dark:bg-white/[0.03] text-muted-foreground border-border dark:border-white/[0.08] hover:text-foreground"
                         }`}
                     >
                       <div className="font-bold flex items-center justify-between text-foreground dark:text-white">
@@ -712,8 +712,8 @@ export default function Home() {
                     <button
                       onClick={() => setCalcRoi(100)}
                       className={`p-3.5 rounded-xl text-xs font-medium border transition-all cursor-pointer text-left ${calcRoi === 100
-                          ? "bg-[#ff5722]/15 text-foreground dark:text-white border-[#ff5722] shadow-[0_0_15px_rgba(255,87,34,0.15)] font-semibold"
-                          : "bg-secondary/60 dark:bg-white/[0.03] text-muted-foreground border-border dark:border-white/[0.08] hover:text-foreground"
+                        ? "bg-[#ff5722]/15 text-foreground dark:text-white border-[#ff5722] shadow-[0_0_15px_rgba(255,87,34,0.15)] font-semibold"
+                        : "bg-secondary/60 dark:bg-white/[0.03] text-muted-foreground border-border dark:border-white/[0.08] hover:text-foreground"
                         }`}
                     >
                       <div className="font-bold flex items-center justify-between text-foreground dark:text-white">
