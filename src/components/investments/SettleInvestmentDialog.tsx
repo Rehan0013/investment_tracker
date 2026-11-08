@@ -101,7 +101,7 @@ export function SettleInvestmentDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-lg bg-card border-border p-5 sm:p-6 overflow-hidden">
+      <DialogContent className="sm:max-w-lg max-h-[90dvh] overflow-y-auto bg-card border-border p-5 sm:p-6">
         <DialogHeader className="pb-2 border-b border-border/70">
           <div className="flex items-center gap-2.5 mb-1">
             <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 flex items-center justify-center">

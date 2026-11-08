@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableFooter } from "@/components/ui/table";
 import { MonthlyChart } from "./MonthlyChart";
 import { SettleInvestmentDialog } from "./SettleInvestmentDialog";
+import { InvestmentEditSheet } from "./InvestmentEditSheet";
 import { getMonthlyBreakdown, getCurrentProgress } from "@/lib/utils";
 import { reopenInvestment } from "@/actions/investment.actions";
 import { toast } from "sonner";
@@ -142,7 +143,7 @@ export function InvestmentDetail({ investment }: { investment: any }) {
             </div>
           </div>
 
-          <div className="flex items-center gap-2.5 w-full sm:w-auto">
+          <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
             {!isPaid && !isMatured ? (
               <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary border border-border text-xs text-muted-foreground font-mono">
                 <Clock className="h-3.5 w-3.5 text-blue-500" />
@@ -172,6 +173,10 @@ export function InvestmentDetail({ investment }: { investment: any }) {
                 </Button>
               </div>
             )}
+            <InvestmentEditSheet
+              investment={investmentData}
+              onSuccess={() => router.refresh()}
+            />
           </div>
         </div>
 
